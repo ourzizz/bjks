@@ -3,7 +3,6 @@
  */
 
 // 此处主机域名修改成腾讯云解决方案分配的域名
-//var host = 'http://h4jxwax7.qcloud.la';
 var host = 'https://www.alemao.club/server/index.php?';
 
 
