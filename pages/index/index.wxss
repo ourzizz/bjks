@@ -140,32 +140,44 @@ page {
     background: #FFF;
 }
 .element{
-    padding: 40rpx 12rpx 1rpx 12rpx; /*上右*/
-    background:#BBFFEE;
-    margin:0 5px 0 0;
-    height:78px;
-    background:greey;
+    padding: 0rpx 32rpx 1rpx 12rpx; /*上右*/
+    margin:0 3rpx 0 3rpx;
+    /*background:#BBFFEE;*/
+    /*height:78px;*/
+    /*background:greey;*/
     /*border:1px solid black;*/
-    border-radius: 6%;
+    border-top: 1px solid rgba(0, 0, 0, .1);
 }
 
 .img {
   width: 100rpx;
   height: 100rpx;
-  margin: 20rpx;
-  border-radius: 60%;
+  margin: 10rpx;
+  /*border-radius: 60%;*/
   /*position: relative;*/
   /*vertical-align:middle;[>让图片和文字处于同一水平<]*/
-  float:left;
+  /*float:left;*/
 }
 
-.swiper-contener
-{
-    background: #FFF;
-    margin: 20rpx;
+.page-section{
+  width: 100%;
+  margin-top: 10rpx;
+  margin-bottom: 5rpx;
+  background-color: rgb(122, 122, 42);
 }
-.swiper-items
-{
+.page-section-spacing{
+  box-sizing: border-box;
+  padding: 0 10rpx;/*swiper左右边距*/
+}
+
+.swiper-item{
+  background-color: rgb(198, 235, 150);
   display: block;
   height: 150px;
+  border-style:groove;
+  border-right:0px;
+  border-left:0px;
+}
+.ksplan{
+  display:flex;
 }
