@@ -41,7 +41,7 @@
   box-sizing: border-box;
   margin-top: 4rpx;
   border-radius: 2%;
-  background: #cccfd1; /*这个颜色做底色很好看*/
+  background: #243949; /*这个颜色做底色很好看*/
 }
 
 .msgnote{

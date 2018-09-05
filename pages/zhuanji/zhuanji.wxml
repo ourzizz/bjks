@@ -1,0 +1,10 @@
+<!--pages/zhuanji/zhuanji.wxml-->
+
+<view class="container">
+  <view class="ksbar" wx:for="{{list.zhuanjilist}}">
+    <navigator url="../zhuanjikaoshi/zhuanjikaoshi?ksid={{item.ksid}}" open-type="navigate" class="navigation">  
+    <image class="img" src="https://www.alemao.club/weapp/images/{{item.shortname}}.png"> </image>
+      <text class="ksmingchen">{{item.ksname}} </text>
+    </navigator>
+  </view>
+</view>

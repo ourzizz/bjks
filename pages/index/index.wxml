@@ -10,7 +10,12 @@
 
 <view class="typelist">
   <view wx:for="{{list.type}}">
-    <navigator url="../kaoshi/kaoshi?kstypeid={{item.kstypeid}}" open-type="navigate" class="navigation">
+    <navigator wx:if="{{item.typename=='专业技术'}}" url="../zhuanji/zhuanji?kstypeid={{item.kstypeid}}" open-type="navigate" class="navigation">
+      <image class="img" src="../../image/bus.png"> </image>
+      <view class="element">{{item.typename}}</view>
+    </navigator>
+
+    <navigator wx:if="{{item.typename!='专业技术'}}" url="../kaoshi/kaoshi?kstypeid={{item.kstypeid}}" open-type="navigate" class="navigation">
       <image class="img" src="../../image/bus.png"> </image>
       <view class="element">{{item.typename}}</view>
     </navigator>
