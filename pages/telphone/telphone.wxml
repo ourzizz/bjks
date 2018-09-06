@@ -1,2 +1,3 @@
 <!--pages/telphone/telphone.wxml-->
-<text>pages/telphone/telphone.wxml</text>
+<text>pages/---------------telphone/telphone.wxml</text>
+<web-view src="{{webaddress}}"></web-view>

@@ -1,4 +1,5 @@
-// pages/telphone/telphone.js
+var config = require('../../config')
+
 Page({
 
   /**
@@ -11,8 +12,12 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
-  
+  onLoad: function() {
+    let url = `${config.service.host}/weapp/demo/show_guide_article/4` 
+    console.log(url)
+    this.setData({
+      webaddress: url
+    })
   },
 
   /**

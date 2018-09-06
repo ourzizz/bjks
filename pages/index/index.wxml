@@ -1,41 +1,34 @@
 <!--index.wxml-->
 
 <view class="page-section page-section-spacing swiper">
-<swiper indicator-dots="true">
-  <block wx:for="{{list.headline}}">
-    <navigator url="../webview/webview?fileid={{item.fileid}}">
-      <swiper-item class="swiper-item ">{{item.msgcontent}}</swiper-item>
-    </navigator>
-  </block>
-</swiper>
+  <swiper indicator-dots="true">
+    <block wx:for="{{list.headline}}">
+      <navigator url="../webview/webview?fileid={{item.fileid}}">
+        <swiper-item class="swiper-item ">{{item.msgcontent}}</swiper-item>
+      </navigator>
+    </block>
+  </swiper>
 </view>
 
 <view class="typelist">
   <view wx:for="{{list.type}}">
-    <navigator wx:if="{{item.typename=='专业技术'}}" url="../zhuanji/zhuanji?kstypeid={{item.kstypeid}}" open-type="navigate" class="navigation">
+    <navigator wx:if="{{item.kstypeid==3}}" url="../zhuanji/zhuanji?kstypeid={{item.kstypeid}}" open-type="navigate" class="type-navigation">
       <image class="img" src="https://www.alemao.club/weapp/images/{{item.shortname}}.png"> </image>
       <view class="element">{{item.typename}}</view>
     </navigator>
 
-    <navigator wx:if="{{item.typename!='专业技术'}}" url="../kaoshi/kaoshi?kstypeid={{item.kstypeid}}" open-type="navigate" class="navigation">
+    <navigator wx:if="{{item.kstypeid!=3}}" url="../kaoshi/kaoshi?kstypeid={{item.kstypeid}}" open-type="navigate" class="type-navigation">
       <image class="img" src="https://www.alemao.club/weapp/images/{{item.shortname}}.png"> </image>
       <view class="element">{{item.typename}}</view>
     </navigator>
   </view>
 </view>
 
-<view class="ksplan">
-<image class="img" src="https://www.alemao.club/weapp/images/plan.png"> </image>
-本年度考试计划
-</view>
+<view class="plan-title"> |办事指南 </view>
 
-<view class="uploader">办事指南</view>
-
-<!-- 用户登录测试 -->
-<view class="userinfo">
-  <image class="userinfo-avatar" src="{{logged ? userInfo.avatarUrl : './user-unlogin.png'}}" background-size="cover"></image>
-  <view>
-    <button class="userinfo-nickname" wx:if="{{!logged}}" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">点击测试登录接口</button>
-    <text class="userinfo-nickname" wx:else>{{userInfo.nickName}}</text>
+  <view class="filecontainer" wx:for="{{list.guidelist}}">
+    <navigator url="../webview/webview?fileid={{item.guideid}}&type=guide" open-type="navigate" class="navigation">
+    <image class="guideimg" src="https://www.alemao.club/weapp/images/plan.png"> </image>
+      <view class="element">{{item.title}}</view>
+    </navigator>
   </view>
-</view>
