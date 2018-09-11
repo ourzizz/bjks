@@ -1,10 +1,10 @@
+var qcloud = require('../../vendor/wafer2-client-sdk/index')
+var config = require('../../config')
+var util = require('../../utils/util.js')
 var config = require('../../config')
 
 Page({
 
-  /**
-   * 页面的初始数据
-   */
   data: {
   
   },
@@ -13,10 +13,21 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function() {
-    let url = `${config.service.host}/weapp/demo/show_guide_article/4` 
-    console.log(url)
-    this.setData({
-      webaddress: url
+    util.showBusy('请求中...')
+    var that = this
+    qcloud.request({
+      url: `${config.service.host}/weapp/demo/get_phone_list`,
+      login: false,
+      success(result) {
+        util.showSuccess('请求成功完成')
+        that.setData({
+          list: result.data
+        })
+      },
+      fail(error) {
+        util.showModel('请求失败', error);
+        console.log('request fail', error);
+      }
     })
   },
 

@@ -123,3 +123,8 @@ background-color: rgb(245, 247, 243);
   border: black;
 }
 
+.adv{
+  background: grey;
+  font-size:16px;
+  align-content: center; 
+}

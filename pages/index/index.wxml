@@ -32,3 +32,4 @@
       <view class="element">{{item.title}}</view>
     </navigator>
   </view>
+  <view class="adv">七星关区诺必达科技提供技术支持(13308570523)</view>

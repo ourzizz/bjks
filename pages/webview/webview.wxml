@@ -1,2 +1,6 @@
 <!--pages/webview/webview.wxml-->
-<web-view src="{{webaddress}}"></web-view>
+
+<web-view src="{{webaddress}}">
+<view>-----------------------------------------------------back</view>
+</web-view>
+

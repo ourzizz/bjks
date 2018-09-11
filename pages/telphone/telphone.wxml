@@ -1,3 +1,7 @@
-<!--pages/telphone/telphone.wxml-->
-<text>pages/---------------telphone/telphone.wxml</text>
-<web-view src="{{webaddress}}"></web-view>
+
+  <view class="filecontainer" wx:for="{{list.phonelist}}">
+    <navigator url="../webview/webview?fileid={{item.guideid}}&type=guide" open-type="navigate" class="navigation">
+    <image class="guideimg" src="https://www.alemao.club/weapp/images/telphone.png"> </image>
+      <view class="element">{{item.title}}</view>
+    </navigator>
+  </view>
