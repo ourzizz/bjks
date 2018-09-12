@@ -18,13 +18,9 @@ page {
     /*border:1px solid black;*/
     background: #FFF;
 }
-.element{
+.element{/*考试类型横向菜单*/
     padding: 0rpx 32rpx 1rpx 12rpx; /*上右*/
     margin:0 3rpx 0 3rpx;
-    /*background:#BBFFEE;*/
-    /*height:78px;*/
-    /*background:greey;*/
-    /*border:1px solid black;*/
     border-top: 1px solid rgba(0, 0, 0, .1);
 }
 
@@ -37,39 +33,35 @@ page {
   /*vertical-align:middle;[>让图片和文字处于同一水平<]*/
   /*float:left;*/
 }
-.guideimg {
-  width: 100rpx;
-  height: 100rpx;
-  margin: 10rpx;
-  border-radius: 60%;
-  position: relative;
-  vertical-align:middle;/*让图片和文字处于同一水平*/
-  float:left;
-}
 
 .page-section{
   width: 100%;
   margin-top: 10rpx;
   margin-bottom: 5rpx;
-  background-color: rgb(122, 122, 42);
-}
-.page-section-spacing{
-  box-sizing: border-box;
-  padding: 0 10rpx;/*swiper左右边距*/
+  /*background-color: rgb(122, 122, 42);*/
 }
 
+.page-section-spacing{
+  box-sizing: border-box;
+  padding: 0 10rpx 0 20rpx;/*swiper左右边距*/
+}
+.swiper-container{
+height: auto;
+  box-sizing: border-box;
+  padding: 0 10rpx 0 10rpx;/*swiper四上右下左*/
+  width: 100%;
+  hight:100%;
+  margin-top: 10rpx;
+  margin-bottom: 25rpx;
+}
 .swiper-item{
-  background-color: rgb(198, 235, 150);
+  padding:0 0 120px 0rpx;
+  background-color: rgb(110, 189, 209);
   display: block;
   height: 150px;
   border-style:groove;
   border-right:0px;
   border-left:0px;
-}
-
-.plan-title{
-border-top:2px solid;
-background-color: rgb(245, 247, 243);
 }
 
 /* list */
@@ -98,8 +90,6 @@ background-color: rgb(245, 247, 243);
   margin-top: 4rpx;
   height: 130rpx;
   width: 100%;
-  /*background: #5f9ea0;*/
-  /*background: #F6F6F6; [>还可以<]*/
   background: #BBFFEE;
   display: flex;
   flex-direction: row;
@@ -118,9 +108,4 @@ background-color: rgb(245, 247, 243);
 }
 .weui-media-box__info {
  margin:0 0 0 0;
- /*padding: 0rpx 0rpx 0rpx 32rpx; [>上右<]*/
 }
-/*.weui-cells{*/
- /*padding:0 0 0 0;*/
-/*background:green;*/
-/*}*/
