@@ -1,4 +1,5 @@
 /**index.wxss**/
+@import '/weui.wxss'
 page {
     background: #F6F6F6;
     display: flex;
@@ -6,19 +7,6 @@ page {
     justify-content: flex-start;
 }
 
-.userinfo, .uploader, .tunnel {
-    margin-top: 10rpx;
-    height: 140rpx;
-    width: 100%;
-    background: #FFF;
-    border: 1px solid rgba(0, 0, 0, .1);
-    border-left: none;
-    border-right: none;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    transition: all 300ms ease;
-}
 
 .typelist{
     padding: 20rpx 0;
@@ -43,7 +31,7 @@ page {
 .img {
   width: 100rpx;
   height: 100rpx;
-  margin: 10rpx;
+  margin: 0rpx;
   /*border-radius: 60%;*/
   /*position: relative;*/
   /*vertical-align:middle;[>让图片和文字处于同一水平<]*/
@@ -128,3 +116,11 @@ background-color: rgb(245, 247, 243);
   font-size:16px;
   align-content: center; 
 }
+.weui-media-box__info {
+ margin:0 0 0 0;
+ /*padding: 0rpx 0rpx 0rpx 32rpx; [>上右<]*/
+}
+/*.weui-cells{*/
+ /*padding:0 0 0 0;*/
+/*background:green;*/
+/*}*/
