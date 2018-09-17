@@ -1,7 +1,7 @@
 
   <view class="filecontainer" wx:for="{{list.phonelist}}">
     <navigator url="../webview/webview?fileid={{item.guideid}}&type=guide" open-type="navigate" class="navigation">
-    <image class="guideimg" src="https://www.alemao.club/weapp/images/telphone.png"> </image>
+    <image class="img" src="https://www.alemao.club/weapp/images/telphone.png"> </image>
       <view class="element">{{item.title}}</view>
     </navigator>
   </view>

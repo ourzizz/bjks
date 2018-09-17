@@ -6,62 +6,52 @@ page {
     flex-direction: column;
     justify-content: flex-start;
 }
-
-
 .typelist{
     padding: 20rpx 0;
-    font-size: 40rpx;
+    font-size: 35rpx;
     line-height: 46rpx;
     word-break: break-all;
     display: flex;
-    justify-content:center;
-    /*border:1px solid black;*/
+    justify-content:space-around;/*横向导航均匀分布在弹性容器中*/
     background: #FFF;
 }
-.element{/*考试类型横向菜单*/
-    padding: 0rpx 32rpx 1rpx 12rpx; /*上右*/
-    margin:0 3rpx 0 3rpx;
-    border-top: 1px solid rgba(0, 0, 0, .1);
+.type-navigation{
+    position: relative;
+    display: flex;
+    flex-direction: column;
 }
-
-.img {
+.element{/*考试类型横向菜单*/
+    /*padding: 0rpx 32rpx 1rpx 12rpx; [>上右<]*/
+    /*margin:0 3rpx 0 3rpx;这里设置了margin所以auto属性不能工作*/
+    border-top: 1px solid rgba(0, 0, 0, .1);
+    margin: auto;
+}
+.guideimg { /*横向导航图片样式*/
   width: 100rpx;
   height: 100rpx;
-  margin: 0rpx;
-  /*border-radius: 60%;*/
-  /*position: relative;*/
-  /*vertical-align:middle;[>让图片和文字处于同一水平<]*/
-  /*float:left;*/
+  display: block; /*图片居中需要设置为block*/
+  margin: auto;
 }
 
-.page-section{
-  width: 100%;
-  margin-top: 10rpx;
-  margin-bottom: 5rpx;
-  /*background-color: rgb(122, 122, 42);*/
-}
-
-.page-section-spacing{
-  box-sizing: border-box;
-  padding: 0 10rpx 0 20rpx;/*swiper左右边距*/
+.img { /*办事指南里面用的是这个样式*/
+  width: 100rpx;
+  height: 100rpx;
 }
 .swiper-container{
-height: auto;
+  height: auto;
   box-sizing: border-box;
   padding: 0 10rpx 0 10rpx;/*swiper四上右下左*/
   width: 100%;
-  hight:100%;
   margin-top: 10rpx;
-  margin-bottom: 25rpx;
+  margin-bottom: 15rpx;
 }
 .swiper-item{
-  padding:0 0 120px 0rpx;
+  border-radius: 3%;
+  margin:0 3rpx 0 ;
+  margin-right: 30px;
   background-color: rgb(110, 189, 209);
   display: block;
-  height: 150px;
-  border-style:groove;
-  border-right:0px;
-  border-left:0px;
+  /*box-shadow: darkgrey 0px 0px 30px 5px ;*/
 }
 
 /* list */

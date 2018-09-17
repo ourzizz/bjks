@@ -1,6 +1,7 @@
 /* pages/zhuanjikaoshi/zhuanjikaoshi.wxss */
 /* pages/kaoshi/kaoshi.wxss */
 /*页面元素紧挨着摆放*/
+@import '/weui.wxss'
 .container,.note {
   width: 100%;
   padding: 1rpx 0rpx 0rpx 1rpx; /*上右*/
@@ -9,7 +10,7 @@
   justify-content: center;
   box-sizing: border-box;
    margin-top: 4rpx;
-   border-radius: 3%;
+   /*border-radius: 3%;*/
   background: green;
 
 }

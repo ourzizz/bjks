@@ -1,5 +1,5 @@
 <!--index.wxml-->
-<view class="page">
+
 <view class="swiper-container">
   <swiper indicator-dots="true">
     <block wx:for="{{list.headline}}">
@@ -10,15 +10,17 @@
   </swiper>
 </view>
 
+<view class="page">
 <view class="typelist">
   <view wx:for="{{list.type}}">
     <navigator wx:if="{{item.kstypeid==3}}" url="../zhuanji/zhuanji?kstypeid={{item.kstypeid}}" open-type="navigate" class="type-navigation">
-      <image class="img" src="https://www.alemao.club/weapp/images/{{item.shortname}}.png"> </image>
+      <image class="guideimg" src="https://www.alemao.club/weapp/images/{{item.shortname}}.png" /> 
       <view class="element">{{item.typename}}</view>
     </navigator>
 
     <navigator wx:if="{{item.kstypeid!=3}}" url="../kaoshi/kaoshi?kstypeid={{item.kstypeid}}" open-type="navigate" class="type-navigation">
-      <image class="img" src="https://www.alemao.club/weapp/images/{{item.shortname}}.png"> </image>
+      <image class="guideimg" src="https://www.alemao.club/weapp/images/{{item.shortname}}.png"/> 
+       <view class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">8</view>
       <view class="element">{{item.typename}}</view>
     </navigator>
   </view>

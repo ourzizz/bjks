@@ -1,2 +1,8 @@
 /* pages/telphone/telphone.wxss */
 @import "/pages/index/index.wxss";
+.img { /*办事指南里面用的是这个样式*/
+  width: 80rpx;
+  height: 80rpx;
+  float: left;
+  margin: 20rpx 0 0 0;
+}
