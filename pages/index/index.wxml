@@ -1,57 +1,70 @@
 <!--index.wxml-->
 
 <view class="swiper-container">
-  <swiper indicator-dots="true">
+  <swiper indicator-dots="true" >
     <block wx:for="{{list.headline}}">
       <navigator url="../webview/webview?fileid={{item.fileid}}">
-        <swiper-item class="swiper-item ">{{item.msgcontent}}</swiper-item>
+        <swiper-item class="swiper-item">{{item.msgcontent}}</swiper-item>
       </navigator>
     </block>
   </swiper>
 </view>
 
 <view class="page">
+
+
 <view class="typelist">
   <view wx:for="{{list.type}}">
-    <navigator wx:if="{{item.kstypeid==3}}" url="../zhuanji/zhuanji?kstypeid={{item.kstypeid}}" open-type="navigate" class="type-navigation">
+     <navigator  url="{{item.kstypeid==3 ? '../zhuanji/zhuanji?kstypeid={{item.kstypeid}}':'../kaoshi/kaoshi?kstypeid={{item.kstypeid}}'}}" open-type="navigate" class="type-navigation">
       <image class="guideimg" src="https://www.alemao.club/weapp/images/{{item.shortname}}.png" /> 
-      <view class="element">{{item.typename}}</view>
-    </navigator>
-
-    <navigator wx:if="{{item.kstypeid!=3}}" url="../kaoshi/kaoshi?kstypeid={{item.kstypeid}}" open-type="navigate" class="type-navigation">
-      <image class="guideimg" src="https://www.alemao.club/weapp/images/{{item.shortname}}.png"/> 
-       <view class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">8</view>
+       <view wx:if="{{item.newfile!=0}}" class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">{{item.newfile}}</view>
       <view class="element">{{item.typename}}</view>
     </navigator>
   </view>
 </view>
 
-      <view class="weui-panel">
-            <view class="weui-panel__hd">办事指南</view>
-            <view class="weui-panel__bd">
-                <view wx:for="{{list.guidelist}}">
-                <view class="weui-media-box weui-media-box_small-appmsg">
-                    <view class="weui-cells weui-cells_in-small-appmsg">
-                        <navigator url="../webview/webview?fileid={{item.guideid}}&type=guide" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
-                            <view class="weui-cell__hd"><image src="https://www.alemao.club/weapp/images/plan.png" class="img" /></view>
-                            <view class="weui-cell__bd weui-cell_primary">
-                                <view>{{item.title}}</view>
-                            <view class="weui-media-box__info">
-                                <view class="weui-media-box__info__meta weui-media-box__info__meta_extra">浏览次数:{{item.readtime}}</view>
-                            </view>
-                            </view>
-                            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-                        </navigator>
-                    </view>
-                </view>
-                </view>
-            </view>
-        </view>
+<view class="typelist">
+  <view wx:for="{{list.type}}">
+    <navigator wx:if="{{item.kstypeid==3}}" url="../zhuanji/zhuanji?kstypeid={{item.kstypeid}}" open-type="navigate" class="type-navigation">
+      <image class="guideimg" src="https://www.alemao.club/weapp/images/{{item.shortname}}.png" /> 
+       <view wx:if="{{item.newfile!=0}}" class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">{{item.newfile}}</view>
+      <view class="element">{{item.typename}}</view>
+    </navigator>
 
-        <view class="weui-footer">
-            <view class="weui-footer__links">
-                <navigator url="" class="weui-footer__link">PowerBy七星诺必达</navigator>
+    <navigator wx:if="{{item.kstypeid!=3}}" url="../kaoshi/kaoshi?kstypeid={{item.kstypeid}}" open-type="navigate" class="type-navigation">
+      <image class="guideimg" src="https://www.alemao.club/weapp/images/{{item.shortname}}.png"/> 
+       <view wx:if="{{item.newfile!=0}}" class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">{{item.newfile}}</view>
+      <view class="element">{{item.typename}}</view>
+    </navigator>
+  </view>
+</view>
+
+<view class="weui-panel">
+    <view class="weui-panel__hd">办事指南</view>
+    <view class="weui-panel__bd">
+        <view wx:for="{{list.guidelist}}">
+        <view class="weui-media-box weui-media-box_small-appmsg">
+            <view class="weui-cells weui-cells_in-small-appmsg">
+                <navigator url="../webview/webview?fileid={{item.guideid}}&type=guide" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+                    <view class="weui-cell__hd"><image src="https://www.alemao.club/weapp/images/plan.png" class="img" /></view>
+                    <view class="weui-cell__bd weui-cell_primary">
+                        <view>{{item.title}}</view>
+                    <view class="weui-media-box__info">
+                        <view class="weui-media-box__info__meta weui-media-box__info__meta_extra">浏览次数:{{item.readtime}}</view>
+                    </view>
+                    </view>
+                    <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+                </navigator>
             </view>
-            <view class="weui-footer__text">Copyright © www.qixingnbd.com</view>
         </view>
+        </view>
+    </view>
+</view>
+
+    <view class="weui-footer">
+        <view class="weui-footer__links">
+            <navigator url="" class="weui-footer__link">PowerBy七星诺必达</navigator>
+        </view>
+        <view class="weui-footer__text">Copyright © www.qixingnbd.com</view>
+    </view>
 </view>

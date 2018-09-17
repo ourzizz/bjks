@@ -17,7 +17,7 @@ Page({
   onLoad: function(options) {
     util.showBusy('请求中...')
     var that = this
-    console.log(`${config.service.host}/weapp/demo/get_zhuanji_list/`)
+    //console.log(`${config.service.host}/weapp/demo/get_zhuanji_list/`)
     qcloud.request({
       url: `${config.service.host}/weapp/demo/get_zhuanji_list/`,
 

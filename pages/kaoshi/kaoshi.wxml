@@ -1,17 +1,19 @@
 <!--pages/kaoshi/kaoshi.wxml-->
 <view class="container">
-  <text class="msgtitle">划重点啦：</text>
-<view class="msgcontainer" wx:for="{{list.msg}}">
-<navigator url="../webview/webview?fileid={{item.fileid}}" open-type="navigate" class="navigation">  
-<view class="element">{{item.msgcontent}}{{item.pubtime}}</view>
-</navigator>
-</view>
+    <text class="msgtitle">划重点啦：</text>
+    <view class="msgcontainer" wx:for="{{list.msg}}">
+    <navigator url="../webview/webview?fileid={{item.fileid}}" open-type="navigate" class="navigation">  
+    <view class="element">{{item.msgcontent}}{{item.pubtime}}</view>
+    </navigator>
+    </view>
 
-<text class="filetitle">文件列表：</text>
-<view class="filecontainer" wx:for="{{list.files}}">
-<navigator url="../webview/webview?fileid={{item.fileid}}" open-type="navigate" class="navigation">  
-<view class="element">{{item.filetitle}}({{item.pubtime}})</view>
-</navigator>
-</view>
+    <text class="filetitle">文件列表：</text>
+    <view class="filecontainer" wx:for="{{list.files}}">
+        <navigator url="../webview/webview?fileid={{item.fileid}}" open-type="navigate" class="navigation">  
+        <view class="weui-badge" style="float:right">new</view>
+            <view class="element">{{item.filetitle}}({{item.pubtime}})</view>
+            
+        </navigator>
+    </view>
 </view>
 

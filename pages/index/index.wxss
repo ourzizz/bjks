@@ -37,20 +37,24 @@ page {
   width: 100rpx;
   height: 100rpx;
 }
+
 .swiper-container{
-  height: auto;
   box-sizing: border-box;
   padding: 0 10rpx 0 10rpx;/*swiper四上右下左*/
-  width: 100%;
+  /*width: 100%;*/
   margin-top: 10rpx;
   margin-bottom: 15rpx;
 }
 .swiper-item{
+  /*width: 10px;*/
+  /*height: auto;*/
   border-radius: 3%;
-  margin:0 3rpx 0 ;
-  margin-right: 30px;
+  /*margin:0 3rpx 0 0;*/
+  /*margin-right: 30px;*/
   background-color: rgb(110, 189, 209);
-  display: block;
+  /*padding: 20px 0;*/
+  /*align-items: center;*/
+  /*display: block;*/
   /*box-shadow: darkgrey 0px 0px 30px 5px ;*/
 }
 
