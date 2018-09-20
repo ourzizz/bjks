@@ -10,9 +10,8 @@
     <text class="filetitle">文件列表：</text>
     <view class="filecontainer" wx:for="{{list.files}}">
         <navigator url="../webview/webview?fileid={{item.fileid}}" open-type="navigate" class="navigation">  
-        <view class="weui-badge" style="float:right">new</view>
+            <view wx:if="{{item.ifnew!=0}}" class="weui-badge" style="float:right">new</view>
             <view class="element">{{item.filetitle}}({{item.pubtime}})</view>
-            
         </navigator>
     </view>
 </view>

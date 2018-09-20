@@ -10,7 +10,7 @@ var Session = require('./session');
 /**
  * 微信登录，获取 code 和 encryptData
  */
-function getWxLoginResult (cb) {
+function getWxLoginResult (cb) {//cb callback
     wx.login({
         success (loginResult) {
             wx.getUserInfo({

@@ -11,28 +11,10 @@
 </view>
 
 <view class="page">
-
-
 <view class="typelist">
   <view wx:for="{{list.type}}">
-     <navigator  url="{{item.kstypeid==3 ? '../zhuanji/zhuanji?kstypeid={{item.kstypeid}}':'../kaoshi/kaoshi?kstypeid={{item.kstypeid}}'}}" open-type="navigate" class="type-navigation">
+     <navigator  url="{{item.kstypeid==3 ? '../zhuanji/zhuanji?kstypeid=':'../kaoshi/kaoshi?kstypeid='}}{{item.kstypeid}} " open-type="navigate" class="type-navigation">
       <image class="guideimg" src="https://www.alemao.club/weapp/images/{{item.shortname}}.png" /> 
-       <view wx:if="{{item.newfile!=0}}" class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">{{item.newfile}}</view>
-      <view class="element">{{item.typename}}</view>
-    </navigator>
-  </view>
-</view>
-
-<view class="typelist">
-  <view wx:for="{{list.type}}">
-    <navigator wx:if="{{item.kstypeid==3}}" url="../zhuanji/zhuanji?kstypeid={{item.kstypeid}}" open-type="navigate" class="type-navigation">
-      <image class="guideimg" src="https://www.alemao.club/weapp/images/{{item.shortname}}.png" /> 
-       <view wx:if="{{item.newfile!=0}}" class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">{{item.newfile}}</view>
-      <view class="element">{{item.typename}}</view>
-    </navigator>
-
-    <navigator wx:if="{{item.kstypeid!=3}}" url="../kaoshi/kaoshi?kstypeid={{item.kstypeid}}" open-type="navigate" class="type-navigation">
-      <image class="guideimg" src="https://www.alemao.club/weapp/images/{{item.shortname}}.png"/> 
        <view wx:if="{{item.newfile!=0}}" class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">{{item.newfile}}</view>
       <view class="element">{{item.typename}}</view>
     </navigator>
