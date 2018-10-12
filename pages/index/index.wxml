@@ -22,6 +22,25 @@
 </view>
 
 <view class="weui-panel">
+    <view class="weui-panel__bd">
+        <view wx:for="{{list.newfiles}}">
+        <view class="weui-media-box weui-media-box_small-appmsg" >
+            <view class="weui-cells weui-cells_in-small-appmsg">
+                <navigator url="../webview/webview?fileid={{item.fileid}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+                    <view class="weui-cell__bd weui-cell_primary" style="font-size:15px">
+                        <view>{{item.filetitle}}</view>
+                    <view class="weui-media-box__info">
+                        <view class="weui-media-box__info__meta weui-media-box__info__meta_extra">发布于:{{item.pubtime}} 浏览次数:{{item.readtime}}</view>
+                    </view>
+                    </view>
+                </navigator>
+            </view>
+        </view>
+        </view>
+    </view>
+</view>
+
+<view class="weui-panel">
     <view class="weui-panel__hd">办事指南</view>
     <view class="weui-panel__bd">
         <view wx:for="{{list.guidelist}}">

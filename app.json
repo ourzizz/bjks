@@ -34,6 +34,12 @@
         "text": "考试通讯录"
       },
       {
+          "selectedIconPath": "image/book2.png",
+          "iconPath": "image/book1.png",
+          "pagePath": "pages/user/user",
+          "text": "考试书店"
+      },
+      {
         "selectedIconPath": "image/user2.png",
         "iconPath": "image/user.png",
         "pagePath": "pages/user/user",
