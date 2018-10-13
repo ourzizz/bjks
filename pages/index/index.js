@@ -8,7 +8,8 @@ Page({
     userInfo: {},
     logged: false,
     takeSession: false,
-    requestResult: ''
+    requestResult: '',
+    filelist: []
   },
   onLoad: function () {
     util.showBusy('请求中...')
@@ -19,7 +20,8 @@ Page({
       success(result) {
         util.showSuccess('请求成功完成')
         that.setData({
-          list: result.data
+          list: result.data,
+          filelist: result.data.newfiles
         })
       },
       fail(error) {
@@ -28,38 +30,24 @@ Page({
       }
     })
   },
-  bindGetUserInfo: function () {
-    if (this.data.logged) return
-
-    util.showBusy('正在登录')
-
-    const session = qcloud.Session.get()
-
-    if (session) {
-      qcloud.loginWithCode({
-        success: res => {
-          this.setData({ userInfo: res, logged: true })
-          util.showSuccess('登录成功')
-        },
-        fail: err => {
-          console.error(err)
-          util.showModel('登录错误', err.message)
-        }
-      })
-    } else {
-      qcloud.login({
-        success: res => {
-          this.setData({ userInfo: res, logged: true })
-          util.showSuccess('登录成功')
-        },
-        fail: err => {
-          console.error(err)
-          util.showModel('登录错误', err.message)
-        }
-      })
-    }
+  changeFileList: function(event){
+    var that = this
+    qcloud.request({
+      // url: `${config.service.host}/weapp/demo/get_file_msg/` + event.currenTarget.dataset.typeid,
+      url: `${config.service.host}/weapp/demo/get_file_list/`+event.currentTarget.dataset.typeid ,
+      login: false,
+      success(result) {
+        that.data = result.data;
+        that.setData({
+          filelist: that.data.files
+        })
+      },
+      fail(error) {
+        util.showModel('请求失败', error);
+        console.log('request fail', error);
+      }
+    }) 
   },
-
   // 切换是否带有登录态
   switchRequestMode: function (e) {
     this.setData({
