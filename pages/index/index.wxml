@@ -12,16 +12,26 @@
 
 <view class="page">
 <view class="typelist">
-  <view wx:for="{{list.type}}">
-     <!--navigator  url="{{item.kstypeid==3 ? '../zhuanji/zhuanji?kstypeid=':'../kaoshi/kaoshi?kstypeid='}}{{item.kstypeid}} " open-type="navigate" class="type-navigation"-->
+  <view wx:for="{{typelist}}" open-type="navigate" class="type-navigation">
+
+     <block wx:if="{{item.kstypeid!=3}}">
       <view data-typeid="{{ item.kstypeid }}" bindtap="changeFileList">
       <image class="guideimg" src="https://www.alemao.club/weapp/images/{{item.shortname}}.png" /> 
        <view wx:if="{{item.newfile!=0}}" class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">{{item.newfile}}</view>
-      <view class="element">{{item.typename}}</view>
+      <view class="element" id="{{item.kstypeid}}" style="background:{{ item.color }};padding:0 5px 0 5px">{{item.typename}}</view>
       </view>
-    <!--/navigator-->
+      </block>
+
+     <block wx:else>
+        <navigator  url="{{item.kstypeid==3 ? '../zhuanji/zhuanji?kstypeid=':'../kaoshi/kaoshi?kstypeid='}}{{item.kstypeid}} " open-type="navigate" class="type-navigation">
+        <image class="guideimg" src="https://www.alemao.club/weapp/images/{{item.shortname}}.png" /> 
+        <view wx:if="{{item.newfile!=0}}" class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">{{item.newfile}}</view>
+        <view class="element">{{item.typename}}</view>
+    </navigator>
+    </block>
+
   </view>
-</view>
+  </view>
 
 
 <view class="weui-panel">
@@ -31,10 +41,16 @@
             <view class="weui-cells weui-cells_in-small-appmsg">
                 <navigator url="../webview/webview?fileid={{item.fileid}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
                     <view class="weui-cell__bd weui-cell_primary" style="font-size:15px">
-                        <view>{{item.filetitle}}</view>
+                        <view>
+                        <view wx:if="{{item.ifnew!=0}}" class="weui-badge" style="float:right">new</view>
+                        {{item.filetitle}}
+                        </view>
+                        
                     <view class="weui-media-box__info">
                         <view class="weui-media-box__info__meta weui-media-box__info__meta_extra">发布于:{{item.pubtime}} 浏览次数:{{item.readtime}}</view>
+                        
                     </view>
+                
                     </view>
                 </navigator>
             </view>
@@ -43,27 +59,6 @@
     </view>
 </view>
 
-<view class="weui-panel">
-    <view class="weui-panel__hd">办事指南</view>
-    <view class="weui-panel__bd">
-        <view wx:for="{{list.guidelist}}">
-        <view class="weui-media-box weui-media-box_small-appmsg">
-            <view class="weui-cells weui-cells_in-small-appmsg">
-                <navigator url="../webview/webview?fileid={{item.guideid}}&type=guide" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
-                    <view class="weui-cell__hd"><image src="https://www.alemao.club/weapp/images/plan.png" class="img" /></view>
-                    <view class="weui-cell__bd weui-cell_primary">
-                        <view>{{item.title}}</view>
-                    <view class="weui-media-box__info">
-                        <view class="weui-media-box__info__meta weui-media-box__info__meta_extra">浏览次数:{{item.readtime}}</view>
-                    </view>
-                    </view>
-                    <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-                </navigator>
-            </view>
-        </view>
-        </view>
-    </view>
-</view>
 
     <view class="weui-footer">
         <view class="weui-footer__links">

@@ -7,11 +7,13 @@ page {
     justify-content: flex-start;
 }
 .typelist{
+    position: sticky;
+    top: 0;
     padding: 20rpx 0;
     font-size: 35rpx;
     line-height: 46rpx;
     word-break: break-all;
-    display: flex;
+    //display: flex;
     justify-content:space-around;/*横向导航均匀分布在弹性容器中*/
     background: #FFF;
 }
