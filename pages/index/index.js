@@ -2,7 +2,6 @@
 var qcloud = require('../../vendor/wafer2-client-sdk/index')
 var config = require('../../config')
 var util = require('../../utils/util.js')
-let typelist = new Array('gwy', 'zyjs', 'sydw', 'qt');
 let filesMap = new Map();
 Page({
     data: {
@@ -10,7 +9,9 @@ Page({
         logged: false,
         takeSession: false,
         requestResult: '',
-        typelist: []
+        typelist: [],//类型列表缓存数组
+        zhuanjilist: [],
+        zhuanjilistshow: "none"
     },
     onLoad: function () {
         util.showBusy('请求中...')
@@ -49,45 +50,98 @@ Page({
                 webdata.files[key].ifnew = 0;
             }
         }
-        //for (var key in webdata.files) {
-        //console.log(webdata.files[key].ifnew);
-        //}
         return webdata.files
     },
+
     myChangeColor:function (typelist,typeid) {
+        //刷新导航列表字符颜色
         for (var key in typelist) {
             typelist[key].color = 'white'
         }
-        typelist[typeid-1].color = 'red'
+        typelist[typeid-1].color = '#00CCFF '
     },
+
+    getZhuanjiKsList: function()
+    {
+        var that = this
+        qcloud.request({
+            url: `${config.service.host}/weapp/demo/get_zhuanji_list/`,
+            success(result) {
+                if(that.data.zhuanjilist.length == 0){
+                    that.data.zhuanjilist = result.data.zhuanjilist
+                }
+                that.setData({
+                    zhuanjilist: that.data.zhuanjilist
+                })
+            },
+            fail(error) {
+                util.showModel('请求失败', error);
+                console.log('request fail', error);
+            }
+        }) 
+    },
+
+    setZhuanjiFileByKsid(event){
+        var that = this
+        var ksid = event.currentTarget.dataset.ksid 
+        qcloud.request({
+            url: `${config.service.host}/weapp/demo/get_zhuanji_files_by_ksid/` + ksid,
+            success(result) {
+                that.setData({
+                    filelist: result.data.filelist,
+                    zhuanjilistshow: "none"
+                })
+            },
+            fail(error) {
+                util.showModel('请求失败', error);
+                console.log('request fail', error);
+            }
+        })
+    },
+
     changeFileList: function(event){
         //每次点击都触发请求，体验上很慢，而且浪费服务器资源，只要主页不注销，只用请求一次数据就保存在map中，需要重新渲染的时候就不用再请求了，这有点像缓存
         var that = this
         var typeid = event.currentTarget.dataset.typeid 
         this.myChangeColor(that.data.typelist,typeid)
-        if(filesMap.has(typeid))
+        if(typeid == 3)
         {
+            this.getZhuanjiKsList()
             this.setData({
-                filelist: filesMap.get(typeid),
-                typelist: that.data.typelist
+                typelist: that.data.typelist,
+                zhuanjilistshow: "inline"
             })
         }
         else{
-            qcloud.request({
-                url: `${config.service.host}/weapp/demo/get_file_list/`+typeid ,
-                login: false,
-                success(result) {
-                    filesMap.set(typeid,that.judgeIfNewFile(result.data))
-                    that.setData({
-                        filelist: filesMap.get(typeid),
-                        typelist: that.data.typelist
-                    })
-                },
-                fail(error) {
-                    util.showModel('请求失败', error);
-                    console.log('request fail', error);
-                }
-            }) 
+            this.setData({
+                zhuanjilistshow: "none"
+            })
+
+
+            if(filesMap.has(typeid))
+            {
+                this.setData({
+                    filelist: filesMap.get(typeid),
+                    typelist: that.data.typelist
+                })
+            }
+            else{
+                qcloud.request({
+                    url: `${config.service.host}/weapp/demo/get_file_list/`+typeid ,
+                    login: false,
+                    success(result) {
+                        filesMap.set(typeid,that.judgeIfNewFile(result.data))
+                        that.setData({
+                            filelist: filesMap.get(typeid),
+                            typelist: that.data.typelist
+                        })
+                    },
+                    fail(error) {
+                        util.showModel('请求失败', error);
+                        console.log('request fail', error);
+                    }
+                }) 
+            }
         }
     },
     // 切换是否带有登录态

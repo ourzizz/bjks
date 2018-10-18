@@ -14,25 +14,17 @@
 <view class="typelist">
   <view wx:for="{{typelist}}" open-type="navigate" class="type-navigation">
 
-     <block wx:if="{{item.kstypeid!=3}}">
       <view data-typeid="{{ item.kstypeid }}" bindtap="changeFileList">
       <image class="guideimg" src="https://www.alemao.club/weapp/images/{{item.shortname}}.png" /> 
        <view wx:if="{{item.newfile!=0}}" class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">{{item.newfile}}</view>
       <view class="element" id="{{item.kstypeid}}" style="background:{{ item.color }};padding:0 5px 0 5px">{{item.typename}}</view>
       </view>
-      </block>
-
-     <block wx:else>
-        <navigator  url="{{item.kstypeid==3 ? '../zhuanji/zhuanji?kstypeid=':'../kaoshi/kaoshi?kstypeid='}}{{item.kstypeid}} " open-type="navigate" class="type-navigation">
-        <image class="guideimg" src="https://www.alemao.club/weapp/images/{{item.shortname}}.png" /> 
-        <view wx:if="{{item.newfile!=0}}" class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">{{item.newfile}}</view>
-        <view class="element">{{item.typename}}</view>
-    </navigator>
-    </block>
-
   </view>
   </view>
 
+<view  wx:for="{{zhuanjilist}}" style='display:{{zhuanjilistshow}}'>
+  <button data-ksid="{{ item.ksid }}" bindtap="setZhuanjiFileByKsid" style='display:block'>{{item.ksname}}</button>
+</view>
 
 <view class="weui-panel">
     <view class="weui-panel__bd">
@@ -42,7 +34,7 @@
                 <navigator url="../webview/webview?fileid={{item.fileid}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
                     <view class="weui-cell__bd weui-cell_primary" style="font-size:15px">
                         <view>
-                        <view wx:if="{{item.ifnew!=0}}" class="weui-badge" style="float:right">new</view>
+                        <view wx:if="{{item.ifnew!=0 && item.ifnew!=null}}" class="weui-badge" style="float:right">new</view>
                         {{item.filetitle}}
                         </view>
                         
