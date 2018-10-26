@@ -1,33 +1,66 @@
+// pages/kaoshi/kaoshi.js
 Page({
+
+  /**
+   * 页面的初始数据
+   */
   data: {
-    msg: 'sssssssssssssssssssssssssssssssssssssssssssssssss',
-    html: '<style>body{background-color:#d0e4fe;}h1{color:orange;text-align:center;}p{font-family:"Times New Roman";font-size:20px;}</style></head><body><h1>CSS 实例!</h1><p>这是一个段落。</p></body>',
-    nodes: [{
-      name: 'div',
-      attrs: { 
-        class: 'div_class',
-        style: 'line-height: 60px; color: red;'
-      },
-      children: [{
-        type: 'text',
-        text: 'Hello&nbsp;World!'
-      }]
-    }]
+
   },
-  tap() {
-    console.log('tap')
+
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad: function (options) {
+
   },
-  show: function (event) {
-    if (event.currentTarget.dataset.ifshow == 'none') {
-      this.setData({
-        ifshow: 'inline'
-      })
-    }
-    else {
-      this.setData({
-        ifshow: 'none'
-      })
-    }
-    console.log("call")
+
+  /**
+   * 生命周期函数--监听页面初次渲染完成
+   */
+  onReady: function () {
+
+  },
+
+  /**
+   * 生命周期函数--监听页面显示
+   */
+  onShow: function () {
+
+  },
+
+  /**
+   * 生命周期函数--监听页面隐藏
+   */
+  onHide: function () {
+
+  },
+
+  /**
+   * 生命周期函数--监听页面卸载
+   */
+  onUnload: function () {
+
+  },
+
+  /**
+   * 页面相关事件处理函数--监听用户下拉动作
+   */
+  onPullDownRefresh: function () {
+
+  },
+
+  /**
+   * 页面上拉触底事件的处理函数
+   */
+  onReachBottom: function () {
+
+  },
+
+  /**
+   * 用户点击右上角分享
+   */
+  onShareAppMessage: function () {
+
   }
 })

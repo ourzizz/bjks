@@ -1,22 +1,2 @@
-
-<view class="page-body">
-  <view class="page-section">
-    <button class="page-section-title" data-ifshow="{{ifshow}}" bindtap='show' style='position:fixed; top:0px'>点击收起文章or展开文章</button>
-
-    <view class="rich-text-wrp" style='display:{{ifshow}}'  >
-      msgmsgmsgmsgmsgmsgmsgmsgmsgmsgmsgmsgmsgmsgmsgmsgmsgmsgmsgmsgmsgmsgmsgmsgmsgmsgmsgmsgmsgmsg
-    </view>
-
-    <view class="rich-text-wrp" style='display:{{ifshow}}'  >
-      <rich-text nodes="{{html}}" bindtap="tap"></rich-text>
-    </view>
-  
-  </view>
-<button  style='position:fixed; top:200px'>收藏</button>
-  <view class="page-section">
-    <view class="page-section-title">传入节点列表</view>
-    <view class="rich-text-wrp">
-      <rich-text nodes="{{nodes}}" bindtap="tap"></rich-text>
-    </view>
-  </view>
-</view>
+<!--pages/kaoshi/kaoshi.wxml-->
+<text>pages/kaoshi/kaoshi.wxml</text>

@@ -1,76 +1,84 @@
-// pages/webview/webview.js
-var config = require('../../config')
-Page({
+var sliderWidth = 96; // 需要设置slider的宽度，用于计算中间位置
+const htmlSnip =
+  `<h1 style="text-indent:15px;" align="center"><span style="font-size:12px;font-family:仿宋_GB2312;"><span style="color:#009900;font-size:32px;">中央机关及其直属机构2019年度考试录用公务员公告</span><br /></span> </h1><p style="text-indent:40px;"><span style="font-size:21px;font-family:仿宋_GB2312;">为满足中央机关及其直属机构录用公务员的需要，根据公务员法和公务员录用的有关规定，国家公务员局将组织实施</span><span style="font-size:21px;">2019</span><span style="font-size:21px;font-family:仿宋_GB2312;">年度中央机关及其直属机构考试录用主任科员以下及其他相当职务层次非领导职务公务员工作。现将有关事项公告如下：</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:黑体;">一、报考条件</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">（一）具有中华人民共和国国籍；</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">（二）</span><span style="font-size:21px;">18</span><span style="font-size:21px;font-family:仿宋_GB2312;">周岁以上、</span><span style="font-size:21px;">35</span><span style="font-size:21px;font-family:仿宋_GB2312;">周岁以下（</span><span style="font-size:21px;">1982</span><span style="font-size:21px;font-family:仿宋_GB2312;">年</span><span style="font-size:21px;">10</span><span style="font-size:21px;font-family:仿宋_GB2312;">月至</span><span style="font-size:21px;">2000</span><span style="font-size:21px;font-family:仿宋_GB2312;">年</span><span style="font-size:21px;">10</span><span style="font-size:21px;font-family:仿宋_GB2312;">月期间出生），</span><span style="font-size:21px;">2019</span><span style="font-size:21px;font-family:仿宋_GB2312;">年应届硕士研究生和博士研究生（非在职）人员年龄可放宽到</span><span style="font-size:21px;">40</span><span style="font-size:21px;font-family:仿宋_GB2312;">周岁以下（</span><span style="font-size:21px;">1977</span><span style="font-size:21px;font-family:仿宋_GB2312;">年</span><span style="font-size:21px;">10</span><span style="font-size:21px;font-family:仿宋_GB2312;">月以后出生）；</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">（三）拥护中华人民共和国宪法；</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">（四）具有良好的品行；</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">（五）具有正常履行职责的身体条件；</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">（六）具有符合职位要求的工作能力；</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">（七）具有大专以上文化程度；</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">（八）具备中央公务员主管部门规定的拟任职位所要求的其他资格条件。</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">中央机关及其省级直属机构除部分特殊职位和专业性较强的职位外，主要招录具有</span><span style="font-size:21px;">2</span><span style="font-size:21px;font-family:仿宋_GB2312;">年以上基层工作经历的人员，</span><span style="font-size:21px;font-family:仿宋_GB2312;">中央机关直属市（地）级机构职位、县（区）级及以下机构职位（含参照公务员法管理的事业单位）</span><span style="font-size:21px;">10%</span><span style="font-size:21px;font-family:仿宋_GB2312;">—</span><span style="font-size:21px;">15%</span><span style="font-size:21px;font-family:仿宋_GB2312;">的计划用于招录服务期满、考核合格的大学生村官、</span><span style="font-size:21px;font-family:仿宋_GB2312;">“三支一扶”计划、“农村义务教育阶段学校教师特设岗位计划”、“大学生志愿服务西部计划”</span><span style="font-size:21px;font-family:仿宋_GB2312;">等服务基层项目人员。</span><span style="font-size:21px;font-family:仿宋_GB2312;">地处艰苦边远地区的中央机关直属县（区）级及以下机构职位</span><span style="font-size:21px;font-family:仿宋_GB2312;">（含参照公务员法管理的事业单位）根据《关于做好艰苦边远地区基层公务员考试录用工作的意见》采取措施适当降低进入门槛。</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">招考职位明确要求有基层工作经历的，报考人员必须具备相应的基层工作经历。基层工作经历，是指具有在县级及以下党政机关、国有企事业单位、村（社区）组织及其他经济组织、社会组织等工作的经历。在军队团和相当于团以下单位工作的经历，退役士兵在军队服现役的经历可视为基层工作经历。报考中央机关的人员，曾在市（地）直属机关工作的经历，也可视为基层工作经历。以上基层工作经历计算时间截止到</span><span style="font-size:21px;">2018</span><span style="font-size:21px;font-family:仿宋_GB2312;">年</span><span style="font-size:21px;">10</span><span style="font-size:21px;font-family:仿宋_GB2312;">月。</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">现役军人、在读的非应届毕业生、在职公务员和参照公务员法管理的机关（单位）工作人员，不能报考。</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">因犯罪受过刑事处罚的人员和被开除公职的人员，在各级公务员招考中被认定有舞弊等严重违反录用纪律行为的人员，公务员和参照公务员法管理的机关（单位）工作人员被辞退未满</span><span style="font-size:21px;">5</span><span style="font-size:21px;font-family:仿宋_GB2312;">年的，以及法律法规规定不得录用为公务员的其他情形的人员，不得报考。报考人员不得报考录用后即构成回避关系的招考职位。</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:黑体;">二、报考程序</span> </p><p style="text-indent:43px;"><strong><span style="font-size:21px;font-family:楷体_GB2312;">（一）职位查询</span></strong> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">各招录机关的招考人数、具体职位、考试类别、资格条件等详见《中央机关及其直属机构</span><span style="font-size:21px;">2019</span><span style="font-size:21px;font-family:仿宋_GB2312;">年度考试录用公务员招考简章》（以下简称《招考简章》），报考人员在</span><span style="font-size:21px;">2018</span><span style="font-size:21px;font-family:仿宋_GB2312;">年</span><span style="font-size:21px;">10</span><span style="font-size:21px;font-family:仿宋_GB2312;">月</span><span style="font-size:21px;">21</span><span style="font-size:21px;font-family:仿宋_GB2312;">日后可以通过国家公务员局门户网站（</span><span style="font-size:21px;">http://www.scs.gov.cn</span><span style="font-size:21px;font-family:仿宋_GB2312;">）和中央机关及其直属机构</span><span style="font-size:21px;">2019</span><span style="font-size:21px;font-family:仿宋_GB2312;">年度考试录用公务员专题网站（以下简称考录专题网站，</span><span style="font-size:21px;">http://bm.scs.gov.cn/kl2019</span><span style="font-size:21px;font-family:仿宋_GB2312;">）查阅。</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">对《招考简章》中的专业、学历、学位、资格条件、基层工作经历以及备注内容等信息需要咨询时，请报考人员直接与招录机关联系，招录机关的咨询电话可以通过上述网站查询。</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">有关报考政策、报名网络技术和考场考务安排等事宜的详细情况，请参阅《中央机关及其直属机构</span><span style="font-size:21px;">2019</span><span style="font-size:21px;font-family:仿宋_GB2312;">年度考试录用公务员报考指南》（以下简称《报考指南》）。</span> </p><p style="text-indent:43px;"><strong><span style="font-size:21px;font-family:楷体_GB2312;">（二）网上报名</span></strong> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">本次考试报名主要采取网上报名的方式进行。报考人员可登录考录专题网站进行网上报名，也可以通过国家公务员局门户网站上的相关链接登录考录专题网站。</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">网上报名按以下程序进行：</span> </p><p style="text-indent:43px;"><strong><span style="font-size:21px;">1. </span></strong><strong><span style="font-size:21px;font-family:仿宋_GB2312;">提交报考申请。</span></strong><span style="font-size:21px;font-family:仿宋_GB2312;">报考人员可在</span><span style="font-size:21px;">2018</span><span style="font-size:21px;font-family:仿宋_GB2312;">年</span><span style="font-size:21px;">10</span><span style="font-size:21px;font-family:仿宋_GB2312;">月</span><span style="font-size:21px;">22</span><span style="font-size:21px;font-family:仿宋_GB2312;">日</span><span style="font-size:21px;">8:00</span><span style="font-size:21px;font-family:仿宋_GB2312;">至</span><span style="font-size:21px;">10</span><span style="font-size:21px;font-family:仿宋_GB2312;">月</span><span style="font-size:21px;">31</span><span style="font-size:21px;font-family:仿宋_GB2312;">日</span><span style="font-size:21px;">18:00</span><span style="font-size:21px;font-family:仿宋_GB2312;">期间登录考录专题网站，提交报考申请。报考人员只能选择一个部门（单位）中的一个职位进行报名，报名与考试时使用的本人有效居民身份证必须一致。</span><span style="font-size:21px;font-family:黑体;">报名时，报考人员要仔细阅读诚信承诺书，提交的报考申请材料应当真实、准确。报考人员提供虚假报考申请材料的，一经查实，即取消报考资格。对伪造、变造有关证件、材料、信息，骗取考试资格的，将按照公务员录用考试违纪违规的有关规定处理。</span> </p><p style="text-indent:43px;"><strong><span style="font-size:21px;">2. </span></strong><strong><span style="font-size:21px;font-family:仿宋_GB2312;">查询资格审查结果。</span></strong><span style="font-size:21px;font-family:仿宋_GB2312;">报考人员请于</span><span style="font-size:21px;">2018</span><span style="font-size:21px;font-family:仿宋_GB2312;">年</span><span style="font-size:21px;">10</span><span style="font-size:21px;font-family:仿宋_GB2312;">月</span><span style="font-size:21px;">22</span><span style="font-size:21px;font-family:仿宋_GB2312;">日至</span><span style="font-size:21px;">11</span><span style="font-size:21px;font-family:仿宋_GB2312;">月</span><span style="font-size:21px;">2</span><span style="font-size:21px;font-family:仿宋_GB2312;">日</span><span style="font-size:21px;font-family:仿宋_GB2312;">期间登录考录专题网站查询是否通过资格审查。通过资格审查的，不能再报考其他职位。</span><span style="font-size:21px;">2018</span><span style="font-size:21px;font-family:仿宋_GB2312;">年</span><span style="font-size:21px;">10</span><span style="font-size:21px;font-family:仿宋_GB2312;">月</span><span style="font-size:21px;">22</span><span style="font-size:21px;font-family:仿宋_GB2312;">日</span><span style="font-size:21px;">8:00</span><span style="font-size:21px;font-family:仿宋_GB2312;">至</span><span style="font-size:21px;">10</span><span style="font-size:21px;font-family:仿宋_GB2312;">月</span><span style="font-size:21px;">31</span><span style="font-size:21px;font-family:仿宋_GB2312;">日</span><span style="font-size:21px;">18:00</span><span style="font-size:21px;font-family:仿宋_GB2312;">期间，报考申请尚未审查或未通过资格审查的，可以改报其他职位。</span><span style="font-size:21px;">2018</span><span style="font-size:21px;font-family:仿宋_GB2312;">年</span><span style="font-size:21px;">10</span><span style="font-size:21px;font-family:仿宋_GB2312;">月</span><span style="font-size:21px;">31</span><span style="font-size:21px;font-family:仿宋_GB2312;">日</span><span style="font-size:21px;">18:00</span><span style="font-size:21px;font-family:仿宋_GB2312;">至</span><span style="font-size:21px;">11</span><span style="font-size:21px;font-family:仿宋_GB2312;">月</span><span style="font-size:21px;">2</span><span style="font-size:21px;font-family:仿宋_GB2312;">日</span><span style="font-size:21px;">18:00</span><span style="font-size:21px;font-family:仿宋_GB2312;">期间，报考申请未审查或未通过资格审查的，不能再改报其他职位。</span> </p><p style="text-indent:43px;"><strong><span style="font-size:21px;">3. </span></strong><strong><span style="font-size:21px;font-family:仿宋_GB2312;">查询报名序号。</span></strong><span style="font-size:21px;font-family:仿宋_GB2312;">通过资格审查的人员，请于</span><span style="font-size:21px;">2018</span><span style="font-size:21px;font-family:仿宋_GB2312;">年</span><span style="font-size:21px;">11</span><span style="font-size:21px;font-family:仿宋_GB2312;">月</span><span style="font-size:21px;">4</span><span style="font-size:21px;font-family:仿宋_GB2312;">日</span><span style="font-size:21px;">8:00</span><span style="font-size:21px;font-family:仿宋_GB2312;">后登录考录专题网站查询报名序号。</span><span style="font-size:21px;font-family:黑体;">报名序号是报考人员报名确认和下载打印准考证等事项的重要依据和关键字，请务必牢记。</span> </p><p style="text-indent:43px;"><strong><span style="font-size:21px;font-family:楷体_GB2312;">（三）报名确认</span></strong> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">通过资格审查的报考人员需要进行报名确认。报名确认采取网上确认的方式进行，报考人员请于</span><span style="font-size:21px;">2018</span><span style="font-size:21px;font-family:仿宋_GB2312;">年</span><span style="font-size:21px;">11</span><span style="font-size:21px;font-family:仿宋_GB2312;">月</span><span style="font-size:21px;">8</span><span style="font-size:21px;font-family:仿宋_GB2312;">日</span><span style="font-size:21px;">0:00</span><span style="font-size:21px;font-family:仿宋_GB2312;">至</span><span style="font-size:21px;">14</span><span style="font-size:21px;font-family:仿宋_GB2312;">日</span><span style="font-size:21px;">24:00</span><span style="font-size:21px;font-family:仿宋_GB2312;">登录考录专题网站进行网上报名确认及缴费。未按期参加报名确认并缴费者视为自动放弃考试。</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">网上报名确认时，报考人员应上传通过</span><span style="font-size:21px;font-family:仿宋_GB2312;">“照片处理工具”</span><span style="font-size:21px;font-family:仿宋_GB2312;">（有关使用说明参阅《报考指南》）处理过的本人电子证件照片，并按规定网上缴纳有关费用。</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">建档立卡贫困家庭人员和城市低保人员，可以直接与当地考试机构联系办理报名确认和减免费用的手续。</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">各省（自治区、直辖市）考试机构的咨询电话将于</span><span style="font-size:21px;">2018</span><span style="font-size:21px;font-family:仿宋_GB2312;">年</span><span style="font-size:21px;">11</span><span style="font-size:21px;font-family:仿宋_GB2312;">月</span><span style="font-size:21px;">7</span><span style="font-size:21px;font-family:仿宋_GB2312;">日以后通过考录专题网站公布。</span> </p><p style="text-indent:43px;"><strong><span style="font-size:21px;font-family:楷体_GB2312;">（四）网上打印准考证</span></strong> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">报名确认成功后，报考人员请于</span><span style="font-size:21px;">2018</span><span style="font-size:21px;font-family:仿宋_GB2312;">年</span><span style="font-size:21px;">11</span><span style="font-size:21px;font-family:仿宋_GB2312;">月</span><span style="font-size:21px;">26</span><span style="font-size:21px;font-family:仿宋_GB2312;">日</span><span style="font-size:21px;">0:00</span><span style="font-size:21px;font-family:仿宋_GB2312;">至</span><span style="font-size:21px;">12</span><span style="font-size:21px;font-family:仿宋_GB2312;">月</span><span style="font-size:21px;">2</span><span style="font-size:21px;font-family:仿宋_GB2312;">日</span><span style="font-size:21px;">12:00</span><span style="font-size:21px;font-family:仿宋_GB2312;">期间，登录考录专题网站打印准考证。打印中如遇问题，请与当地考试机构联系解决。</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:黑体;">三、考试内容、时间和地点</span> </p><p style="text-indent:43px;"><strong><span style="font-size:21px;font-family:楷体_GB2312;">（一）笔试</span></strong> </p><p style="text-indent:43px;"><strong><span style="font-size:21px;">1. </span></strong><strong><span style="font-size:21px;font-family:仿宋_GB2312;">内容。</span></strong><span style="font-size:21px;font-family:仿宋_GB2312;">公共科目包括行政职业能力测验和申论两科。有关情况详见《中央机关及其直属机构</span><span style="font-size:21px;">2019</span><span style="font-size:21px;font-family:仿宋_GB2312;">年度考试录用公务员公共科目考试大纲》。</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">报考中共</span><span style="font-size:21px;font-family:仿宋_GB2312;">中央对外联络部、外交部、商务部、中国贸促会、全国对外友协等</span><span style="font-size:21px;font-family:仿宋_GB2312;">部门日语、法语、俄语、西班牙语、阿拉伯语、德语、朝鲜语（韩语）、葡萄牙语等</span><span style="font-size:21px;">8</span><span style="font-size:21px;font-family:仿宋_GB2312;">个非通用语职位的人员，还将参加</span><span style="font-size:21px;font-family:黑体;">外语水平测试</span><span style="font-size:21px;font-family:仿宋_GB2312;">，考试大纲请在考录专题网站和外交部、商务部等部门网站查询。</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">报考中国银保监会及其派出机构、中国证监会及其派出机构特殊专业职位的人员以及报考公安机关人民警察职位的人员还将参加</span><span style="font-size:21px;font-family:黑体;">专业科目考试</span><span style="font-size:21px;font-family:仿宋_GB2312;">，考试大纲请在考录专题网站，中国银保监会、中国证监会、公安部网站分别查询。</span> </p><p style="text-indent:43px;"><strong><span style="font-size:21px;">2. </span></strong><strong><span style="font-size:21px;font-family:仿宋_GB2312;">时间地点。</span></strong><span style="font-size:21px;font-family:仿宋_GB2312;">公共科目笔试的时间为</span><span style="font-size:21px;">2018</span><span style="font-size:21px;font-family:仿宋_GB2312;">年</span><span style="font-size:21px;">12</span><span style="font-size:21px;font-family:仿宋_GB2312;">月</span><span style="font-size:21px;">2</span><span style="font-size:21px;font-family:仿宋_GB2312;">日</span><span style="font-size:21px;font-family:仿宋_GB2312;">。具体安排为：</span> </p><p style="text-indent:43px;"><span style="font-size:21px;">12</span><span style="font-size:21px;font-family:仿宋_GB2312;">月</span><span style="font-size:21px;">2</span><span style="font-size:21px;font-family:仿宋_GB2312;">日</span><span style="font-size:21px;font-family:仿宋_GB2312;">上午</span><span style="font-size:21px;">&nbsp; 9:00</span><span style="font-size:21px;font-family:仿宋_GB2312;">－</span><span style="font-size:21px;">11:00&nbsp;&nbsp;&nbsp; </span><span style="font-size:21px;font-family:仿宋_GB2312;">行政职业能力测验</span> </p><p style="text-indent:43px;"><span style="font-size:21px;">12</span><span style="font-size:21px;font-family:仿宋_GB2312;">月</span><span style="font-size:21px;">2</span><span style="font-size:21px;font-family:仿宋_GB2312;">日</span><span style="font-size:21px;font-family:仿宋_GB2312;">下午</span><span style="font-size:21px;">&nbsp; 14:00</span><span style="font-size:21px;font-family:仿宋_GB2312;">－</span><span style="font-size:21px;">17:00&nbsp;&nbsp; </span><span style="font-size:21px;font-family:仿宋_GB2312;">申论</span> </p><p style="text-indent:40px;"><span style="font-size:21px;">8</span><span style="font-size:21px;font-family:仿宋_GB2312;">个非通用语职位外语水平测试的时间为：</span> </p><p style="text-indent:40px;"><span style="font-size:21px;">2018</span><span style="font-size:21px;font-family:仿宋_GB2312;">年</span><span style="font-size:21px;">12</span><span style="font-size:21px;font-family:仿宋_GB2312;">月</span><span style="font-size:21px;">1</span><span style="font-size:21px;font-family:仿宋_GB2312;">日下午</span><span style="font-size:21px;">&nbsp; 14:00</span><span style="font-size:21px;font-family:仿宋_GB2312;">－</span><span style="font-size:21px;">16:00</span> </p><p style="text-indent:40px;"><span style="font-size:21px;font-family:仿宋_GB2312;">中国银保监会及其派出机构、中国证监会及其派出机构特殊专业职位和公安机关人民警察职位专业科目考试的时间为：</span> </p><p style="text-indent:43px;"><span style="font-size:21px;">2018</span><span style="font-size:21px;font-family:仿宋_GB2312;">年</span><span style="font-size:21px;">12</span><span style="font-size:21px;font-family:仿宋_GB2312;">月</span><span style="font-size:21px;">1</span><span style="font-size:21px;font-family:仿宋_GB2312;">日下午</span><span style="font-size:21px;">&nbsp; 14:00</span><span style="font-size:21px;font-family:仿宋_GB2312;">－</span><span style="font-size:21px;">16:00</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">本次考试在全国各省会城市和个别较大的城市设置考场。报考人员应按照准考证上确定的时间和地点参加考试。参加考试时，</span><span style="font-size:21px;font-family:黑体;">必须同时携带准考证和本人有效居民身份证（与报名时一致）</span><span style="font-size:21px;font-family:仿宋_GB2312;">。报考中国银保监会及其派出机构、中国证监会及其派出机构特殊专业职位和公安机关人民警察职位的人员在网上报名时，</span><span style="font-size:21px;font-family:黑体;">务必将考点选择为省会城市、自治区首府或直辖市。</span><span style="font-size:21px;font-family:仿宋_GB2312;">报考中共中央对外联络部等部门</span><span style="font-size:21px;">8</span><span style="font-size:21px;font-family:仿宋_GB2312;">个非通用语职位的人员在网上报名时，</span><span style="font-size:21px;font-family:黑体;">务必将考点选择为北京。</span> </p><p style="text-indent:43px;"><strong><span style="font-size:21px;">3. </span></strong><strong><span style="font-size:21px;font-family:仿宋_GB2312;">成绩查询。</span></strong><span style="font-size:21px;font-family:仿宋_GB2312;">公共科目笔试成绩及最低合格分数线可于</span><span style="font-size:21px;">2019</span><span style="font-size:21px;font-family:仿宋_GB2312;">年</span><span style="font-size:21px;">1</span><span style="font-size:21px;font-family:仿宋_GB2312;">月中下旬在考录专题网站查询。</span><span style="font-size:21px;">8</span><span style="font-size:21px;font-family:仿宋_GB2312;">个非通用语职位的外语水平测试成绩和中国银保监会及其派出机构、中国证监会及其派出机构特殊专业职位、公安机关人民警察职位专业科目考试成绩也同时在考录专题网站上查询。</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">对西部地区和艰苦边远地区职位、基层职位和特殊专业职位等，在划定最低合格分数线时将予以政策倾斜。</span> </p><p style="text-indent:43px;"><strong><span style="font-size:21px;font-family:楷体_GB2312;">（二）面试和专业能力测试</span></strong> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">根据《招考简章》中规定的面试人选的比例，按照笔试成绩从高到低的顺序，确定参加面试和专业能力测试的人选名单，并在考录专题网站上统一公布。其中，</span><span style="font-size:21px;">8</span><span style="font-size:21px;font-family:仿宋_GB2312;">个非通用语职位按照公共科目笔试成绩与外语水平测试成绩</span><span style="font-size:21px;">1</span><span style="font-size:21px;font-family:仿宋_GB2312;">：</span><span style="font-size:21px;">1</span><span style="font-size:21px;font-family:仿宋_GB2312;">的比例进行合成后排序；中国银保监会及其派出机构、中国证监会及其派出机构特殊专业职位按照公共科目笔试成绩与专业科目考试成绩</span><span style="font-size:21px;">1</span><span style="font-size:21px;font-family:仿宋_GB2312;">：</span><span style="font-size:21px;">1</span><span style="font-size:21px;font-family:仿宋_GB2312;">的比例进行合成后排序。公安机关人民警察</span><span style="font-size:21px;font-family:仿宋_GB2312;">职位按照行政职业能力测验、申论、专业科目考试成绩各占</span><span style="font-size:21px;">40%</span><span style="font-size:21px;font-family:仿宋_GB2312;">、</span><span style="font-size:21px;">30%</span><span style="font-size:21px;font-family:仿宋_GB2312;">、</span><span style="font-size:21px;">30%</span><span style="font-size:21px;font-family:仿宋_GB2312;">的比例</span><span style="font-size:21px;font-family:仿宋_GB2312;">进行合成后排序。</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">达到公共科目笔试最低合格分数线的人数与计划录用人数比例低于规定面试比例的招考职位，将进行调剂。调剂职位及调剂相关事宜，在公共科目笔试成绩公布后，通过考录专题网站面向社会统一公布。</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">调剂结束后，报考人员可登录考录专题网站查询各招录机关的面试公告。面试时，报考人员须提供本人身份证件（本人有效居民身份证、学生证、工作证等）原件、</span><span style="font-size:21px;font-family:仿宋_GB2312;">所在学校或所在单位盖章的报名推荐表、</span><span style="font-size:21px;font-family:仿宋_GB2312;">报名登记表等材料。凡有关材料主要信息不实，影响资格审查结果的，招录机关有权取消该报考人员参加面试的资格。</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">部分招录机关会根据职位特点设置面试阶段的专业能力测试，专业能力测试设置情况及相关事项将在考录专题网站及招录机关网站上公布。</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">报考所需的报名推荐表、报名登记表等材料可从考录专题网站下载、打印。</span> </p><p style="text-indent:40px;"><span style="font-size:21px;font-family:仿宋_GB2312;">一般职位综合成绩的计算方法为</span><span style="font-size:21px;font-family:仿宋_GB2312;">：公共科目笔试、面试成绩各占</span><span style="font-size:21px;">50</span><span style="font-size:21px;font-family:仿宋_GB2312;">％，进行</span><span style="font-size:21px;font-family:仿宋_GB2312;">专业能力测试</span><span style="font-size:21px;font-family:仿宋_GB2312;">的，面试成绩和</span><span style="font-size:21px;font-family:仿宋_GB2312;">专业能力测试</span><span style="font-size:21px;font-family:仿宋_GB2312;">成绩共占</span><span style="font-size:21px;">50</span><span style="font-size:21px;font-family:仿宋_GB2312;">％，公共科目笔试、面试、</span><span style="font-size:21px;font-family:仿宋_GB2312;">专业能力测试</span><span style="font-size:21px;font-family:仿宋_GB2312;">成绩均按百分制折算。</span><span style="font-size:21px;font-family:仿宋_GB2312;">专业能力测试</span><span style="font-size:21px;font-family:仿宋_GB2312;">成绩一般不超过综合成绩的</span><span style="font-size:21px;">15%</span><span style="font-size:21px;font-family:仿宋_GB2312;">，具体各职位所占分值比重见《招考简章》。</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">个别参加面试人数与录用计划数比例低于</span><span style="font-size:21px;">3:1</span><span style="font-size:21px;font-family:仿宋_GB2312;">的职位，报考人员面试成绩应达到其所在面试考官小组使用同一套面试题本面试的所有人员的平均分或者招录机关在面试公告中确定的面试合格分数线，方可进入体检和考察。</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:黑体;">四、体检和考察</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">面试和专业能力测试结束后，将按照综合成绩从高到低的顺序确定进入体检和考察的人选。考生可到考录专题网站查询本人面试成绩。</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:黑体;">五、公示拟录用人员名单</span> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">拟录用人员由招录机关按规定的程序和标准从考试成绩、考察情况和体检结果合格的人员中综合考虑，择优确定，并在考录专题网站上公示。公示内容包括录用职位名称、拟录用人员姓名、性别、准考证号、学历、所在工作单位（应届生填毕业院校）等，同时公布举报电话，接受社会监督，公示期为</span><span style="font-size:21px;">5</span><span style="font-size:21px;font-family:仿宋_GB2312;">个工作日。</span> </p><p style="text-indent:43px;"><strong><span style="font-size:21px;font-family:黑体;">特别提示：</span></strong> </p><p style="text-indent:43px;"><span style="font-size:21px;font-family:仿宋_GB2312;">本次考试不指定考试辅导用书，不举办也不委托任何机构举办考试辅导培训班。目前社会上出现的假借公务员考试命题组、考试教材编委会、中央公务员主管部门授权等名义举办的有关公务员考试辅导班、辅导网站或发行的出版物等，均与本次考试无关，敬请广大报考者提高警惕，切勿上当受骗。</span> </p><span style="font-size:21px;"></span>
 
-  /**
-   * 页面的初始数据
-   */
+<img src="http://www.bijiekaoshi.com/public/images/fileimg/testrichtextimg.png" width="100%" alt="上海鲜花港 - 郁金香" />
+`
+
+
+const nodeSnip =
+  `Page({
   data: {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function(options) {
-    let url = ''
-    if (options.type === 'guide') {
-       url = `${config.service.host}/weapp/demo/show_guide_article/` + options.fileid
-    } else {
-       url = `${config.service.host}/weapp/demo/show_article/` + options.fileid
-    }
-    console.log(url)
-    this.setData({
-      webaddress: url
-    })
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function() {
-
+    nodes: [{
+      name: 'div',
+      attrs: {
+        class: 'div_class',
+        style: 'line-height: 60px; color: red;'
+      },
+      children: [{
+        type: 'text',
+        text: 'You never know what you're gonna get.'
+      }]
+    }]
   }
 })
+`
+Page({
+  data: {
+    tabs: ["时间节点", "职位一览", "注意事项"],
+    activeIndex: 5,
+    sliderOffset: 0,
+    sliderLeft: 0,
+
+    htmlSnip,
+    nodeSnip,
+    renderedByHtml: false,
+    renderedByNode: false,
+    nodes: [{
+      name: 'div',
+      attrs: {
+        class: 'div_class',
+        style: 'line-height: 60px; color: blue;'
+      },
+      children: [{
+        type: 'text',
+        text: 'You never know what you\'re gonna get.'
+      }]
+    }]
+  },
+  onLoad: function () {
+    var that = this;
+    wx.getSystemInfo({
+      success: function (res) {
+        that.setData({
+          sliderLeft: (res.windowWidth / that.data.tabs.length - sliderWidth) / 2,
+          sliderOffset: res.windowWidth / that.data.tabs.length * that.data.activeIndex
+        });
+      }
+    });
+  },
+  tabClick: function (e) {
+    this.setData({
+      sliderOffset: e.currentTarget.offsetLeft,
+      activeIndex: e.currentTarget.id
+    });
+  },
+  renderHtml() {
+    this.setData({
+      renderedByHtml: true,
+      renderedByNode: false
+    })
+  },
+  renderNode() {
+    this.setData({
+      renderedByNode: true,
+      renderedByHtml: false
+    })
+  },
+  enterCode(e) {
+    console.log(e.detail.value)
+    this.setData({
+      htmlSnip: e.detail.value
+    })
+  }
+});

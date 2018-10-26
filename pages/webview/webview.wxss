@@ -1,1 +1,63 @@
-/* pages/webview/webview.wxss */
+@import '/weui.wxss';
+.page__bd{
+    height: 100%;
+}
+.page__bd{
+    padding-bottom: 0;
+}
+.weui-tab__content{
+    padding-top: 60px;
+    text-align: center;
+}
+
+/*-----------下面是HTML页面解析------------------*/
+.page-content {
+  width: 58vmax;
+  margin: 30rpx 0;
+  padding: 0 50rpx;
+}
+
+.code-fragment {
+  height: 350rpx;
+}
+
+.code-textarea {
+  width: auto;
+  height: 350rpx;
+  border: 1rpx solid #1AAD19;
+}
+
+.p {
+  color: #1AAD19;
+  margin-top: 30rpx;
+}
+
+.space {
+  display: inline-block;
+  background: red;
+  width: 10rpx;
+}
+
+scroll-view {
+  height: 350rpx;
+  border: 1rpx solid #1AAD19;
+  white-space: pre;
+  padding: 10rpx;
+  box-sizing: border-box;
+}
+
+.shareicon{
+  /*display: absolute ;*/
+  position: fixed;
+  top: 324 px;
+  left: 0px;
+  height: 30px;
+  width: 30px;
+}
+.collecticon{
+  position: fixed;
+  top: 624 px;
+  right: 0px;
+  height: 30px;
+  width: 30px;
+}
