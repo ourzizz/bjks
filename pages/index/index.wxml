@@ -1,62 +1,62 @@
 <!--index.wxml-->
 <view class="page">
-<view class="swiper-container">
-  <swiper indicator-dots="true" >
-    <block wx:for="{{list.headline}}">
-      <navigator url="../webview/webview?fileid={{item.fileid}}">
-        <swiper-item class="swiper-item">{{item.msgcontent}}</swiper-item>
-      </navigator>
-    </block>
-  </swiper>
-</view>
+  <view class="swiper-container">
+    <swiper indicator-dots="true">
+      <block wx:for="{{list.headline}}">
+        <navigator url="../webview/webview?fileid={{item.fileid}}">
+          <swiper-item class="swiper-item">{{item.msgcontent}}</swiper-item>
+        </navigator>
+      </block>
+    </swiper>
+  </view>
 
-<scroll-view scroll-x="true" style=" white-space: nowrap; display: flex" >
-<view class="typelist">
-  <view wx:for="{{typelist}}" open-type="navigate" class="type-navigation">
+  <scroll-view scroll-x="true" style=" white-space: nowrap; display: flex">
+    <view class="typelist">
+      <view wx:for="{{typelist}}" open-type="navigate" class="type-navigation">
 
-      <view data-typeid="{{ item.kstypeid }}" bindtap="changeFileList">
-      <image class="guideimg" src="https://www.alemao.club/weapp/images/{{item.shortname}}.png" /> 
-       <view wx:if="{{item.newfile!=0}}" class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">{{item.newfile}}</view>
-      <view class="element" id="{{item.kstypeid}}" style="background:{{ item.color }};padding:0 5px 0 5px">{{item.typename}}</view>
+        <view data-typeid="{{ item.kstypeid }}" bindtap="changeFileList">
+          <image class="guideimg" src="https://www.alemao.club/weapp/images/{{item.shortname}}.png" />
+          <view wx:if="{{item.newfile!=0}}" class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">{{item.newfile}}</view>
+          <view class="element" id="{{item.kstypeid}}" style="background:{{ item.color }};padding:0 5px 0 5px">{{item.typename}}</view>
+        </view>
       </view>
-  </view>
-  </view>
-</scroll-view>
+    </view>
+  </scroll-view>
 
-<view  wx:for="{{zhuanjilist}}" style='display:{{zhuanjilistshow}}'>
-  <button data-ksid="{{ item.ksid }}" bindtap="setZhuanjiFileByKsid" style='display:block'>{{item.ksname}}</button>
-</view>
+  <view wx:for="{{zhuanjilist}}" style='display:{{zhuanjilistshow}}'>
+    <button data-ksid="{{ item.ksid }}" bindtap="setZhuanjiFileByKsid" style='display:block'>{{item.ksname}}</button>
+  </view>
 
-<view class="weui-panel">
+  <view class="weui-panel">
     <view class="weui-panel__bd">
-        <view wx:for="{{filelist}}">
-        <view class="weui-media-box weui-media-box_small-appmsg" >
-            <view class="weui-cells weui-cells_in-small-appmsg">
-                <navigator url="../webview/webview?fileid={{item.fileid}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
-                    <view class="weui-cell__bd weui-cell_primary" style="font-size:15px">
-                        <view>
-                        <view wx:if="{{item.ifnew!=0 && item.ifnew!=null}}" class="weui-badge" style="float:right">new</view>
-                        {{item.filetitle}}
-                        </view>
-                        
-                    <view class="weui-media-box__info">
-                        <view class="weui-media-box__info__meta weui-media-box__info__meta_extra">发布于:{{item.pubtime}} 浏览次数:{{item.readtime}}</view>
-                        
-                    </view>
-                
-                    </view>
-                </navigator>
-            </view>
+      <view wx:for="{{filelist}}">
+        <view class="weui-media-box weui-media-box_small-appmsg">
+          <view class="weui-cells weui-cells_in-small-appmsg">
+            <navigator url="../webview/webview?fileid={{item.fileid}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+              <view class="weui-cell__bd weui-cell_primary" style="font-size:15px">
+                <view>
+                  <view wx:if="{{item.ifnew!=0 && item.ifnew!=null}}" class="weui-badge" style="float:right">new</view>
+                  {{item.filetitle}}
+                </view>
+
+                <view class="weui-media-box__info">
+                  <view class="weui-media-box__info__meta weui-media-box__info__meta_extra">发布于:{{item.pubtime}} 浏览次数:{{item.readtime}}</view>
+
+                </view>
+
+              </view>
+            </navigator>
+          </view>
         </view>
-        </view>
+      </view>
     </view>
-</view>
+  </view>
 
 
-    <view class="weui-footer">
-        <view class="weui-footer__links">
-            <navigator url="" class="weui-footer__link">PowerBy七星诺必达</navigator>
-        </view>
-        <view class="weui-footer__text">Copyright © www.qixingnbd.com</view>
+  <view class="weui-footer">
+    <view class="weui-footer__links">
+      <navigator url="" class="weui-footer__link">PowerBy七星诺必达</navigator>
     </view>
+    <view class="weui-footer__text">Copyright © www.qixingnbd.com</view>
+  </view>
 </view>

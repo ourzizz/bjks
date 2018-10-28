@@ -4,30 +4,69 @@
       <view class="weui-navbar">
         <block wx:for="{{tabs}}" wx:key="*this">
           <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
-            <view class="weui-navbar__title">{{item}}</view>
+            <view class="weui-navbar__title">{{item[0]}}</view>
           </view>
         </block>
         <view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
       </view>
-      <view class="weui-tab__panel">
-        <view class="weui-tab__content" hidden="{{activeIndex != 0}}">选项一的内容</view>
-        <view class="weui-tab__content" hidden="{{activeIndex != 1}}">选项二的内容</view>
-        <view class="weui-tab__content" hidden="{{activeIndex != 2}}">选项三的内容</view>
-      </view>
+
+
+      <block wx:if="{{tabs != false}}">
+        <!-- 没有notify的话就不用渲染导航 -->
+        <view class="weui-tab__panel">
+          <block wx:for="{{tabs}}" wx:key="*this" wx:for-index="idx">
+            <block wx:if="{{item[0] == '时间节点' }}">
+              <view class="notify" hidden="{{activeIndex != idx}}">
+                <view wx:for="{{item[1]}}">
+                  <view>
+                    <view style='display:inline;font-weight:bold;'>*{{item.event}}时间:</view>{{item.startime}}至{{item.endtime}}</view>
+                  <view>{{item.detail}}</view>
+                </view>
+              </view>
+            </block>
+
+            <block wx:else>
+              <view class="notify" hidden="{{activeIndex != idx}}">
+                <rich-text nodes="{{item[1]}}"></rich-text>
+              </view>
+            </block>
+          </block>
+        </view>
+      </block>
+      <!-- 没有notify的话就不用渲染导航 -->
+
     </view>
   </view>
 </view>
 
-  <image class="shareicon" src="/image/share.png" />
-  <image class="collecticon" src="/image/collect.png" />
-
 <view class="container">
   <view class="page-body">
     <view class="page-section">
-      <view class="page-content">
+      <view class="page-content" bindtouchmove="hideNotify">
         <rich-text nodes="{{htmlSnip}}"></rich-text>
       </view>
     </view>
   </view>
+<view style='padding:20px'></view>
+<!-- 没有notify的话就不用渲染导航 -->
+<view class="bottomnav" >
 
+  <navigator url="../index/index" open-type="reLaunch">
+   <view class="navitem">
+    <image class="navicon" src="/image/home.png" />
+    <view class="navtext">首页</view>
+   </view>
+  </navigator>
+
+  <view class="navitem" open-type="share" >
+    <image class="navicon" src="/image/share.png" />
+    <view class="navtext">分享</view>
+  </view>
+  <view class="navitem">
+    <image class="navicon" src="/image/collect.png" />
+    <view class="navtext">收藏</view>
+  </view>
+</view>
+<!-- 没有notify的话就不用渲染导航 -->
+  
 </view>
