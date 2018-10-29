@@ -73,3 +73,12 @@ scroll-view {
 .navtext{
  font-size:12px;
 }
+
+.sharebutton{
+    margin:0px;
+    /*padding: 10px;*/
+    /*background: red;*/
+    border: 1px;
+}
+
+

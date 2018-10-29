@@ -58,9 +58,11 @@
    </view>
   </navigator>
 
-  <view class="navitem" open-type="share" >
-    <image class="navicon" src="/image/share.png" />
+  <view class="navitem"  >
+  <button class="sharebutton"  open-type="share" >
+    <image class="navicon" style='float:right'  src="/image/share.png" />
     <view class="navtext">分享</view>
+    </button>
   </view>
   <view class="navitem">
     <image class="navicon" src="/image/collect.png" />

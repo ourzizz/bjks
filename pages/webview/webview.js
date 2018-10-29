@@ -12,6 +12,7 @@ Page({
     htmlSnip: '',
   },
   onShareAppMessage: function() {
+    console.log("inshare")
     return {
       title: '转发按钮',
       path: 'pages/webview/webview'
