@@ -17,10 +17,11 @@
           <block wx:for="{{tabs}}" wx:key="*this" wx:for-index="idx">
             <block wx:if="{{item[0] == '时间节点' }}">
               <view class="notify" hidden="{{activeIndex != idx}}">
+              <!--image style='float:right;display:absolute;top:0;height:43rpx;width:43rpx' src="/image/shutdown.png" /-->
                 <view wx:for="{{item[1]}}">
                   <view>
-                    <view style='display:inline;font-weight:bold;'>*{{item.event}}时间:</view>{{item.startime}}至{{item.endtime}}</view>
-                  <view>{{item.detail}}</view>
+                    <view style='color:white;background:#ff546b;display:inline;padding:2px;margin:1rpx; font-size:13px;'>*{{item.event}}时间*</view>{{item.startime}}至{{item.endtime}}[{{item.detail}}]</view>
+                  
                 </view>
               </view>
             </block>
@@ -47,28 +48,38 @@
       </view>
     </view>
   </view>
-<view style='padding:20px'></view>
-<!-- 没有notify的话就不用渲染导航 -->
-<view class="bottomnav" >
+  <view style='padding:20px'></view>
 
-  <navigator url="../index/index" open-type="reLaunch">
-   <view class="navitem">
-    <image class="navicon" src="/image/home.png" />
-    <view class="navtext">首页</view>
-   </view>
-  </navigator>
+<!-- 回顶部 -->
+  <view class="btn-area" style='position:fixed;bottom:120rpx;right:0rpx' bindtap="scrollToTop">
+   <image  src="/image/gotop.png" style='height:40px;width:40px;position:relative;top:25rpx' />
+    <view type="primary" style='position:relative;left:18rpx;font-size:12px'>回顶</view>
+  </view>
+<!-- 回顶部 -->
 
-  <view class="navitem"  >
-  <button class="sharebutton"  open-type="share" >
-    <image class="navicon" style='float:right'  src="/image/share.png" />
-    <view class="navtext">分享</view>
-    </button>
+  <!-- 下面是底部导航 -->
+  <view class="bottomnav">
+      <view class="navitem" bindtap="gohome">
+        <image class="navicon" src="/image/home.png" />
+        <view class="navtext">首页</view>
+      </view>
+   
+
+    <view class="navitem">
+      <button class="sharebutton" open-type="share">
+        <image class="navicon" style='float:left;' src="/image/share.png" />
+        <view class="navtext" style='position:absolute;padding:25rpx 0 0 0;margin:15rpx 0 0 0'>分享</view>
+      </button>
+    </view>
+    <view class="navitem" bindtap='collectFile'>
+      <image class="navicon" src="/image/collect.png" />
+      <view class="navtext">收藏</view>
+    </view>
+    <view class="navitem" bindtap='collectFile'>
+      <image class="navicon" src="/image/book2.png" />
+      <view class="navtext">参考资料</view>
+    </view>
   </view>
-  <view class="navitem">
-    <image class="navicon" src="/image/collect.png" />
-    <view class="navtext">收藏</view>
-  </view>
-</view>
-<!-- 没有notify的话就不用渲染导航 -->
-  
+  <!-- 底部导航  -->
+
 </view>

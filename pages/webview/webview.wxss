@@ -54,9 +54,9 @@ scroll-view {
 }
 /*底部导航栏*/
 .bottomnav{
-    padding: 5px;
+    padding: 4px;
     width: 100%;
-    height: 38px;
+    height: 40px;
     position:fixed;
     bottom:0;
     background: #eee;
@@ -75,10 +75,12 @@ scroll-view {
 }
 
 .sharebutton{
-    margin:0px;
-    /*padding: 10px;*/
-    /*background: red;*/
-    border: 1px;
+    padding: 2px 15px 22px 15px;
+    background-color: Transparent; 
+    /*border-style: none;   */
+    /*outline: none;     */
+         /*border:1px #eee solid;*/
 }
-
-
+button[class="sharebutton"]::after {
+  border: 0;
+} 
