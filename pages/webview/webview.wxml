@@ -72,8 +72,8 @@
       </button>
     </view>
     <view class="navitem" bindtap='collectFile'>
-      <image class="navicon" src="/image/collect.png" />
-      <view class="navtext">收藏</view>
+      <image class="navicon" src="{{collect.src}}" />
+      <view class="navtext">{{collect.text}}</view>
     </view>
     <view class="navitem" bindtap='collectFile'>
       <image class="navicon" src="/image/book2.png" />

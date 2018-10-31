@@ -77,9 +77,6 @@ scroll-view {
 .sharebutton{
     padding: 2px 15px 22px 15px;
     background-color: Transparent; 
-    /*border-style: none;   */
-    /*outline: none;     */
-         /*border:1px #eee solid;*/
 }
 button[class="sharebutton"]::after {
   border: 0;
