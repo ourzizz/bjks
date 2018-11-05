@@ -16,13 +16,19 @@
     "navigationBarTitleText": "考试中心",
     "navigationBarTextStyle": "black"
   },
+  "commet":{
+        "selectedIconPath": "image/book2.png",
+        "iconPath": "image/book1.png",
+        "pagePath": "pages/user/user",
+        "text": "考试书店"
+      },
   "tabBar": {
     "color": "#a9b7b7",
     "selectedColor": "#11cd6e",
     "borderStyle": "black",
     "list": [
       {
-        "selectedIconPath": "image/home.png",
+        "selectedIconPath": "image/homeed.png",
         "iconPath": "image/home.png",
         "pagePath": "pages/index/index",
         "text": "首页"
@@ -33,14 +39,9 @@
         "pagePath": "pages/telphone/telphone",
         "text": "正在进行时"
       },
+      
       {
-        "selectedIconPath": "image/book2.png",
-        "iconPath": "image/book1.png",
-        "pagePath": "pages/user/user",
-        "text": "考试书店"
-      },
-      {
-        "selectedIconPath": "image/user2.png",
+        "selectedIconPath": "image/usered.png",
         "iconPath": "image/user.png",
         "pagePath": "pages/user/user",
         "text": "我的"

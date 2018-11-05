@@ -36,9 +36,9 @@ Page({
         const session = qcloud.Session.get()
         var that = this
         if(session){
-            this.data.userInfo = session.userinfo
+            this.data.userInfo = session.userinfo //保存userinfo到本文件周期内
             qcloud.request({
-                url: `${config.service.host}/weapp/demo/get_if_userhasfile/` + session.userinfo.openId + `/` + this.data.fileid,
+                url: `${config.service.host}/weapp/demo/get_if_userhasfile/` + that.data.userInfo.openId + `/` + that.data.fileid,
                 success(res) {
                     if(res.data["userhasfile"] != false)
                     {
@@ -139,34 +139,38 @@ Page({
     {
         var that = this
         if(this.data.collect['status'] == true)
-        {
-            //const session = qcloud.Session.get()
+        {//显示为已收藏，用户必须是已登录状态,且本页面的userinfo是设置好的
             this.cancleCollect(this.data.userInfo.openId,this.data.fileid)
+            util.showSuccess('已经取消收藏')
         }
-        //if (session) {
-        //qcloud.loginWithCode({
-        //success: res => {
-        //this.setData({ userInfo: res, logged: true })
-        //util.showSuccess('登录成功')
-        //console.log(this.data.userInfo)
-        //},
-        //fail: err => {
-        //console.error(err)
-        //util.showModel('登录错误', err.message)
-        //}
-        //})
-        //} else {
-        //qcloud.login({
-        //success: res => {
-        //this.setData({ userInfo: res, logged: true })
-        //util.showSuccess('登录成功')
-        //},
-        //fail: err => {
-        //console.error(err)
-        //util.showModel('登录错误', err.message)
-        //}
-        //})
-        //}
+        else{//情况1用户session存在，2新登录用户需要注册
+            const session = qcloud.Session.get()
+            if (null == session) {//
+                qcloud.login({
+                    success: res => {
+                        that.setData({ userInfo: res, logged: true })
+                        util.showSuccess('登录成功')
+                    },
+                    fail: err => {
+                        console.error(err)
+                        util.showModel('登录错误', err.message)
+                    }
+                })
+            }
+                qcloud.request({
+                    url: `${config.service.host}/weapp/demo/insert_user_file/` + that.data.userInfo.openId + `/` + that.data.fileid,
+                    success(res) {
+                        that.setData({
+                            collect: { 'status':true,'src':'/image/collected.png','text':'已收藏'}
+                        })
+                        util.showSuccess('收藏成功')
+                    },
+                    fail(error) {
+                        util.showModel('请求失败', error);
+                        console.log('request fail', error);
+                    }
+                })
+        }
     },
 
     // 切换是否带有登录态

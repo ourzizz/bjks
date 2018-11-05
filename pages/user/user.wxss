@@ -1,5 +1,7 @@
 /* pages/user/user.wxss */
 /**index.wxss**/
+@import '/weui.wxss';
+@import '/pages/index/index.wxss';
 page {
     background: #F6F6F6;
     display: flex;
@@ -127,4 +129,15 @@ page {
     font-size: 24rpx;
     line-height: 36rpx;
     word-break: break-all;
+}
+/*userpage_delete*/
+.delete-image{
+position:absolute;
+right:10rpx;
+top:15rpx;
+height:50rpx;
+width:50rpx;
+}
+.uploader{
+padding:2rpx 0 2rpx 10rpx;
 }
