@@ -4,7 +4,7 @@
     "pages/addCgi/addCgi",
     "pages/kaoshi/kaoshi",
     "pages/webview/webview",
-    "pages/telphone/telphone",
+    "pages/filetime/filetime",
     "pages/zhuanji/zhuanji",
     "pages/zhuanjikaoshi/zhuanjikaoshi",
     "pages/user/user"
@@ -38,6 +38,12 @@
         "iconPath": "image/home.png",
         "pagePath": "pages/index/index",
         "text": "首页"
+      },
+      {
+        "selectedIconPath": "image/timeed.png",
+        "iconPath": "image/time.png",
+        "pagePath": "pages/filetime/filetime",
+        "text": "正在进行时"
       },
       {
         "selectedIconPath": "image/usered.png",
