@@ -75,10 +75,10 @@
       <image class="navicon" src="{{collect.src}}" />
       <view class="navtext">{{collect.text}}</view>
     </view>
-    <view class="navitem" bindtap='collectFile'>
+    <!--view class="navitem" bindtap='collectFile'>
       <image class="navicon" src="/image/book2.png" />
       <view class="navtext">参考资料</view>
-    </view>
+    </view-->
   </view>
   <!-- 底部导航  -->
 

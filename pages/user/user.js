@@ -26,9 +26,9 @@ Page({
             this.setData({hidecollect: true})
         }
         qcloud.request({
-            url: `${config.service.host}/weapp/demo/get_user_files/` + that.data.userInfo.openId,
+            url: `${config.service.host}/weapp/demo/get_user_files_events/` + that.data.userInfo.openId,
             success(res) {
-                    that.setData({ userFiles: res.data})
+                that.setData({ userFiles: res.data})
             },
             fail(error) {
                 util.showModel('请求失败', error);
@@ -103,18 +103,27 @@ Page({
     deleteFile: function (event)
     {
         var that = this
-        var fileId = event.currentTarget.dataset.fileid 
-        console.log(fileId)
-        qcloud.request({
-            url: `${config.service.host}/weapp/demo/delete_user_file/` + that.data.userInfo.openId + `/` + fileId,
-            fail(error) {
-                util.showModel('请求失败', error);
-                console.log('request fail', error);
+        var index = event.currentTarget.dataset.index 
+        var fileId = this.data.userFiles[index].fileinfo.fileid ;
+        wx.showModal({
+            title: '提示',
+            content: '确定在您的收藏中删除本文',
+            success (res) {
+                if (res.confirm) {
+                    qcloud.request({
+                        url: `${config.service.host}/weapp/demo/delete_user_file/` + that.data.userInfo.openId + `/` + fileId,
+                        fail(error) {
+                            util.showModel('请求失败', error);
+                            console.log('request fail', error);
+                        }
+                    })
+                    that.data.userFiles.splice(index,1)
+                    that.setData({userFiles:that.data.userFiles})
+                    util.showSuccess('已经取消收藏')
+                } else if (res.cancel) {
+                    return 
+                }
             }
         })
-        this.setData({userFiles: {}})
-        this.setUserFiles()
-        util.showSuccess('已经取消收藏')
-        this.setData({hidecollect: false})
     }
 })

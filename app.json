@@ -16,12 +16,18 @@
     "navigationBarTitleText": "考试中心",
     "navigationBarTextStyle": "black"
   },
-  "commet":{
-        "selectedIconPath": "image/book2.png",
-        "iconPath": "image/book1.png",
-        "pagePath": "pages/user/user",
-        "text": "考试书店"
-      },
+  "commet": {
+    "selectedIconPath": "image/book2.png",
+    "iconPath": "image/book1.png",
+    "pagePath": "pages/user/user",
+    "text": "考试书店"
+  },
+  "comment2": {
+    "selectedIconPath": "image/calendar.png",
+    "iconPath": "image/calendar1.png",
+    "pagePath": "pages/telphone/telphone",
+    "text": "正在进行时"
+  },
   "tabBar": {
     "color": "#a9b7b7",
     "selectedColor": "#11cd6e",
@@ -33,13 +39,6 @@
         "pagePath": "pages/index/index",
         "text": "首页"
       },
-      {
-        "selectedIconPath": "image/calendar.png",
-        "iconPath": "image/calendar1.png",
-        "pagePath": "pages/telphone/telphone",
-        "text": "正在进行时"
-      },
-      
       {
         "selectedIconPath": "image/usered.png",
         "iconPath": "image/user.png",

@@ -23,27 +23,30 @@
       <view wx:for="{{userFiles}}">
         <view class="weui-media-box weui-media-box_small-appmsg" style="font-size:15px;padding:0rpx;margin:2rpx">
           <view class="weui-cells weui-cells_in-small-appmsg">
-            <navigator url="../webview/webview?fileid={{item.fileid}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+            <navigator url="../webview/webview?fileid={{item.fileinfo.fileid}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
               <view class="weui-cell__bd weui-cell_primary" style="font-size:15px;padding:0 10px 0 0;margin:2rpx">
                 <view>
-                  {{item.filetitle}}
+                  {{item.fileinfo.filetitle}}
                 </view>
+                <!-- 渲染时间事件 -->
+                <view wx:for="{{item.eventtime}}">
+                    <view style='color:white;background:red;display:inline;float:left;padding:2px 4px 2px 4px;margin:1rpx 5rpx 0 0; font-size:12px;'> 正在{{item.event}} </view>
+                </view>
+                <!-- 渲染时间事件 -->
               </view>
             </navigator>
-            <image class="delete-image" src="/image/delete.png" data-fileId="{{ item.fileid }}" bindtap="deleteFile" />
+            <!--image class="delete-image" src="/image/delete.png" data-fileId="{{ item.fileinfo.fileid }}" bindtap="deleteFile" /-->
+            <image class="delete-image" src="/image/delete.png" data-index="{{ index }}" bindtap="deleteFile" />
           </view>
         </view>
       </view>
     </view>
   </view>
 
-
-
-
   <!-- 上传图片测试 -->
-  <view class="uploader">
+  <!--view class="uploader">
     <navigator url="../addCgi/addCgi" open-type="navigate" class="uploader-text">
       <text>我的订单</text>
     </navigator>
-  </view>
+  </view-->
 </view>
