@@ -2,10 +2,10 @@
   <view class="page__bd page__bd_spacing">
     <view class="weui-flex">
       <view class="weui-flex__item">
-        <view class="placeholder">正在进行中</view>
+        <view class="placeholder" style="background:{{Hselected}}" data-index="0" bindtap="selectTime">正在进行中</view>
       </view>
       <view class="weui-flex__item">
-        <view class="placeholder">即将开始</view>
+        <view class="placeholder" style="background:{{Iselected}}" data-index="1" bindtap="selectTime">即将开始</view>
       </view>
     </view>
   </view>
@@ -13,7 +13,7 @@
   <view class="page__bd">
     <view class="weui-tab">
       <view class="weui-navbar">
-        <block wx:for="{{eventtime.impend}}" wx:key="*this">
+        <block wx:for="{{pageEt}}" wx:key="*this">
           <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
             <view class="weui-navbar__title">{{item.event}}</view>
           </view>
@@ -22,14 +22,15 @@
       </view>
 
       <view class="weui-tab__panel">
-        <block wx:for="{{eventtime.impend}}" wx:for-index="idx">
-          <block hidden="{{activeIndex != idx}}">
-            <block wx:for="{{item.filelist}}">
-              <view class="weui-tab__content">{{item.filetitle}}---{{idx}}</view>
-            </block>
-          </block>
+        <block wx:for="{{pageEt}}" wx:for-index="idx">
+          <view  hidden="{{activeIndex != idx}}">
+            <view wx:for="{{item.filelist}}">
+              <view class="weui-tab__content">{{item.filetitle}} {{item.startime}}---{{idx}}</view>
+            </view>
+          </view>
         </block>
       </view>
+
     </view>
   </view>
 </view>
