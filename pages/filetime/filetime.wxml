@@ -2,10 +2,11 @@
   <view class="page__bd page__bd_spacing">
     <view class="weui-flex">
       <view class="weui-flex__item">
-        <view class="placeholder" style="background:{{Hselected}}" data-index="0" bindtap="selectTime">正在进行中</view>
+        <view class="placeholder" style="background:{{Iselected}}"data-index="1" bindtap="selectTime">即将开始</view>
       </view>
       <view class="weui-flex__item">
-        <view class="placeholder" style="background:{{Iselected}}" data-index="1" bindtap="selectTime">即将开始</view>
+      <view class="placeholder" style="background:{{Hselected}}" data-index="0" bindtap="selectTime">正在进行中</view>
+        
       </view>
     </view>
   </view>
@@ -18,14 +19,31 @@
             <view class="weui-navbar__title">{{item.event}}</view>
           </view>
         </block>
-        <view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
+        <!-- <view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view> -->
       </view>
 
       <view class="weui-tab__panel">
         <block wx:for="{{pageEt}}" wx:for-index="idx">
-          <view  hidden="{{activeIndex != idx}}">
-            <view wx:for="{{item.filelist}}">
-              <view class="weui-tab__content">{{item.filetitle}} {{item.startime}}---{{idx}}</view>
+          <view hidden="{{activeIndex != idx}}">
+            <view class="weui-media-box weui-media-box_small-appmsg" style="font-size:15px;padding:0rpx;margin:2rpx">
+                  <view wx:for="{{item.filelist}}">
+              <view class="weui-cells weui-cells_in-small-appmsg">
+                <navigator url="../webview/webview?fileid={{item.fileid}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+                    <view class="weui-tab__content">{{item.filetitle}} 
+                        <block wx:if="{{item.startime != null}}">
+                            <view style="display:block; color:white;background:green;padding:2px 4px 2px 4px;margin:1rpx 5rpx 0 0; font-size:12px;">
+                            {{pageEt[idx].event}}开始时间>>>:{{item.startime}}
+                            </view>
+                        </block>
+                        <block wx:else>
+                            <view style="display:block; color:white;background:blue;padding:2px 4px 2px 4px;margin:1rpx 5rpx 0 0; font-size:12px;">
+                            {{pageEt[idx].event}}结束时间>>>>:{{item.endtime}}
+                            </view>
+                        </block>
+                </view>
+                </navigator>
+                  </view>
+              </view>
             </view>
           </view>
         </block>

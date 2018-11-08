@@ -10,11 +10,12 @@ Page({
         takeSession: false,
         requestResult: '',
         userFiles: {},
-        hidecollect: true 
+        hidecollect: false 
     },
     onLoad:function()
     {
         this.bindGetUserInfo()
+        this.setUserFiles()
     },
     setUserFiles:function (){
         var that = this

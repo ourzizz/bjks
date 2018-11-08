@@ -1,6 +1,7 @@
 /* pages/telphone/telphone.wxss */
-@import "/pages/index/index.wxss";
+@import '/weui.wxss';
 .placeholder{
+    /*posti*/
     margin: 5px;
     padding: 0 10px;
     text-align: center;
