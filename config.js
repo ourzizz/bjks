@@ -4,7 +4,7 @@
 
 // 此处主机域名修改成腾讯云解决方案分配的域名
 //var host = 'https://www.alemao.club/server/index.php?';
-var host = 'https://www.alemao.club/server/index.php?';
+var host = 'https://www.alemao.club/bjks/index.php?';
 
 var config = {
 

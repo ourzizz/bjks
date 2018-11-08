@@ -14,8 +14,14 @@ Page({
     },
     onLoad:function()
     {
-        this.bindGetUserInfo()
-        this.setUserFiles()
+        const session = qcloud.Session.get()
+        if(session)
+        {//session存在
+            this.setData({
+                userInfo:session.userInfo
+            })
+            this.setUserFiles()
+        }
     },
     setUserFiles:function (){
         var that = this
@@ -39,11 +45,8 @@ Page({
     },
     bindGetUserInfo: function () {
         if (this.data.logged) return
-
         util.showBusy('正在登录')
-
         const session = qcloud.Session.get()
-
         if (session) {
             qcloud.loginWithCode({
                 success: res => {

@@ -15,7 +15,7 @@ Page({
         logged: false,
         takeSession: false,
         requestResult: '',
-        collect: {'status':false,'src':'/image/collect.png','text':'收藏本文'}
+        collect: {'status':false,'src':'/image/collect.png','text':'收藏'}
     },
     onShareAppMessage: function() {
         console.log("inshare")
@@ -48,7 +48,7 @@ Page({
                     }
                     else{
                         that.setData({
-                            collect: { 'status':false,'src':'/image/collect.png','text':'收藏本文'}
+                            collect: { 'status':false,'src':'/image/collect.png','text':'收藏'}
                         })
                     }
                 },
@@ -126,8 +126,30 @@ Page({
             url: `${config.service.host}/weapp/demo/delete_user_file/` + openId + `/` + fileId,
             success(res) {
                     that.setData({
-                        collect: { 'status':false,'src':'/image/collect.png','text':'收藏本文'}
+                        collect: { 'status':false,'src':'/image/collect.png','text':'收藏'}
                     })
+            },
+            fail(error) {
+                util.showModel('请求失败', error);
+                console.log('request fail', error);
+            }
+        })
+    },
+    /*这个部分的函数全部用来处理登录收藏文件*/
+    addFile2user:function()
+    {
+        var that = this
+        if (!this.data.logged) {
+            util.showBusy('请重授权再收藏')
+            return
+        }
+        qcloud.request({
+            url: `${config.service.host}/weapp/demo/insert_user_file/` + that.data.userInfo.openId + `/` + that.data.fileid,
+            success(res) {
+                that.setData({
+                    collect: { 'status':true,'src':'/image/collected.png','text':'已收藏'}
+                })
+                util.showSuccess('收藏成功')
             },
             fail(error) {
                 util.showModel('请求失败', error);
@@ -143,12 +165,15 @@ Page({
             this.cancleCollect(this.data.userInfo.openId,this.data.fileid)
             util.showSuccess('已经取消收藏')
         }
-        else{//情况1用户session存在，2新登录用户需要注册
+        else{//，2新登录用户需要注册
             const session = qcloud.Session.get()
-            if (null == session) {//
+            if(session) {//用户session存在
+                this.setData({ userInfo: session.userinfo,logged:true })
+            }
+            else{
                 qcloud.login({
                     success: res => {
-                        that.setData({ userInfo: res, logged: true })
+                        this.setData({ userInfo: res, logged: true })
                         util.showSuccess('登录成功')
                     },
                     fail: err => {
@@ -157,21 +182,11 @@ Page({
                     }
                 })
             }
-                qcloud.request({
-                    url: `${config.service.host}/weapp/demo/insert_user_file/` + that.data.userInfo.openId + `/` + that.data.fileid,
-                    success(res) {
-                        that.setData({
-                            collect: { 'status':true,'src':'/image/collected.png','text':'已收藏'}
-                        })
-                        util.showSuccess('收藏成功')
-                    },
-                    fail(error) {
-                        util.showModel('请求失败', error);
-                        console.log('request fail', error);
-                    }
-                })
+
+            this.addFile2user()
         }
     },
+    /*这个部分的函数全部用来处理登录收藏文件*/
 
     // 切换是否带有登录态
     switchRequestMode: function (e) {

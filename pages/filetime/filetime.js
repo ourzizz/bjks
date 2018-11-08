@@ -44,7 +44,6 @@ Page({
             sliderOffset: e.currentTarget.offsetLeft,
             activeIndex: e.currentTarget.id
         });
-        console.log(e.currentTarget.id)
     },
 
     selectTime: function (e) {
