@@ -169,12 +169,14 @@ Page({
             const session = qcloud.Session.get()
             if(session) {//用户session存在
                 this.setData({ userInfo: session.userinfo,logged:true })
+                this.addFile2user()
             }
             else{
                 qcloud.login({
                     success: res => {
-                        this.setData({ userInfo: res, logged: true })
+                        this.setData({ userInfo: res, logged: true})
                         util.showSuccess('登录成功')
+                        this.addFile2user()
                     },
                     fail: err => {
                         console.error(err)
@@ -182,8 +184,6 @@ Page({
                     }
                 })
             }
-
-            this.addFile2user()
         }
     },
     /*这个部分的函数全部用来处理登录收藏文件*/

@@ -14,11 +14,13 @@ Page({
     },
     onLoad:function()
     {
+        //session = qcloud.Session.get()
         const session = qcloud.Session.get()
         if(session)
         {//session存在
             this.setData({
-                userInfo:session.userInfo
+                userInfo:session.userinfo,
+                logged:true
             })
             this.setUserFiles()
         }
