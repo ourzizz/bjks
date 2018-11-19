@@ -12,8 +12,7 @@
 
   <scroll-view scroll-x="true" style=" white-space: nowrap; display: flex">
     <view class="typelist">
-      <view wx:for="{{typelist}}" open-type="navigate" class="type-navigation">
-
+      <view wx:for="{{typelist}}"  class="type-navigation">
         <view data-typeid="{{ item.kstypeid }}" bindtap="changeFileList">
           <image class="guideimg" src="https://www.alemao.club/weapp/images/{{item.shortname}}.png" />
           <view wx:if="{{item.newfile!=0}}" class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">{{item.newfile}}</view>
@@ -23,8 +22,12 @@
     </view>
   </scroll-view>
 
-  <view wx:for="{{zhuanjilist}}" style='display:{{zhuanjilistshow}}'>
-    <button data-ksid="{{ item.ksid }}" bindtap="setZhuanjiFileByKsid" style='display:block'>{{item.ksname}}</button>
+  <view class="scroll_box" hidden="{{shownav}}">
+    <scroll-view class="scroll-view_x" scroll-x style="width: auto;overflow:hidden;">
+      <view class="item_list" wx:for="{{zhuanjilist}}">
+        <button class="item_book_text" data-ksid="{{ item.ksid }}"  bindtap="setZhuanjiFileByKsid">{{item.ksname}}</button>
+      </view>
+    </scroll-view>
   </view>
 
   <view class="weui-panel">

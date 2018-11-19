@@ -29,7 +29,7 @@
                 </view>
                 <!-- 渲染时间事件 -->
                 <view wx:for="{{item.eventtime}}">
-                    <view style='color:white;background:red;display:inline;float:left;padding:2px 4px 2px 4px;margin:1rpx 5rpx 0 0; font-size:12px;'> 正在{{item.event}} </view>
+                    <view style='color:white;background:red;display:inline;float:left;padding:2px 4px 2px 4px;margin:1rpx 5rpx 0 0; font-size:12px;'> {{item.event}} </view>
                 </view>
                 <!-- 渲染时间事件 -->
               </view>

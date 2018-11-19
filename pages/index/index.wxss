@@ -105,3 +105,25 @@ page {
 .weui-media-box__info {
  margin:0 0 0 0;
 }
+/*二级导航横向滑块*/
+
+.scroll_box{
+width: 100%;
+height: 80rpx;
+overflow: hidden;
+padding: 1rpx;
+background: #fff;
+white-space: nowrap;
+}
+.item_list{
+width: 160rpx;
+height: auto;
+margin-right: 1rpx;
+display: inline-block;
+}
+.item_book_text{
+width: 85px; overflow: hidden; text-overflow:ellipsis; white-space: nowrap;
+/*padding:0 5rpx 5 5;*/
+margin:0 1px 0 0;
+font-size:25rpx;
+}
