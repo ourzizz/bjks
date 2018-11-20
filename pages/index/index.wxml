@@ -12,8 +12,8 @@
 
   <scroll-view scroll-x="true" style=" white-space: nowrap; display: flex">
     <view class="typelist">
-      <view wx:for="{{typelist}}"  class="type-navigation">
-        <view data-typeid="{{ item.kstypeid }}" bindtap="changeFileList">
+      <view wx:for="{{typelist}}" class="type-navigation">
+        <view data-typeid="{{ item.kstypeid }}" bindtap="NewchangeFileList">
           <image class="guideimg" src="https://www.alemao.club/weapp/images/{{item.shortname}}.png" />
           <view wx:if="{{item.newfile!=0}}" class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">{{item.newfile}}</view>
           <view class="element" id="{{item.kstypeid}}" style="background:{{ item.color }};padding:0 5px 0 5px">{{item.typename}}</view>
@@ -22,13 +22,25 @@
     </view>
   </scroll-view>
 
-  <view class="scroll_box" hidden="{{shownav}}">
+   <view class="scroll_box" hidden="{{hiddennav}}">
     <scroll-view class="scroll-view_x" scroll-x style="width: auto;overflow:hidden;">
-      <view class="item_list" wx:for="{{zhuanjilist}}">
-        <button class="item_book_text" data-ksid="{{ item.ksid }}"  bindtap="setZhuanjiFileByKsid">{{item.ksname}}</button>
-      </view>
+      <block wx:if="{{ typeid == 2 }}">
+        <view class="item_list" wx:for="{{navlist}}">
+          <button class="item_book_text" data-xianquid="{{ item.id }}" bindtap="setSydwFiles">{{item.countyname}}</button>
+        </view>
+      </block>
+      <block wx:elif="{{ typeid == 3 }}">
+        <view class="item_list" wx:for="{{navlist}}">
+          <button class="item_book_text" data-ksid="{{ item.ksid }}" bindtap="setZhuanjiFiles">{{item.ksname}}</button>
+        </view>
+      </block>
+      <block wx:elif="{{ typeid == 4 }}">
+        <view class="item_list" wx:for="{{navlist}}">
+          <button class="item_book_text" data-xianquid="{{ item.id }}" bindtap="setShFiles">{{item.countyname}}</button>
+        </view>
+      </block>
     </scroll-view>
-  </view>
+  </view> 
 
   <view class="weui-panel">
     <view class="weui-panel__bd">
