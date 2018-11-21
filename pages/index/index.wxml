@@ -13,7 +13,7 @@
   <scroll-view scroll-x="true" style=" white-space: nowrap; display: flex">
     <view class="typelist">
       <view wx:for="{{typelist}}" class="type-navigation">
-        <view data-typeid="{{ item.kstypeid }}" bindtap="NewchangeFileList">
+        <view data-typeid="{{ item.kstypeid }}" bindtap="changeFileList">
           <image class="guideimg" src="https://www.alemao.club/weapp/images/{{item.shortname}}.png" />
           <view wx:if="{{item.newfile!=0}}" class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">{{item.newfile}}</view>
           <view class="element" id="{{item.kstypeid}}" style="background:{{ item.color }};padding:0 5px 0 5px">{{item.typename}}</view>
@@ -52,13 +52,16 @@
                 <view>
                   <view wx:if="{{item.ifnew!=0 && item.ifnew!=null}}" class="weui-badge" style="float:right">new</view>
                   {{item.filetitle}}
+                  <!-- 事件渲染 -->
+                  <view wx:for="{{item.eventtime}}" style='display:inline-block'>
+                    <view style='color:white;background:red;display:inline;float:left;padding:2px 4px 2px 4px;margin:1rpx 5rpx 0 0; font-size:12px;'> {{item.event}} </view>
+                  </view>
+                  <!-- 事件渲染 -->
                 </view>
-
                 <view class="weui-media-box__info">
-                  <view class="weui-media-box__info__meta weui-media-box__info__meta_extra">发布于:{{item.pubtime}} 浏览次数:{{item.readtime}}</view>
-
+                  <view class="weui-media-box__info__meta weui-media-box__info__meta_extra">发布于:{{item.pubtime}} 浏览次数:{{item.readtime}}
+                  </view>
                 </view>
-
               </view>
             </navigator>
           </view>
@@ -66,7 +69,6 @@
       </view>
     </view>
   </view>
-
 
   <view class="weui-footer">
     <view class="weui-footer__links">

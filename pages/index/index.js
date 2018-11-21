@@ -2,10 +2,10 @@
 var qcloud = require('../../vendor/wafer2-client-sdk/index')
 var config = require('../../config')
 var util = require('../../utils/util.js')
-let filesMap = new Map();
-let zjMap = new Map(); //专技map
+let filesMap = new Map();//publicFiles
+let zhuanjiMap = new Map(); //专技map
 let sydwMap = new Map();//事业map
-let shzpMap = new Map();//社会招聘map
+let shehuiMap = new Map();//社会招聘map
 Page({
     data: {
         typeid:1,
@@ -61,14 +61,61 @@ Page({
         this.setData({ typelist: typelist})
     },
 
+
+    setZhuanjiNavList:function(typeid){
+        var that = this
+        if(this.data.zhuanjilist.length == 0) {
+            qcloud.request({
+                url: `${config.service.host}/weapp/demo/get_zhuanji_list`,
+                success(result) {
+                    that.setData({
+                        zhuanjilist: result.data.zhuanjilist,
+                        typeid: typeid,
+                        navlist: result.data.zhuanjilist,                            
+                        hiddennav:false
+                    })
+                },
+                fail(error) {
+                    util.showModel('请求失败', error);
+                    console.log('request fail', error);
+                }
+            })
+        }
+        else{
+            this.setData({ typeid: typeid,navlist: this.data.zhuanjilist,hiddennav:false})
+        }
+    },
+    setXianquNavList:function(typeid){
+        var that = this
+        if(that.data.xianqulist.length == 0) {
+            qcloud.request({
+                url: `${config.service.host}/weapp/demo/get_xianqu_list`,
+                success(result) {
+                    that.setData({
+                        xianqulist: result.data.xianqulist,
+                        typeid: typeid,
+                        navlist: result.data.xianqulist,
+                        hiddennav:false
+                    })
+                },
+                fail(error) {
+                    util.showModel('请求失败', error);
+                    console.log('request fail', error);
+                }
+            })
+        }
+        else{
+            this.setData({ typeid: typeid,navlist: this.data.xianqulist,hiddennav:false})
+        }
+    },
+
     setPublicFiles:function(typeid) {
         var that = this
         if (filesMap.has(typeid)) {
-            this.setData({ filelist: filesMap.get(typeid), typelist: that.data.typelist })
+            this.setData({ filelist: filesMap.get(typeid) })
         } else {
             qcloud.request({
                 url: `${config.service.host}/weapp/demo/get_file_list/` + typeid,
-                login: false,
                 success(result) {
                     filesMap.set(typeid, that.judgeIfNewFile(result.data))
                     that.setData({
@@ -84,91 +131,53 @@ Page({
         }
     },
 
-    setNavList:function (typeid) { 
-        //按照user点击的typeid直接将二级导航进行渲染依旧是缓存到数组中，减小服务器压力
-        //bug记录由于view里面要根据typeid进行选择渲染，所以在set NavList的时候必先设置typeid
+    setSydwFiles:function (event) {
         var that = this
-        if(typeid == 3) { //表示专技考试列表
-            if(that.data.zhuanjilist.length == 0) {
-                qcloud.request({
-                    url: `${config.service.host}/weapp/demo/get_zhuanji_list`,
-                    success(result) {
-                        that.setData({
-                            zhuanjilist: result.data.zhuanjilist,
-                            typeid: typeid,
-                            navlist: result.data.zhuanjilist,                            
-                            hiddennav:false
-                        })
-                    },
-                    fail(error) {
-                        util.showModel('请求失败', error);
-                        console.log('request fail', error);
-                    }
-                })
-            }
-            else{
-                this.setData({ typeid: typeid,navlist: this.data.zhuanjilist,hiddennav:false})
-            }
-        } else if(typeid == 2 || typeid == 4) {//2，4表示为县区列表
-            if(that.data.xianqulist.length == 0) {
-                qcloud.request({
-                    url: `${config.service.host}/weapp/demo/get_xianqu_list`,
-                    success(result) {
-                        that.setData({
-                            xianqulist: result.data.xianqulist,
-                            typeid: typeid,
-                            navlist: result.data.xianqulist,
-                            hiddennav:false
-                        })
-                    },
-                    fail(error) {
-                        util.showModel('请求失败', error);
-                        console.log('request fail', error);
-                    }
-                })
-            }
-            else{
-                this.setData({ typeid: typeid,navlist: this.data.xianqulist,hiddennav:false})
-            }
+        var xianquid = 1 //xianquid默认为1市直单位
+        if(event != null) {
+            var xianquid = event.currentTarget.dataset.xianquid
+        } 
+        if (sydwMap.has(xianquid)){
+            this.setData({ filelist: sydwMap.get(xianquid) })
+        }else{
+            qcloud.request({
+                url: `${config.service.host}/weapp/demo/get_filesby_ksid_countyid/` + 6 + `/` + xianquid,
+                success(result) {
+                    sydwMap.set(xianquid, that.judgeIfNewFile(result.data))
+                    that.setData({
+                        filelist: sydwMap.get(xianquid)
+                    })
+                },
+                fail(error) {
+                    util.showModel('请求失败', error);
+                    console.log('request fail', error);
+                }
+            })
         }
     },
-    setSydwFiles:function (event) {
-        var xianquid = 1
-        var that = this
-        if(event != null) {
-            var xianquid = event.currentTarget.dataset.xianquid
-        } 
-        qcloud.request({
-            url: `${config.service.host}/weapp/demo/get_filesby_ksid_countyid/` + 6 + `/` + xianquid,
-            success(result) {
-                that.setData({
-                    filelist: result.data.filelist,
-                })
-            },
-            fail(error) {
-                util.showModel('请求失败', error);
-                console.log('request fail', error);
-            }
-        })
-    },
     setShFiles:function (event) {
-        var xianquid = 1
         var that = this
+        var xianquid = 1 //xianquid默认为1市直单位
         if(event != null) {
             var xianquid = event.currentTarget.dataset.xianquid
         } 
-        qcloud.request({
-            url: `${config.service.host}/weapp/demo/get_filesby_ksid_countyid/` + 7 + `/` + xianquid,
-            success(result) {
-                that.setData({
-                    filelist: result.data.filelist,
-                })
-            },
-            fail(error) {
-                util.showModel('请求失败', error);
-                console.log('request fail', error);
-            }
-        })
+        if (shehuiMap.has(xianquid)){
+            this.setData({ filelist: shehuiMap.get(xianquid) })
+        }else{
+            qcloud.request({
+                url: `${config.service.host}/weapp/demo/get_filesby_ksid_countyid/` + 7 + `/` + xianquid,
+                success(result) {
+                    shehuiMap.set(xianquid, that.judgeIfNewFile(result.data))
+                    that.setData({
+                        filelist: shehuiMap.get(xianquid)
+                    })
+                },
+                fail(error) {
+                    util.showModel('请求失败', error);
+                    console.log('request fail', error);
+                }
+            })
+        }
     },
 
     setZhuanjiFiles(event) {
@@ -177,23 +186,26 @@ Page({
         if(event != null) {
             var ksid = event.currentTarget.dataset.ksid
         } 
-        qcloud.request({
-            url: `${config.service.host}/weapp/demo/get_zhuanji_files_by_ksid/` + ksid,
-            success(result) {
-                that.setData({
-                    filelist: result.data.filelist,
-                    //hiddennav: true
-                })
-            },
-            fail(error) {
-                util.showModel('请求失败', error);
-                console.log('request fail', error);
-            }
-        })
+        if (zhuanjiMap.has(ksid)){
+            this.setData({ filelist: zhuanjiMap.get(ksid) })
+        }else{
+            qcloud.request({
+                url: `${config.service.host}/weapp/demo/get_zhuanji_files_by_ksid/` + ksid,
+                success(result) {
+                    zhuanjiMap.set(ksid, that.judgeIfNewFile(result.data))
+                    that.setData({
+                        filelist: zhuanjiMap.get(ksid)
+                    })
+                },
+                fail(error) {
+                    util.showModel('请求失败', error);
+                    console.log('request fail', error);
+                }
+            })
+        }
     },
 
-
-    NewchangeFileList:function(event) {
+    changeFileList:function(event) {
         var that = this
         var typeid = event.currentTarget.dataset.typeid
         this.data.typeid = typeid
@@ -204,15 +216,15 @@ Page({
                 that.setPublicFiles(1);
                 break;
             case '2':
-                that.setNavList(2);
+                that.setXianquNavList(2);
                 that.setSydwFiles();
                 break;
             case '3':
-                that.setNavList(3);
+                that.setZhuanjiNavList(3);
                 that.setZhuanjiFiles();
                 break;
             case '4':
-                that.setNavList(4);
+                that.setXianquNavList(4);
                 that.setShFiles();
                 break;
             case '5':

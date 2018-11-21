@@ -116,14 +116,17 @@ background: #fff;
 white-space: nowrap;
 }
 .item_list{
-width: 160rpx;
+width: 60px; /*连边带按钮宽度*/
 height: auto;
 margin-right: 1rpx;
 display: inline-block;
 }
 .item_book_text{
-width: 85px; overflow: hidden; text-overflow:ellipsis; white-space: nowrap;
-/*padding:0 5rpx 5 5;*/
+width: 55px; /*按钮自身宽度*/
+overflow: hidden;
+/* text-overflow:ellipsis; */
+/* white-space: nowrap; */
 margin:0 1px 0 0;
+padding: 0 0 0 0;
 font-size:25rpx;
 }
