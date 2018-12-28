@@ -5,15 +5,16 @@
 	},
 	"setting": {
 		"urlCheck": true,
-		"es6": true,
+		"es6": false,
 		"postcss": true,
 		"minified": true,
-		"newFeature": true
+		"newFeature": true,
+		"autoAudits": false
 	},
 	"compileType": "miniprogram",
 	"libVersion": "2.2.4",
-	"appid": "wxfa21ea4bdaef03e9",
-	"projectname": "%E8%80%83%E8%AF%95%E4%B8%AD%E5%BF%83",
+	"appid": "wxa8510d55a9cbdc9c",
+	"projectname": "%E6%AF%95%E8%8A%82%E8%80%83%E8%AF%95%E6%B5%8B%E8%AF%95%E7%89%88%E6%9C%AC",
 	"isGameTourist": false,
 	"condition": {
 		"search": {
@@ -33,13 +34,13 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 3,
+			"current": 6,
 			"list": [
 				{
 					"id": 0,
 					"name": "xx",
 					"pathName": "pages/webview/webview",
-					"query": ""
+					"query": "fileid=9"
 				},
 				{
 					"id": -1,
@@ -56,7 +57,28 @@
 				{
 					"id": -1,
 					"name": "zjpage",
-					"pathName": "pages/zhuanji/zhuanji"
+					"pathName": "pages/zhuanji/zhuanji",
+					"query": ""
+				},
+				{
+					"id": 4,
+					"name": "二维码访问",
+					"pathName": "pages/webview/webview",
+					"query": "fileid=87",
+					"scene": "1012"
+				},
+				{
+					"id": -1,
+					"name": "bookstore",
+					"pathName": "pages/bookstore/bookstore",
+					"query": "fileid=87",
+					"scene": "1012"
+				},
+				{
+					"id": 6,
+					"name": "shopcart",
+					"pathName": "pages/shopcart/shopcart",
+					"query": "open_id=o9pU65LTYEE8tVWQR_yClRc1466k"
 				}
 			]
 		}

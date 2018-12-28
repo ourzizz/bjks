@@ -4,7 +4,7 @@ var util = require('../../utils/util.js')
 
 Page({
 
-  /**
+  /** b
    * 页面的初始数据
    */
   data: {

@@ -1,13 +1,14 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/addCgi/addCgi",
+    "pages/bookstore/bookstore",
     "pages/kaoshi/kaoshi",
     "pages/webview/webview",
     "pages/filetime/filetime",
     "pages/zhuanji/zhuanji",
     "pages/zhuanjikaoshi/zhuanjikaoshi",
-    "pages/user/user"
+    "pages/user/user",
+    "pages/shopcart/shopcart"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
@@ -40,10 +41,10 @@
         "text": "首页"
       },
       {
-        "selectedIconPath": "image/timeed.png",
-        "iconPath": "image/time.png",
-        "pagePath": "pages/filetime/filetime",
-        "text": "正在进行时"
+        "selectedIconPath": "image/book2.png",
+        "iconPath": "image/book1.png",
+        "pagePath": "pages/bookstore/bookstore",
+        "text": "学习资料"
       },
       {
         "selectedIconPath": "image/usered.png",

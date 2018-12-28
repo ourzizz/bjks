@@ -20,7 +20,7 @@
                 <!--image style='float:right;display:absolute;top:0;height:43rpx;width:43rpx' src="/image/shutdown.png" /-->
                 <view wx:for="{{item[1]}}">
                   <view>
-                    <view style='color:white;background:#ff546b;display:inline;padding:2px;margin:1rpx; font-size:13px;'>*{{item.event}}时间*</view>{{item.startime}}至{{item.endtime}}[{{item.detail}}]</view>
+                    <view style='color:white;background:#ff546b;display:inline;padding:4rpx;margin:1rpx; font-size:26rpx;'>*{{item.event}}时间*</view>{{item.startime}}至{{item.endtime}}[{{item.detail}}]</view>
 
                 </view>
               </view>
@@ -48,28 +48,28 @@
       </view>
     </view>
   </view>
-  <view style='padding:20px'></view>
+  <view style='padding:40rpx'></view>
 
   <!-- 回顶部 -->
   <view class="btn-area" style='position:fixed;bottom:120rpx;right:0rpx' bindtap="scrollToTop">
-    <image src="/image/gotop.png" style='height:40px;width:40px;position:relative;top:25rpx' />
-    <view type="primary" style='position:relative;left:18rpx;font-size:12px'>回顶</view>
+    <image src="/image/gotop.png" style='height:80rpx;width:80rpx;position:relative;top:25rpx' />
+    <view type="primary" style='position:relative;left:18rpx;font-size:24rpx'>回顶</view>
   </view>
   <!-- 回顶部 -->
 
   <!-- 下面是底部导航 -->
+
   <view class="bottomnav">
+    <!-- <view class="weui-cells weui-cells_after-title" style='padding:0 15 0 15'>
+      <view class="weui-cell weui-cell_input">
+        <view class="weui-cell__bd">
+          <input class="weui-input" name="input" placeholder="我说两句" />
+        </view>
+      </view>
+    </view> -->
     <view class="navitem" bindtap="gohome">
       <image class="navicon" src="/image/home.png" />
       <view class="navtext">首页</view>
-    </view>
-
-
-    <view class="navitem">
-      <button class="sharebutton" open-type="share">
-        <image class="navicon" style='float:left;' src="/image/share.png" />
-        <view class="navtext" style='position:absolute;padding:25rpx 0 0 0;margin:15rpx 0 0 0'>分享</view>
-      </button>
     </view>
     <view class="navitem">
       <button open-type="getUserInfo" class="sharebutton" bindgetuserinfo='collectFile'>
@@ -77,10 +77,16 @@
         <view class="navtext" style='position:absolute;padding:25rpx 0 0 0;margin:15rpx 0 0 0'>{{collect.text}}</view>
       </button>
     </view>
-    <!--view class="navitem" bindtap='collectFile'>
+    <view class="navitem">
+      <button class="sharebutton" open-type="share">
+        <image class="navicon" style='float:left;' src="/image/share.png" />
+        <view class="navtext" style='position:absolute;padding:25rpx 0 0 0;margin:15rpx 0 0 0'>分享</view>
+      </button>
+    </view>
+    <!-- <view class="navitem" bindtap='collectFile'>
       <image class="navicon" src="/image/book2.png" />
       <view class="navtext">参考资料</view>
-    </view-->
+    </view> -->
   </view>
   <!-- 底部导航  -->
 
