@@ -1,5 +1,9 @@
 // pages/bookstore/bookstore.js
 //index.js 
+//本页设计思路
+//数据格式 分类数据 统一为{parent_id,son_list} 每个对象都有自身id和子列表
+//渲染一级目录的时候 在onLoad函数  nav_list: this.data.parent_son[0].son_list
+//点击触发渲染时，调用get_sons_by_id 
 var qcloud = require('../../vendor/wafer2-client-sdk/index')
 var config = require('../../config')
 var util = require('../../utils/util.js')
@@ -266,7 +270,7 @@ Page({
         count_cart: 0,
     },
     onLoad: function () {
-        var son_list = this.get_sons_by_id("100")
+        var son_list = this.get_sons_by_id("100")//100是公务员 下阶段 这里需要自动生成
         var id = this.find_first_leave("100")
         this.show_goods_list_by_class_id(id)
         this.setData({
