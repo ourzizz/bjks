@@ -263,7 +263,7 @@ Page({
         takeSession: false,
         requestResult: '',
         goods_list: [],
-        count_cart: 0,//新老客户不论，导航页的购物车初始数字均为0,简化开发流程
+        count_cart: 0,
     },
     onLoad: function () {
         var son_list = this.get_sons_by_id("100")

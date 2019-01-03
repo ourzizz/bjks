@@ -34,7 +34,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 7,
+			"current": 8,
 			"list": [
 				{
 					"id": 0,
@@ -83,7 +83,14 @@
 				{
 					"id": -1,
 					"name": "结算",
-					"pathName": "pages/Settlement/Settlement"
+					"pathName": "pages/Settlement/Settlement",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "useraddress",
+					"pathName": "pages/user_address/user_address",
+					"query": "openid=\"777\""
 				}
 			]
 		}
