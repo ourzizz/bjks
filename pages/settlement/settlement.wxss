@@ -1,0 +1,78 @@
+/* pages/settlement/settlement.wxss */
+/* pages/shopcart/shopcart.wxss */
+@import '/weui.wxss'
+
+.weui-cell {
+    margin: 10px 0px 15px 5px;
+}
+
+.cart_box {
+    height: 100%
+}
+.goods_info_box {
+    padding: 0; margin: 0;
+}
+
+.cart_item {
+    position: relative;
+    border-bottom: 1rpx solid #d9d9d9;
+}
+
+/*商品的图片、名称、价格*/
+.goods_box {
+    display: block
+}
+
+.goods_img {
+    margin-right: 5px;
+    vertical-align: middle;
+    width: 80px;
+    height: 80px;
+}
+
+.price {
+display:inline;
+font-size: 28rpx;
+color: red;
+}
+
+/*商品的图片、名称、价格*/
+
+.opra_box {
+    /* float: right;*/
+    width: 600px;  
+    /* position: absolute;
+    right: 0;
+    bottom: 10rpx; */
+}
+
+.modify_count_img {
+    position: relative;
+    top: 15rpx;
+    height: 60rpx;
+    width: 60rpx;
+}
+.goods_name{
+    /* width:30%;
+    height: 60px;
+    justify-content: center;
+    text-align: center;
+    font-size: 30rpx;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap; */
+}
+.delete-image {
+    right: 10rpx;
+    top: 15rpx;
+    height: 50rpx;
+    width: 50rpx;
+}
+
+.foot {
+    position: fixed;
+    bottom: 0;
+    color: #11cd6e;
+    border-top: solid 1rpx #e5e5e5;
+    width: 100%;
+}

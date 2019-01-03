@@ -34,7 +34,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 6,
+			"current": 7,
 			"list": [
 				{
 					"id": 0,
@@ -79,6 +79,11 @@
 					"name": "shopcart",
 					"pathName": "pages/shopcart/shopcart",
 					"query": "open_id=o9pU65LTYEE8tVWQR_yClRc1466k"
+				},
+				{
+					"id": -1,
+					"name": "结算",
+					"pathName": "pages/Settlement/Settlement"
 				}
 			]
 		}

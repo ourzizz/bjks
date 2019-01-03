@@ -42,7 +42,7 @@
 <!--------商品展示e------->
 <view class="foot">
   <view style="position:relative;top:16rpx;left:30rpx;display:inline;">合计￥:{{cost}}元</view>
-  <view style="background:red;color:white;float:right;width:60%;height:90rpx;text-align:center">
-    <view style="position:relative;top:16rpx;"> 提交订单</view>
+  <view bindtap="submit_order" style="background:red;color:white;float:right;width:60%;height:90rpx;text-align:center">
+    <view style="position:relative;top:16rpx;" > 提交订单</view>
   </view>
 </view>
