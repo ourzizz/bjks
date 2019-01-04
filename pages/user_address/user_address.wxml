@@ -1,5 +1,6 @@
 <!--pages/user_address/user_address.wxml-->
 <view class="container">
+<view bindtap="onQuery">click to opera db</view>
   <template is="head" data="{{title: 'picker-view'}}"/>
 
   <view class="page-body">

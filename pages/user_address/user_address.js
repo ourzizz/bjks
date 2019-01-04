@@ -1,3 +1,4 @@
+const app = getApp()
 const date = new Date()
 const years = []
 const months = []
@@ -33,12 +34,7 @@ Page({
     value: [9999, 1, 1],
     isDaytime: true,
 
-      provinces,
-      province,
-      cities,
-      city,
-      countries,
-      county,
+
   },
 
   bindChange(e) {
@@ -49,5 +45,27 @@ Page({
       day: this.data.days[val[2]],
       isDaytime: !val[3]
     })
-  }
+  },
+  onQuery: function () {
+    const db = wx.cloud.database()
+    // 查询当前用户所有的 counters
+    db.collection('area').where({
+      ID: "0"
+    }).get({
+      success: res => {
+        this.setData({
+          queryResult: JSON.stringify(res.data, null, 2)
+        })
+        console.log('[数据库] [查询记录] 成功: ', res)
+      },
+      fail: err => {
+        wx.showToast({
+          icon: 'none',
+          title: '查询记录失败'
+        })
+        console.error('[数据库] [查询记录] 失败：', err)
+      }
+    })
+  },
+
 })
