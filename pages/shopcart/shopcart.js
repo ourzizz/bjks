@@ -111,16 +111,18 @@ Page({
     }
   },
 
-    calc_total_cost:function (){
+    calc_total_cost: function () {
         order_list = this.data.settlement.goods_list
-        this.data.cost = 0 //求和前先清0
-        for (var i = 0, lenI = order_list.length; i < lenI; ++i) { 
-            //this.data.cost = this.data.cost + (parseInt(goods_list[i].count) * parseInt(goods_list[i].price));
-            this.data.cost = this.data.cost + (parseInt(order_list[i].count) * order_list[i].price);
+        if (order_list !== undefined && order_list != null) {
+            this.data.cost = 0 //求和前先清0
+            for (var i = 0, lenI = order_list.length; i < lenI; ++i) {
+                //this.data.cost = this.data.cost + (parseInt(goods_list[i].count) * parseInt(goods_list[i].price));
+                this.data.cost = this.data.cost + (parseInt(order_list[i].count) * order_list[i].price);
+            }
+            this.setData({
+                cost: this.data.cost
+            })
         }
-        this.setData({
-            cost: this.data.cost
-        })
     },
 
   checkboxChange : function (e) {//计算共计花费
@@ -152,11 +154,13 @@ Page({
             content: '确定删除吗',
             success (res) {
                 if (res.confirm) {
-                    order_list.forEach(function(item, index, arr) {//数组删除元素模板
-                        if(item.goods_id == goods_id) {
-                            arr.splice(index, 1);
-                        }
-                    });
+                    if (order_list !== undefined && order_list != null) {
+                        order_list.forEach(function (item, index, arr) {//数组删除元素模板
+                            if (item.goods_id == goods_id) {
+                                arr.splice(index, 1);
+                            }
+                        });//end_callback
+                    }//endif
                     that.calc_total_cost()
                     that.data.goods_list.splice(idx, 1)
                     qcloud.request({

@@ -382,8 +382,10 @@ Page({
             qcloud.request({//加入到购物车表,现阶段先将逻辑代码理顺
                 url: `${config.service.host}/weapp/shopcart/get_cart_sum_count/` + open_id,
                 success(res) {
-                    that.setData({ count_cart: parseInt(res.data.sum) })
-                    util.showSuccess('收藏成功')
+                    if(res.data.sum !== null){
+                        that.setData({ count_cart: parseInt(res.data.sum) })
+                        util.showSuccess('收藏成功')
+                    }
                 },
                 fail(error) {
                     util.showModel('请求失败', error);

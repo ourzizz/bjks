@@ -48,7 +48,7 @@
   </scroll-view>
 <view style='padding:40rpx'></view>
 </view>
-<!--------商品展示e------->
+<!--商品展示e-->
 <view class="foot">
   <view style="position:relative;top:16rpx;left:30rpx;display:inline;">合计￥:{{cost}}元</view>
   <view bindtap="submit_order" style="background:red;color:white;float:right;width:60%;height:90rpx;text-align:center">
@@ -60,6 +60,7 @@
 <!-- 订单结算页面如下 -->
 <view  wx:if="{{step === 2}}">
 <view class="cart_box">
+      <button class="next" size="mini" type="default" bindtap="pre_step" >返回购物车修改</button>
   <view class="address" hover-class="none" hover-stop-propagation="false">
     <block wx:if="{{user_default_address}}">
           {{user_default_address}}
@@ -68,11 +69,9 @@
           还没有默认地址，点击添加地址
     </block>
   </view>
-      <button class="next" size="mini" type="default" bindtap="pre_step" >返回购物车修改</button>
-      <button class="next" size="mini" type="default" bindtap="pre_step" >去结算</button>
-  <!--------商品展示s------->
+  <!--商品展示s-->
   <scroll-view style="height:980rpx; color:black;" scroll-y="true">
-      <view wx:for="{{goods_list}}" wx:key="{{goods_list.name}}" wx:for-index="idx">
+      <view wx:for="{{order_list}}" wx:key="{{order_list.name}}" wx:for-index="idx">
         <view class="cart_item" bindtap="test">
         <view class='goods_info_box weui-cell weui-cell_access' hover-class="weui-cell_active" style="padding: 15rpx; margin: 0;border:0px">
           <navigator url="" class=""  >
