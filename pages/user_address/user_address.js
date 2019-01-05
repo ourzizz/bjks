@@ -33,9 +33,13 @@ Page({
     day: 2,
     value: [9999, 1, 1],
     isDaytime: true,
-
-
+    area_parent_sonlist:[],
+      provincies:[],
+      cities:[],
+      counties:[],
   },
+  get_son_list()  
+    {},
 
   bindChange(e) {
     const val = e.detail.value
@@ -43,14 +47,15 @@ Page({
       year: this.data.years[val[0]],
       month: this.data.months[val[1]],
       day: this.data.days[val[2]],
-      isDaytime: !val[3]
+      lsDaytime: !val[3]
     })
   },
-  onQuery: function () {
+
+  onQuery: function () {//大小写敏感
+    wx.cloud.init()
     const db = wx.cloud.database()
-    // 查询当前用户所有的 counters
     db.collection('area').where({
-      ID: "0"
+      PARENT_ID: "0"
     }).get({
       success: res => {
         this.setData({

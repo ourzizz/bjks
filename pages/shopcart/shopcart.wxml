@@ -1,12 +1,14 @@
 <!--pages/shopcart/shopcart.wxml-->
-<view  wx:if="{{step === 1}}">
-<view class="head_editor"  hover-class="none" hover-stop-propagation="false">
+<view  wx:if="{{goods_list.length === 0}}">
+    客官，您的购物车空空如也！！
+</view>
 
+<view  wx:if="{{step === 1}}">
+<view class=""  hover-class="none" hover-stop-propagation="false">
  <div class="nav">
 <button class="prev" size="mini" type="default" data-type="{{opera_option == '编辑' ? 'editor' : 'save'}}"  bindtap="switch_info_opera"> {{opera_option}} </button>
       <button class="next" size="mini" type="default" bindtap="next_step" >去结算</button>
     </div>
-
 </view>
 <view class="cart_box">
   <!--商品展示s-->

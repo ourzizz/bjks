@@ -8,6 +8,10 @@
 .cart_box {
     height: 100%
 }
+.head_editor{
+position:fixed;
+top:0;
+}
 .goods_info_box {
     padding: 0; margin: 0;
 }
