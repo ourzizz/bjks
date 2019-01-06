@@ -47,7 +47,7 @@
 
   <scroll-view scroll-x="true" style=" white-space: nowrap; display: flex">
     <view class="typelist">
-      <view wx:for="{{typelist}}" class="type-navigation">
+      <view wx:for="{{typelist}}" wx:key="{{typelist.typeid}}" class="type-navigation">
         <view data-typeid="{{ item.kstypeid }}" bindtap="changeFileList">
           <image class="guideimg" src="https://www.alemao.club/weapp/images/{{item.shortname}}.png" />
           <view wx:if="{{item.newfile!=0}}" class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">{{item.newfile}}</view>
@@ -61,21 +61,21 @@
   <view class="scroll_box" hidden="{{hiddennav}}">
     <scroll-view class="scroll-view_x" scroll-x style="width: auto;overflow:hidden;">
       <block wx:if="{{ typeid == 2 }}">
-        <view class="item_list" wx:for="{{navlist}}" wx:for-index="idx">
+        <view class="item_list" wx:for="{{navlist}}" wx:key="{{navlist}}" wx:for-index="idx">
           <button class="item_book_text" data-idx="{{idx}}" data-xianquid="{{ item.id }}" bindtap="setSydwFiles">{{item.countyname}}
             <image style="width:60rpx;height:60rpx;position:absolute;right:0" hidden="{{activeIndex != idx}}" src="/image/selected.png" />
           </button>
         </view>
       </block>
       <block wx:elif="{{ typeid == 3 }}">
-        <view class="item_list" wx:for="{{navlist}}" wx:for-index="idx">
+        <view class="item_list" wx:for="{{navlist}}" wx:key="{{navlist}}" wx:for-index="idx">
           <button class="item_book_text" data-idx="{{idx}}" data-ksid="{{ item.ksid }}" bindtap="setZhuanjiFiles">{{item.ksname}}
             <image style="width:60rpx;height:60rpx;position:absolute;right:0" hidden="{{activeIndex != idx}}" src="/image/selected.png" />
           </button>
         </view>
       </block>
       <block wx:elif="{{ typeid == 4 }}">
-        <view class="item_list" wx:for="{{navlist}}" wx:for-index="idx">
+        <view class="item_list" wx:for="{{navlist}}"  wx:key="{{navlist}}" wx:for-index="idx">
           <button class="item_book_text" data-idx="{{idx}}" data-xianquid="{{ item.id }}" bindtap="setShFiles">{{item.countyname}}
             <image style="width:60rpx;height:60rpx;position:absolute;right:0" hidden="{{activeIndex != idx}}" src="/image/selected.png" />
           </button>
@@ -87,7 +87,7 @@
 
   <view class="weui-panel">
     <view class="weui-panel__bd">
-      <view wx:for="{{filelist}}">
+      <view wx:for="{{filelist}}" wx:key="{{item.fileid}}">
         <view class="weui-media-box weui-media-box_small-appmsg">
           <view class="weui-cells weui-cells_in-small-appmsg">
             <navigator url="../webview/webview?fileid={{item.fileid}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
@@ -96,7 +96,7 @@
                   <view wx:if="{{item.ifnew!=0 && item.ifnew!=null}}" class="weui-badge" style="float:right">new</view>
                   {{item.filetitle}}
                   <!-- 事件渲染 -->
-                  <view wx:for="{{item.eventtime}}" style='display:inline-block;float:right'>
+                  <view wx:for="{{item.eventtime}}" wx:key="{{item.id}}" style='display:inline-block;float:right'>
                     <view style='color:white;background:red;display:inline;float:left;padding:4rpx 8rpx 4rpx 8rpx;margin:1rpx 5rpx 0 0; font-size:24rpx;'> {{item.event}} </view>
                   </view>
                   <!-- 事件渲染 -->

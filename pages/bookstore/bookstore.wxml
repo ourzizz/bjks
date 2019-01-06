@@ -45,7 +45,7 @@
   <view class="right_box">
     <scroll-view style="height:980rpx; color:black;" scroll-y="true">
       <view class="weui-cells weui-cells_after-title" ><!-- 商品列表s -->
-        <view wx:for="{{goods_list}}" style='border-bottom: 1rpx #999 solid; '>
+        <view wx:for="{{goods_list}}" wx:key="{{item.goods_id}}" style='border-bottom: 1rpx #999 solid; '>
             <view class='goods_box'>
               <navigator url="" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
                 <view class="weui-cell__hd" >

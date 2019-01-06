@@ -130,7 +130,6 @@ Page({
     this.data.settlement.goods_list = [] //结算商品列表清空  这里break 看下length
     goods_list = this.data.goods_list 
     values = e.detail.value
-      console.log(values)
     for (var i = 0, lenI = goods_list.length; i < lenI; ++i) {
       goods_list[i].checked = false;
       for (var j = 0, lenJ = values.length; j < lenJ; ++j) {
@@ -206,23 +205,23 @@ Page({
     })
   },
 
-    //get_user_defualt_address:function ()
-    //{
-        //open_id = this.data.userInfo.openId
-        //qcloud.request({
-          //url: `${config.service.host}/weapp/shopcart/get_user_default_address/` + options.open_id,
-          //success(result) {
-              //util.showSuccess('请求成功完成')
-              //var c = JSON.parse(JSON.stringify(result.data))
-              //that.data.goods_list = c
-              //for (var i in result.data) {
-                  //origin_map.set(result.data[i].goods_id, result.data[i].count)
-              //}
-              //that.setData({
-                  //goods_list: result.data
-              //})
-        //})
-    //}
+    // get_user_defualt_address:function ()
+    // {
+    //     open_id = this.data.userInfo.openId
+    //     qcloud.request({
+    //       url: `${config.service.host}/weapp/shopcart/get_user_default_address/` + options.open_id,
+    //       success(result) {
+    //           util.showSuccess('请求成功完成')
+    //           var c = JSON.parse(JSON.stringify(result.data))
+    //           that.data.goods_list = c
+    //           for (var i in result.data) {
+    //               origin_map.set(result.data[i].goods_id, result.data[i].count)
+    //           }
+    //           that.setData({
+    //               goods_list: result.data
+    //           })
+    //     })
+    // }
 
 })
 

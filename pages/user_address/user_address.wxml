@@ -1,7 +1,6 @@
 <!--pages/user_address/user_address.wxml-->
 <view class="container">
 <view bindtap="onQuery">click to opera db</view>
-  <template is="head" data="{{title: 'picker-view'}}"/>
 
   <view class="page-body">
     <view class="selected-date">{{year}}年{{month}}月{{day}}日{{isDaytime ? "白天" : "夜晚"}}</view>
@@ -26,6 +25,5 @@
     </picker-view>
   </view>
 
-  <template is="foot" />
 </view>
 
