@@ -1,16 +1,7 @@
-.selected-date {
-  text-align: center;
-  margin: 30rpx;
-}
 
-.icon-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
+@import '/weui.wxss';
 
-.picker-icon {
-  width: 50rpx;
-  height: 50rpx;
+.picker{
+    padding: 13px;
+    background-color: #FFFFFF;
 }
