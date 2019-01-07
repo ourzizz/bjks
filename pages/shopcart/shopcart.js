@@ -20,7 +20,7 @@ Page({
       opera_option: '编辑',
       cost: 0,
       step: 1,
-      user_default_address:'毕节市七星关区',
+      user_default_address:{},
   },
   onLoad: function (options) {
       var that = this
@@ -186,6 +186,7 @@ Page({
   next_step: function () {//进入到结算步骤,user may be not click the save button,directly goto settlement page
       this.save_modify()
     if (this.data.settlement.goods_list != null && this.data.settlement.goods_list.length != 0) {//提交订单不为空
+        this.get_user_defualt_address()
       this.data.settlement.cost = this.data.cost
       this.setData({ 
         step: this.data.step + 1 ,
@@ -205,23 +206,17 @@ Page({
     })
   },
 
-    // get_user_defualt_address:function ()
-    // {
-    //     open_id = this.data.userInfo.openId
-    //     qcloud.request({
-    //       url: `${config.service.host}/weapp/shopcart/get_user_default_address/` + options.open_id,
-    //       success(result) {
-    //           util.showSuccess('请求成功完成')
-    //           var c = JSON.parse(JSON.stringify(result.data))
-    //           that.data.goods_list = c
-    //           for (var i in result.data) {
-    //               origin_map.set(result.data[i].goods_id, result.data[i].count)
-    //           }
-    //           that.setData({
-    //               goods_list: result.data
-    //           })
-    //     })
-    // }
+    get_user_defualt_address:function ()
+    {//https://www.alemao.club/bjks/index.php?/user_address/get_user_default_address/o9pU65LTYEE8tVWQR_yClRc1466k
+        open_id = this.data.userInfo.openId
+      qcloud.request({
+          url: `${config.service.host}/weapp/user_address/get_user_default_address/` + open_id,
+          success(result) {
+              util.showSuccess('请求成功完成')
+              that.setData({ user_default_address: result.data })
+          }
+      })
+    }
 
 })
 

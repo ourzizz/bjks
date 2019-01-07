@@ -65,7 +65,12 @@
 <navigator url="/pages/user_address/user_address" open-type="redirect" hover-class="other-navigator-hover" >
   <view class="address" hover-class="none" hover-stop-propagation="false">
     <block wx:if="{{user_default_address}}">
-          {{user_default_address}}
+          {{user_default_address.name}}
+          {{user_default_address.telphone}}
+          {{user_default_address.province}}
+          {{user_default_address.city}}
+          {{user_default_address.county}}
+          {{user_default_address.detail}}
     </block>
     <block wx:else>
           还没有默认地址，点击添加地址
