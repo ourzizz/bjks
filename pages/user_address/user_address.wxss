@@ -5,3 +5,6 @@
     padding: 13px;
     background-color: #FFFFFF;
 }
+.weui-cell{
+    padding: 0;
+}

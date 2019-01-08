@@ -58,7 +58,8 @@ Page({
         goods_list: this.data.goods_list
       })
     } else {
-      util.show('不能超过最大库存')
+        error = "不能超过库存"
+        console.log(error)
     }
     this.calc_total_cost()
   },
@@ -187,7 +188,8 @@ Page({
         this.get_user_defualt_address()
       this.data.settlement.cost = this.data.cost
       this.setData({ 
-        step: this.data.step + 1 ,
+        // step: this.data.step + 1 ,
+        step: 2,
         order_list: this.data.settlement.goods_list
       })
     }

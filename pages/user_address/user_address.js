@@ -35,6 +35,19 @@ Page({
     this.setData({
       step: 1
     })
-  }
+  },
 
+  select_default_address_back_to_prepage(e) {
+    console.log('radio发生change事件，携带value值为：', e.detail.value)
+    const idx = e.detail.value
+    pages = getCurrentPages();
+    currPage = pages[pages.length - 1]; //当前页面
+    prevPage = pages[pages.length - 2];//上一个页面//直接调用上一个页面的setData()方法，把数据存到上一个页面中去
+    prevPage.setData({
+      user_default_address: this.data.address_list[idx]
+    })
+    wx.navigateBack({
+      delta: 1
+    })
+  }
 })
