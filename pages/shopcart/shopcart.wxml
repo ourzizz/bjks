@@ -62,9 +62,9 @@
 <view class="cart_box">
       <button class="next" size="mini" type="default" bindtap="pre_step" >返回购物车修改</button>
 
-<navigator url="/pages/user_address/user_address" open-type="redirect" hover-class="other-navigator-hover" >
+<navigator url="/pages/user_address/user_address?open_id={{userInfo.openId}}"  hover-class="other-navigator-hover" >
   <view class="address" hover-class="none" hover-stop-propagation="false">
-    <block wx:if="{{user_default_address}}">
+    <block wx:if="{{user_default_address.default_address == 1}}">
           {{user_default_address.name}}
           {{user_default_address.telphone}}
           {{user_default_address.province}}
@@ -77,6 +77,7 @@
     </block>
   </view>
   </navigator>
+
   <!--商品展示s-->
   <scroll-view style="height:980rpx; color:black;" scroll-y="true">
       <view wx:for="{{order_list}}" wx:key="{{order_list.name}}" wx:for-index="idx">

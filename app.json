@@ -2,15 +2,10 @@
   "pages": [
     "pages/index/index",
     "pages/bookstore/bookstore",
-    "pages/kaoshi/kaoshi",
     "pages/webview/webview",
     "pages/filetime/filetime",
-    "pages/zhuanji/zhuanji",
-    "pages/zhuanjikaoshi/zhuanjikaoshi",
     "pages/user/user",
     "pages/shopcart/shopcart",
-    "pages/Settlement/Settlement",
-    "pages/settlement/settlement",
     "pages/user_address/user_address"
   ],
   "window": {

@@ -1,5 +1,5 @@
 {
-	"description": "项目配置文件。",
+	"description": "项目配置文件",
 	"packOptions": {
 		"ignore": []
 	},
@@ -14,8 +14,11 @@
 	"compileType": "miniprogram",
 	"libVersion": "2.2.4",
 	"appid": "wxa8510d55a9cbdc9c",
-	"projectname": "%E6%AF%95%E8%8A%82%E8%80%83%E8%AF%95%E6%B5%8B%E8%AF%95%E7%89%88%E6%9C%AC",
-	"isGameTourist": false,
+	"projectname": "%E8%80%83%E8%AF%95%E4%B8%AD%E5%BF%83",
+	"debugOptions": {
+		"hidedInDevtools": []
+	},
+	"scripts": {},
 	"condition": {
 		"search": {
 			"current": -1,
@@ -30,7 +33,6 @@
 			"list": []
 		},
 		"game": {
-			"currentL": -1,
 			"list": []
 		},
 		"miniprogram": {
@@ -87,10 +89,10 @@
 					"query": ""
 				},
 				{
-					"id": -1,
+					"id": 8,
 					"name": "useraddress",
 					"pathName": "pages/user_address/user_address",
-					"query": "openid=\"777\""
+					"query": "open_id=o9pU65LTYEE8tVWQR_yClRc1466k"
 				}
 			]
 		}

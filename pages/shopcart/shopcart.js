@@ -2,9 +2,7 @@
 //1、如果用户反复点击增加、减少和删除等操作按钮，会增大服务器负荷，用户感觉不流畅
 //解决办法:增加操作视图，当用户点击编辑，该视图会自动覆盖掉商品的信息栏,等用户编辑完毕，再一次性提交服务器保存。
 //2、页面之间传递json，数据太长会被微信截断，如果进入新页面重新请求数据，操作麻烦不流畅
-//解决办法:路在购物车页面分两部进行提交，第一步选择商品 确定后 第二部地址管理确认支付
-//1-04遗留bug 选定商品后，再次编辑商品的数量，cost没有被修改
-//变量太多会非常混乱, 严格控制变量个数
+//解决办法:在购物车页面分两步进行提交，第一步选择商品 确定后 第二步地址管理确认支付
 var qcloud = require('../../vendor/wafer2-client-sdk/index')
 var config = require('../../config')
 var util = require('../../utils/util.js')
@@ -209,14 +207,15 @@ Page({
     get_user_defualt_address:function ()
     {//https://www.alemao.club/bjks/index.php?/user_address/get_user_default_address/o9pU65LTYEE8tVWQR_yClRc1466k
         open_id = this.data.userInfo.openId
+        let that = this
       qcloud.request({
           url: `${config.service.host}/weapp/user_address/get_user_default_address/` + open_id,
           success(result) {
               util.showSuccess('请求成功完成')
-              that.setData({ user_default_address: result.data })
+              console.log(result.data[0])
+              that.setData({ user_default_address: result.data[0] })
           }
       })
     }
 
 })
-
