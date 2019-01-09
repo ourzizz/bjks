@@ -1,67 +1,81 @@
-<view class="section">
+<view class="page">
 <view  wx:if="{{step === 1}}">
 <!--地址列表s-->
-<view class="address_list">
-  <scroll-view style="height:980rpx; color:black;" >
-    <radio-group style="position:absolute" bindchange="select_default_address_back_to_prepage">
+<view style='padding:1rpx'></view>
+<view class="address_list" style="margin:20rpx 0 0 0;">
+<radio-group class="group" bindchange="radioChange">
       <view wx:for="{{address_list}}" wx:key="{{address_list.address_id}}" wx:for-index="idx">
-        <view class="cart_item">
-            <label class="weui-cell weui-cells_after-title" style='float:left;margin:10px 0px 0 5px'>
-              <view class="weui-cell__hd">
-                <!-- <checkbox value="{{ item.address_id }}" checked="{{item.checked}}" /> -->
-                <checkbox value="{{ idx }}" checked="{{item.checked}}" />
-              </view>
-            </label>
+        <view class='address_box'>
+            <view class="info_box">
+              <view style="display:inline">{{item.name}} </view>
+              <view style="display:inline">{{item.telphone}} </view>
+              <view style="color:black" class="price">*{{item.province}}{{item.city}}{{item.county}}{{item.detail}}</view>
+            </view>
+            <view class="opera_box">
+                <radio id="{{item.address_id}}" value="{{item.name}}" checked="{{item.checked}}"></radio>
+                <label class="label-2-text" for="{{item.name}}">设为默认地址</label>
+                <view style="display:inline" >
+                  <button style="display:inline;margin:10rpx">编辑</button>
+                  <button  style="display:inline">删除</button>
+                </view>
+            </view>
+        </view> <!-- class='address_info'-->
+</view > <!--wx:for="{{address_list}}"---->
+</radio-group>
 
-        <view class='goods_info_box weui-cell weui-cell_access' hover-class="weui-cell_active" style="padding: 15rpx; margin: 0;border:0px">
-              <view class="goods_name" style='font-size:25rpx'>{{item.name}} </view>
-              <view style="display:inline" class="price">{{item.telphone}} </view>
-              <view style="color:black" class="price">*{{item.province}}{{item.city}}{{item.county}}</view>
-              <view style="color:black" class="price">{{item.detail}}</view>
-        </view> <!-- class='goods_info_box'-->
-
-        </view ><!--class="cart_item"---->
-      </view > <!--wx:for="{{address_list}}"---->
-    </radio-group>
-  </scroll-view>
 <view style='padding:40rpx'></view>
+
 </view>
 <button style="position:relative;top:16rpx;" bindtap="next_step"> 新增地址</button>
 </view>
 
-<!-- 新增和修改页面 -->
+<!-- 新增和修改地址页面 -->
 <view  wx:if="{{step === 2}}">
 
 <view class="page-section">
 
-    <view class="weui-cells__title">姓名</view>
-    <view class="weui-cells weui-cells_after-title">
-      <view class="weui-cell weui-cell_input">
-        <input class="weui-input"  placeholder="将会获取焦点"/>
-      </view>
-    </view>
+        <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell">
+                <view class="weui-cell__bd">收货人:</view>
+                <view class="weui-cell__gt">
+                <input class="weui-input" bindinput="input_name"  placeholder="姓名"/>
+                </view>
+            </view>
+        </view>
+
+
+        <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell">
+                <view class="weui-cell__bd">联系方式:</view>
+                <view class="weui-cell__gt">
+                <input class="weui-input" bindtap="input_telphone" placeholder="电话号码"/>
+                </view>
+            </view>
+        </view>
+
+        <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell">
+  <view class="weui-cell__bd">选择省市区:</view>
+  <picker mode="region" bindchange="bindRegionChange" value="{{region}}" custom-item="{{customItem}}">
+    <view class="weui-cell__gt"> {{region[0]}}，{{region[1]}}，{{region[2]}} </view>
+  </picker>
+  </view>
   </view>
 
-    <view class="weui-cells__title">电话</view>
-    <view class="weui-cells weui-cells_after-title">
-      <view class="weui-cell weui-cell_input"> <input class="weui-input"  placeholder="将会获取焦点"/> </view>
-    </view>
+        <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell">
+                <view class="weui-cell__bd">详细地址:</view>
+                <view class="weui-cell__gt">
+                <input class="weui-input" bindinput="input_detail" placeholder="详细地址"/>
+                </view>
+            </view>
+        </view>
 
-    <view class="weui-cells__title">详细地址</view>
-    <view class="weui-cells weui-cells_after-title">
-      <view class="weui-cell weui-cell_input"> <input class="weui-input"  placeholder="将会获取焦点"/> </view>
-    </view>
-
-  <view class="section__title">省市区选择器</view>
-  <picker mode="region" bindchange="bindRegionChange" value="{{region}}" custom-item="{{customItem}}">
-    <view class="picker">
-      收货地址：{{region[0]}}，{{region[1]}}，{{region[2]}}
-    </view>
-  </picker>
   <view class="foot">
       <button style="position:relative;top:16rpx;" bindtap="pre_step"> 确定</button>
   </view>
 </view>
 </view>
+  </view>
 
 <!-- 新增和修改页面 -->

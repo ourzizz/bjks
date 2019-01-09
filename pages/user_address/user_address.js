@@ -6,6 +6,7 @@ Page({
     region: ['贵州省', '毕节市', '七星关区'],
     step:1,
     address_list:[],
+    new_address:{},
   },
   onLoad:function(option) {//o9pU65LTYEE8tVWQR_yClRc1466k
     open_id = option.open_id
@@ -32,9 +33,22 @@ Page({
     })
   },
   pre_step: function () {
+    console.log("pre")
     this.setData({
       step: 1
     })
+  },
+
+  input_name:function(e){
+    console.log(e.detail.value)
+    this.data.new_address.name = e.detail.value
+  },
+
+  input_telphone:function(e){
+    this.data.new_address.telphone=e.detail.value
+  },
+  input_detail:function(e){
+    this.data.new_address.detail=e.detail.value
   },
 
   select_default_address_back_to_prepage(e) {

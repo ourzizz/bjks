@@ -1,10 +1,33 @@
 
 @import '/weui.wxss';
-
+.page{
+    background: rgb(233, 230, 230);
+}
 .picker{
     padding: 13px;
     background-color: #FFFFFF;
 }
 .weui-cell{
     padding: 0;
+}
+.input_box{
+    height: 150rpx;
+  border-style: solid;
+  border-width: 1rpx;
+}
+.address_box{
+    background-color: #FFFFFF;
+    /* margin: 20rpx 0 20rpx 0rpx; */
+    margin: 20rpx;
+    border-radius: 5px;
+box-shadow: 5px 5px 5px #888888;
+    /* border-bottom: 5rpx #999 solid */
+}
+.info_box{
+    padding: 10rpx 0 10rpx 20rpx;
+    border-bottom: 1rpx rgb(175, 97, 97) solid
+}
+.opera_box{
+    margin:0 10rpx 0 20rpx;
+    /* height: 200rpx; */
 }
