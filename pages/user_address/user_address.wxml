@@ -14,19 +14,21 @@
             <view class="opera_box">
                 <radio id="{{item.address_id}}" value="{{item.name}}" checked="{{item.checked}}"></radio>
                 <label class="label-2-text" for="{{item.name}}">设为默认地址</label>
-                <view style="display:inline" >
-                  <button style="display:inline;margin:10rpx">编辑</button>
-                  <button  style="display:inline">删除</button>
+                <view class="edit_button" style="display:inline;" >
+                  <button style="display:inline;margin:10rpx;font-size:40rpx">编辑</button>
+                  <button  style="display:inline;font-size:40rpx">删除</button>
                 </view>
             </view>
         </view> <!-- class='address_info'-->
 </view > <!--wx:for="{{address_list}}"---->
 </radio-group>
 
-<view style='padding:40rpx'></view>
+<!-- <view style='padding:40rpx'></view> -->
 
+<view class="foot" hover-class="none" hover-stop-propagation="false">
+<button  bindtap="next_step"> 新增地址</button>
 </view>
-<button style="position:relative;top:16rpx;" bindtap="next_step"> 新增地址</button>
+</view >
 </view>
 
 <!-- 新增和修改地址页面 -->
