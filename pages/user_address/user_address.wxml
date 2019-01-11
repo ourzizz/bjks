@@ -23,6 +23,7 @@
 </view > <!--wx:for="{{address_list}}"---->
 </radio-group>
 
+<view style='padding:60rpx 0 60rpx 0'></view>
 <!-- <view style='padding:40rpx'></view> -->
 
 <view class="foot" hover-class="none" hover-stop-propagation="false">
@@ -40,7 +41,7 @@
             <view class="weui-cell">
                 <view class="weui-cell__bd">收货人:</view>
                 <view class="weui-cell__gt">
-                <input class="weui-input" bindinput="input_name"  placeholder="姓名"/>
+                <input class="weui-input" bindchange="input_name"  placeholder="姓名"/>
                 </view>
             </view>
         </view>
@@ -50,7 +51,7 @@
             <view class="weui-cell">
                 <view class="weui-cell__bd">联系方式:</view>
                 <view class="weui-cell__gt">
-                <input class="weui-input" bindtap="input_telphone" placeholder="电话号码"/>
+                <input class="weui-input" bindchange="input_telphone" placeholder="电话号码"/>
                 </view>
             </view>
         </view>
@@ -68,7 +69,7 @@
             <view class="weui-cell">
                 <view class="weui-cell__bd">详细地址:</view>
                 <view class="weui-cell__gt">
-                <input class="weui-input" bindinput="input_detail" placeholder="详细地址"/>
+                <input class="weui-input" bindchange="input_detail" placeholder="详细地址"/>
                 </view>
             </view>
         </view>

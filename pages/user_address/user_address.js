@@ -23,8 +23,12 @@ Page({
   },
   bindRegionChange: function (e) {
     console.log('picker发送选择改变，携带值为', e.detail.value)
+    // let new_address = {}
+    this.data.new_address.province = e.detail.value[0]
+    this.data.new_address.city = e.detail.value[1]
+    this.data.new_address.county = e.detail.value[2]
     this.setData({
-      region: e.detail.value
+      region: e.detail.value,
     })
   },
   next_step:function(){
@@ -32,10 +36,16 @@ Page({
       step:2
     })
   },
+  user_add_address:function(){
+    console.log('insert new address into databases')
+  },
   pre_step: function () {
     console.log("pre")
+    this.data.address_list.push(this.data.new_address)
+    this.user_add_address
     this.setData({
-      step: 1
+      step: 1,
+      address_list:this.data.address_list
     })
   },
 
@@ -43,15 +53,23 @@ Page({
     console.log(e.detail.value)
     this.data.new_address.name = e.detail.value
   },
-
-  input_telphone:function(e){
-    this.data.new_address.telphone=e.detail.value
+  
+  reg_tel:function(phoneno){
+    return true;
   },
+  input_telphone:function(e){//input失去焦点才触发，bindinput是每输入一个字符就触发一次
+    console.log("intelphone")
+    if(this.reg_tel(e.detail.value)){
+      this.data.new_address.telphone = e.detail.value
+    }
+    console.log("输入电话号码错误请重新输入")
+  },
+
   input_detail:function(e){
-    this.data.new_address.detail=e.detail.value
+    this.data.new_address.detail = e.detail.value
   },
 
-  select_default_address_back_to_prepage(e) {
+  select_default_address_back_to_prepage(e) {//返回用户选择的地址给父页面
     console.log('radio发生change事件，携带value值为：', e.detail.value)
     const idx = e.detail.value
     pages = getCurrentPages();
