@@ -1,2 +1,45 @@
-<!--pages/settlement/settlement.wxml-->
-<text>pages/settlement/settlement.wxml</text>
+<view class="cart_box">
+<navigator url="/pages/user_address/user_address?open_id={{open_id}}"  hover-class="other-navigator-hover" >
+  <view class="address" hover-class="none" hover-stop-propagation="false">
+    <block wx:if="{{user_default_address != null}}">
+          {{user_default_address.name}}
+          {{user_default_address.telphone}}
+          {{user_default_address.province}}
+          {{user_default_address.city}}
+          {{user_default_address.county}}
+          {{user_default_address.detail}}
+    </block>
+    <block wx:else>
+          您还没有填写收货地址，点击添加地址!!
+    </block>
+  </view>
+  </navigator>
+
+  <!--商品展示s-->
+  <scroll-view style="height:980rpx; color:black;" scroll-y="true">
+      <view wx:for="{{order_list}}" wx:key="{{order_list.name}}" wx:for-index="idx">
+        <view class="cart_item" bindtap="test">
+        <view class='goods_info_box weui-cell weui-cell_access' hover-class="weui-cell_active" style="padding: 15rpx; margin: 0;border:0px">
+          <navigator url="" class=""  >
+             <image src="{{item.face_img}}" class="goods_img" /> 
+        </navigator>
+            <view class="goods_box"><!--  -->
+              <view class="goods_name" style='font-size:25rpx'>{{item.name}} </view>
+              <view style="display:inline" class="price">价格￥{{item.price}} </view>
+              <view style="color:black" class="price">*{{item.count}}件</view>
+            </view> <!--class goods_info"---->
+
+        </view> <!-- class='goods_info_box'-->
+        </view ><!--class="cart_item"---->
+      </view > <!--wx:for="{{goods_list}}"---->
+  </scroll-view>
+
+<view class="foot">
+  <view style="position:relative;top:16rpx;left:30rpx;display:inline;">合计￥:{{cost}}元</view>
+  <view bindtap="submit_order" style="background:red;color:white;float:right;width:60%;height:90rpx;text-align:center">
+    <view style="position:relative;top:16rpx;"> 去支付</view>
+  </view>
+</view>
+
+<view style='padding:40rpx'></view>
+</view>

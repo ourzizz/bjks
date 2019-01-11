@@ -3,6 +3,8 @@
 //解决办法:增加操作视图，当用户点击编辑，该视图会自动覆盖掉商品的信息栏,等用户编辑完毕，再一次性提交服务器保存。
 //2、页面之间传递json，数据太长会被微信截断，如果进入新页面重新请求数据，操作麻烦不流畅
 //解决办法:在购物车页面分两步进行提交，第一步选择商品 确定后 第二步地址管理确认支付
+//处理订单方式不周全，如果用户是从商品页面直接进入到结算页面，以上方法就不行，故必须要有一个单独的结算页面
+//小程序有10m空间缓存，我们可以在本页面进行settlement的缓存，在计算页拿出来，删除缓存
 var qcloud = require('../../vendor/wafer2-client-sdk/index')
 var config = require('../../config')
 var util = require('../../utils/util.js')
@@ -184,14 +186,15 @@ Page({
 
   next_step: function () {//进入到结算步骤,user may be not click the save button,directly goto settlement page
       this.save_modify()
-    if (this.data.settlement.goods_list != null && this.data.settlement.goods_list.length != 0) {//提交订单不为空
-        this.get_user_defualt_address()
       this.data.settlement.cost = this.data.cost
-      this.setData({ 
-        // step: this.data.step + 1 ,
-        step: 2,
-        order_list: this.data.settlement.goods_list
-      })
+      if (this.data.settlement.goods_list != null && this.data.settlement.goods_list.length != 0) {//提交订单不为空
+        wx.setStorage({
+            key: "settlement",
+            data: this.data.settlement
+        })
+        wx.navigateTo({
+            url: '../settlement/settlement?open_id=' + this.data.userInfo.openId 
+        })
     }
     else {//如果提交空订单
       var error = "订单不能为空"
@@ -206,18 +209,5 @@ Page({
     })
   },
 
-    get_user_defualt_address:function ()
-    {//https://www.alemao.club/bjks/index.php?/user_address/get_user_default_address/o9pU65LTYEE8tVWQR_yClRc1466k
-        open_id = this.data.userInfo.openId
-        let that = this
-      qcloud.request({
-          url: `${config.service.host}/weapp/user_address/get_user_default_address/` + open_id,
-          success(result) {
-              util.showSuccess('请求成功完成')
-              console.log(result.data[0])
-              that.setData({ user_default_address: result.data[0] })
-          }
-      })
-    }
 
 })

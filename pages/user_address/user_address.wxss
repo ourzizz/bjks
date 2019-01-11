@@ -21,7 +21,7 @@ page{
     font-size: 32rpx;
     margin: 20rpx;
     border-radius: 5px;
-box-shadow: 5px 5px 5px #888888;
+/* box-shadow: 5px 5px 5px #888888; */
     /* border-bottom: 5rpx #999 solid */
 }
 .info_box{
