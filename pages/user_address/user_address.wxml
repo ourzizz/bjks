@@ -15,7 +15,7 @@
                 <radio id="{{item.address_id}}" value="{{item.name}}" checked="{{item.checked}}"></radio>
                 <label class="label-2-text" for="{{item.name}}">设为默认地址</label>
                 <view class="edit_button" style="display:inline;" >
-                  <button style="display:inline;margin:10rpx;font-size:40rpx">编辑</button>
+                  <button data-idx="{{idx}}" bindtap="edit_address" style="display:inline;margin:10rpx;font-size:40rpx">编辑</button>
                   <button  style="display:inline;font-size:40rpx">删除</button>
                 </view>
             </view>
@@ -27,7 +27,7 @@
 <!-- <view style='padding:40rpx'></view> -->
 
 <view class="foot" hover-class="none" hover-stop-propagation="false">
-<button  bindtap="next_step"> 新增地址</button>
+<button  bindtap="create_address"> 新增地址</button>
 </view>
 </view >
 </view>
@@ -41,7 +41,7 @@
             <view class="weui-cell">
                 <view class="weui-cell__bd">收货人:</view>
                 <view class="weui-cell__gt">
-                <input class="weui-input" bindchange="input_name"  placeholder="姓名"/>
+                <input class="weui-input" bindchange="input_name"  placeholder="{{new_address !==null ?new_address.name:'姓名'}}"/>
                 </view>
             </view>
         </view>
@@ -51,7 +51,7 @@
             <view class="weui-cell">
                 <view class="weui-cell__bd">联系方式:</view>
                 <view class="weui-cell__gt">
-                <input class="weui-input" bindchange="input_telphone" placeholder="电话号码"/>
+                <input class="weui-input" bindchange="input_telphone" placeholder="{{new_address !==null ?new_address.telphone:'电话'}}"/>
                 </view>
             </view>
         </view>
@@ -69,13 +69,13 @@
             <view class="weui-cell">
                 <view class="weui-cell__bd">详细地址:</view>
                 <view class="weui-cell__gt">
-                <input class="weui-input" bindchange="input_detail" placeholder="详细地址"/>
+                <input class="weui-input" bindchange="input_detail" placeholder="{{new_address !==null ?new_address.detail:'详细地址'}}"/>
                 </view>
             </view>
         </view>
 
   <view class="foot">
-      <button style="position:relative;top:16rpx;" bindtap="pre_step"> 确定</button>
+      <button style="position:relative;top:16rpx;" bindtap="submit"> 确定</button>
   </view>
 </view>
 </view>
