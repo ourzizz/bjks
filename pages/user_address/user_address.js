@@ -7,7 +7,8 @@ Page({
     step:1,
     address_list:[],
     new_address:{},
-    open_id:''
+    open_id:'',
+    edit_index:-1
   },
 
   onLoad:function(option) {//o9pU65LTYEE8tVWQR_yClRc1466k
@@ -35,8 +36,8 @@ Page({
   },
 
   edit_address: function (event) {//用户点击编辑
-    let idx = event.currentTarget.dataset.idx
-    this.data.new_address = JSON.parse(JSON.stringify(this.data.address_list[idx]));
+    this.data.edit_index = event.currentTarget.dataset.idx
+    this.data.new_address = JSON.parse(JSON.stringify(this.data.address_list[this.data.edit_index]));
     this.setData({
       step:2,
       new_address:this.data.new_address
@@ -79,6 +80,9 @@ Page({
 
   create_address:function(){//点击新增，进入步骤2，不携带任何参数
     this.data.new_address = {} //这里的意思需要新分配内存
+    this.data.new_address.province = "贵州省"//给默认值贵州毕节七星关
+    this.data.new_address.city = "毕节市"
+    this.data.new_address.county = "七星关区"
     this.setData({
       step:2,
       new_address:this.data.new_address
@@ -89,22 +93,52 @@ Page({
     console.log('insert new address into databases')
   },
 
+get_change: function () {
+  var modify = []
+  let idx = this.data.edit_index
+  let adlist = this.data.address_list
+  let newadd = this.data.new_address
+  modify.push({'key':0,'value':adlist[idx].address_id})//地址id
+  if (adlist[idx].name != newadd.name) {
+    modify.push({'key':1,'value':newadd.name})
+  }
+  if (adlist[idx].telphone != newadd.telphone) {
+    modify.push({'key':2,'value':newadd.telphone})
+  }
+  if ( adlist[idx].province != newadd.province || adlist[idx].city != newadd.city || adlist[idx].county != newadd.county) {
+    modify.push({'key':3,'value':this.data.region})
+  }
+  if (adlist[idx].detail != newadd.detail) {
+    modify.push({'key':4,'value':newadd.detail})
+  }
+  return modify
+},
+
   submit: function () {
     let that = this
     if(this.data.new_address.address_id != null) {//addressid存在表示这是保存编辑，编辑后modify[{key:1,value:'exmple'}...]后台根据key选择不同的操作将value update到数据库
-      // var modify = this.get_change()//得到modify数组
-      // this.update_address(modify)
-      console.log('submit');
-      that.setData({
-        step: 1,
-        address_list: that.data.address_list
+      var address_str = JSON.stringify(this.get_change())//得到modify数组,转字符串
+      // console.log(address_str);
+      this.data.address_list[this.data.edit_index] = this.data.new_address//把修改后的值传给list渲染
+      qcloud.request({
+        url: `${config.service.host}/weapp/user_address/user_update_address/` + this.data.open_id + '/' + address_str,
+        success(result) {
+          that.setData({
+            step: 1,
+            address_list: that.data.address_list
+          })
+        },
+        fail(error) {
+          util.showModel('请求失败', error);
+          console.log('request fail', error);
+        }
       })
     } else {//id不存在表示新建的
       console.log("pre")
       this.data.address_list.push(this.data.new_address)
-      let address = JSON.stringify(this.data.new_address)
+      let address_str = JSON.stringify(this.data.new_address)
       qcloud.request({
-        url: `${config.service.host}/weapp/user_address/user_add_address/` + this.data.open_id + '/' + address,
+        url: `${config.service.host}/weapp/user_address/user_add_address/` + this.data.open_id + '/' + address_str,
         success(result) {
           that.setData({
             step: 1,
