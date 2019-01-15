@@ -1,3 +1,4 @@
+/* 后台的增删改开发完成，前端用户输入校验立即开发 */
 var qcloud = require('../../vendor/wafer2-client-sdk/index')
 var config = require('../../config')
 var util = require('../../utils/util.js')
@@ -11,11 +12,10 @@ Page({
     edit_index:-1
   },
 
-  onLoad:function(option) {//o9pU65LTYEE8tVWQR_yClRc1466k
-    this.data.open_id = option.open_id
+  get_address_list:function(open_id){
     let that = this
     qcloud.request({
-      url: `${config.service.host}/user_address/get_user_all_address/` + this.data.open_id,
+      url: `${config.service.host}/user_address/get_user_all_address/` + open_id,
       success(result) {
         util.showSuccess('请求成功完成')
         that.setData({
@@ -23,6 +23,11 @@ Page({
         })
       }
     })
+  },
+
+  onLoad:function(option) {//o9pU65LTYEE8tVWQR_yClRc1466k
+    this.data.open_id = option.open_id
+    this.get_address_list(this.data.open_id)
   },
 
   bindRegionChange: function (e) {
@@ -71,67 +76,91 @@ Page({
 
   delete_address: function (event) {//用户点击删除
     let idx = event.currentTarget.dataset.idx
-    this.data.new_address = JSON.parse(JSON.stringify(this.data.address_list[idx]));
-    this.setData({
-      step:2,
-      new_address:this.data.new_address
-    })
+    let address_id = this.data.address_list[idx].address_id
+    let that = this
+    wx.showModal({
+      title: '提示',
+      content: '确定删除吗',
+      success(res) {
+        if (res.confirm) {
+          qcloud.request({
+            url: `${config.service.host}/weapp/user_address/user_delete_address/` + that.data.open_id + '/' + address_id,
+            success(result) {
+              that.data.address_list.splice(idx,1)//数组中删除掉用户点击的地址
+              that.setData({
+                address_list: that.data.address_list,
+                step: 1
+              })
+            },
+            fail(error) {
+              util.showModel('请求失败', error);
+              console.log('request fail', error);
+            }
+          })
+        } else if (res.cancel) {
+          return
+        }
+      }
+    })//}}}
   },
 
-  create_address:function(){//点击新增，进入步骤2，不携带任何参数
+  create_address: function () {//点击新增，进入步骤2，不携带任何参数
     this.data.new_address = {} //这里的意思需要新分配内存
     this.data.new_address.province = "贵州省"//给默认值贵州毕节七星关
     this.data.new_address.city = "毕节市"
     this.data.new_address.county = "七星关区"
     this.setData({
-      step:2,
-      new_address:this.data.new_address
+      step: 2,
+      new_address: this.data.new_address
     })
   },
 
-  insert_address:function(){
+  insert_address: function () {
     console.log('insert new address into databases')
   },
 
-get_change: function () {
-  var modify = []
-  let idx = this.data.edit_index
-  let adlist = this.data.address_list
-  let newadd = this.data.new_address
-  modify.push({'key':0,'value':adlist[idx].address_id})//地址id
-  if (adlist[idx].name != newadd.name) {
-    modify.push({'key':1,'value':newadd.name})
-  }
-  if (adlist[idx].telphone != newadd.telphone) {
-    modify.push({'key':2,'value':newadd.telphone})
-  }
-  if ( adlist[idx].province != newadd.province || adlist[idx].city != newadd.city || adlist[idx].county != newadd.county) {
-    modify.push({'key':3,'value':this.data.region})
-  }
-  if (adlist[idx].detail != newadd.detail) {
-    modify.push({'key':4,'value':newadd.detail})
-  }
-  return modify
-},
+  get_change: function () {
+    var modify = []
+    let idx = this.data.edit_index
+    let adlist = this.data.address_list
+    let newadd = this.data.new_address
+    if (adlist[idx].name != newadd.name) {
+      modify.push({ 'key': 1, 'value': newadd.name })
+    }
+    if (adlist[idx].telphone != newadd.telphone) {
+      modify.push({ 'key': 2, 'value': newadd.telphone })
+    }
+    if (adlist[idx].province != newadd.province || adlist[idx].city != newadd.city || adlist[idx].county != newadd.county) {
+      modify.push({ 'key': 3, 'value': this.data.region })
+    }
+    if (adlist[idx].detail != newadd.detail) {
+      modify.push({ 'key': 4, 'value': newadd.detail })
+    }
+    return modify
+  },
 
   submit: function () {
     let that = this
-    if(this.data.new_address.address_id != null) {//addressid存在表示这是保存编辑，编辑后modify[{key:1,value:'exmple'}...]后台根据key选择不同的操作将value update到数据库
-      var address_str = JSON.stringify(this.get_change())//得到modify数组,转字符串
-      // console.log(address_str);
-      this.data.address_list[this.data.edit_index] = this.data.new_address//把修改后的值传给list渲染
-      qcloud.request({
-        url: `${config.service.host}/weapp/user_address/user_update_address/` + this.data.open_id + '/' + address_str,
-        success(result) {
-          that.setData({
-            step: 1,
-            address_list: that.data.address_list
-          })
-        },
-        fail(error) {
-          util.showModel('请求失败', error);
-          console.log('request fail', error);
-        }
+    if (this.data.new_address.address_id != null) {//addressid存在表示这是保存编辑，编辑后modify[{key:1,value:'exmple'}...]后台根据key选择不同的操作将value update到数据库
+      var modify = this.get_change()
+      var address_str = JSON.stringify(modify)//得到modify数组,转字符串
+      if (modify.length !== 0) {//没有改变就没有必要对后台进行请求，节约服务器资源
+        var address_id = this.data.address_list[this.data.edit_index].address_id
+        this.data.address_list[this.data.edit_index] = this.data.new_address//把修改后的值传给list渲染
+        qcloud.request({
+          url: `${config.service.host}/weapp/user_address/user_update_address/` + this.data.open_id + '/' + address_id + '/' + address_str,
+          success(result) {
+            console.log('request successful');
+          },
+          fail(error) {
+            util.showModel('请求失败', error);
+            console.log('request fail', error);
+          }
+        })
+      }
+      that.setData({//就算是异步也可以放在请求外面执行,放在里面会导致modify为空时不能渲染step1
+        step: 1,
+        address_list: that.data.address_list
       })
     } else {//id不存在表示新建的
       console.log("pre")
@@ -140,9 +169,9 @@ get_change: function () {
       qcloud.request({
         url: `${config.service.host}/weapp/user_address/user_add_address/` + this.data.open_id + '/' + address_str,
         success(result) {
+          that.get_address_list(that.data.open_id)
           that.setData({
-            step: 1,
-            address_list: that.data.address_list
+            step: 1
           })
         },
         fail(error) {
@@ -152,7 +181,6 @@ get_change: function () {
       })
     }
   },
-
 
   select_default_address_back_to_prepage(e) {//返回用户选择的地址给父页面
     console.log('radio发生change事件，携带value值为：', e.detail.value)
@@ -167,5 +195,4 @@ get_change: function () {
       delta: 1
     })
   },
-
 })

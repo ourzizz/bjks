@@ -3,7 +3,7 @@
 <!--地址列表s-->
 <view style='padding:1rpx'></view>
 <view class="address_list" style="margin:20rpx 0 0 0;">
-<radio-group class="group" bindchange="radioChange">
+<radio-group class="group" bindchange="select_default_address_back_to_prepage">
       <view wx:for="{{address_list}}" wx:key="{{address_list.address_id}}" wx:for-index="idx">
         <view class='address_box'>
             <view class="info_box">
@@ -12,11 +12,11 @@
               <view style="color:black" class="price">*{{item.province}}{{item.city}}{{item.county}}{{item.detail}}</view>
             </view>
             <view class="opera_box">
-                <radio id="{{item.address_id}}" value="{{item.name}}" checked="{{item.checked}}"></radio>
+                <radio id="{{item.address_id}}" value="{{idx}}" checked="{{item.checked}}"></radio>
                 <label class="label-2-text" for="{{item.name}}">设为默认地址</label>
                 <view class="edit_button" style="display:inline;" >
                   <button data-idx="{{idx}}" bindtap="edit_address" style="display:inline;margin:10rpx;font-size:40rpx">编辑</button>
-                  <button  style="display:inline;font-size:40rpx">删除</button>
+                  <button data-idx="{{idx}}" bindtap="delete_address" style="display:inline;font-size:40rpx">删除</button>
                 </view>
             </view>
         </view> <!-- class='address_info'-->
