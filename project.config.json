@@ -36,7 +36,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 8,
+			"current": -1,
 			"list": [
 				{
 					"id": 0,
@@ -83,15 +83,15 @@
 					"query": "open_id=o9pU65LTYEE8tVWQR_yClRc1466k"
 				},
 				{
-					"id": -1,
-					"name": "结算",
-					"pathName": "pages/Settlement/Settlement",
-					"query": ""
-				},
-				{
 					"id": 8,
 					"name": "useraddress",
 					"pathName": "pages/user_address/user_address",
+					"query": "open_id=o9pU65LTYEE8tVWQR_yClRc1466k"
+				},
+				{
+					"id": -1,
+					"name": "shopcart",
+					"pathName": "pages/settlement/settlement",
 					"query": "open_id=o9pU65LTYEE8tVWQR_yClRc1466k"
 				}
 			]

@@ -18,6 +18,7 @@ Page({
       url: `${config.service.host}/user_address/get_user_all_address/` + open_id,
       success(result) {
         util.showSuccess('请求成功完成')
+        result.data[0].checked = true
         that.setData({
           address_list: result.data
         })
@@ -69,9 +70,7 @@ Page({
   },
 
   input_detail:function(e){
-    if(e.detail.value != null){
       this.data.new_address.detail = e.detail.value
-    }
   },
 
   delete_address: function (event) {//用户点击删除
@@ -113,10 +112,6 @@ Page({
       step: 2,
       new_address: this.data.new_address
     })
-  },
-
-  insert_address: function () {
-    console.log('insert new address into databases')
   },
 
   get_change: function () {
@@ -169,7 +164,7 @@ Page({
       qcloud.request({
         url: `${config.service.host}/weapp/user_address/user_add_address/` + this.data.open_id + '/' + address_str,
         success(result) {
-          that.get_address_list(that.data.open_id)
+          that.get_address_list(that.data.open_id)//避开插入数据库同时需要取出id，在并发情况可能会取错的情况，前台重新请求地址列表
           that.setData({
             step: 1
           })
@@ -182,12 +177,26 @@ Page({
     }
   },
 
+db_set_default_address: function (idx) {
+  var open_id = this.data.open_id
+  var address_id = this.data.address_list[idx].address_id
+  qcloud.request({
+    url: `${config.service.host}/weapp/user_address/set_default_address/` + open_id + '/' + address_id,
+    success(result) {console.log('set_default_success');},
+    fail(error) {
+      util.showModel('请求失败', error);
+      console.log('request fail', error);
+    }
+  })
+},
+
   select_default_address_back_to_prepage(e) {//返回用户选择的地址给父页面
     console.log('radio发生change事件，携带value值为：', e.detail.value)
     const idx = e.detail.value
     pages = getCurrentPages();
     currPage = pages[pages.length - 1]; //当前页面
     prevPage = pages[pages.length - 2];//上一个页面//直接调用上一个页面的setData()方法，把数据存到上一个页面中去
+    this.db_set_default_address(idx)
     prevPage.setData({
       user_default_address: this.data.address_list[idx]
     })

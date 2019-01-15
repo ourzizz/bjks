@@ -184,7 +184,7 @@ Page({
      })//}}}
     },
 
-  next_step: function () {//进入到结算步骤,user may be not click the save button,directly goto settlement page
+  next_step: function () {//进入到结算步骤,user may be goto settlement page without click the save button directly
       this.save_modify()
       this.data.settlement.cost = this.data.cost
       if (this.data.settlement.goods_list != null && this.data.settlement.goods_list.length != 0) {//提交订单不为空

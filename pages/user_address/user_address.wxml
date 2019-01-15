@@ -41,7 +41,7 @@
             <view class="weui-cell">
                 <view class="weui-cell__bd">收货人:</view>
                 <view class="weui-cell__gt">
-                <input class="weui-input" bindchange="input_name"  placeholder="{{new_address !==null ?new_address.name:'姓名'}}"/>
+                <input class="weui-input" bindchange="input_name" value="{{new_address.name}}"  placeholder="姓名"/>
                 </view>
             </view>
         </view>
@@ -51,7 +51,7 @@
             <view class="weui-cell">
                 <view class="weui-cell__bd">联系方式:</view>
                 <view class="weui-cell__gt">
-                <input class="weui-input" bindchange="input_telphone" placeholder="{{new_address !==null ?new_address.telphone:'电话'}}"/>
+                <input class="weui-input" bindchange="input_telphone" value="{{new_address.telphone}}"  placeholder="电话"/>
                 </view>
             </view>
         </view>
@@ -69,7 +69,7 @@
             <view class="weui-cell">
                 <view class="weui-cell__bd">详细地址:</view>
                 <view class="weui-cell__gt">
-                <input class="weui-input" bindchange="input_detail" placeholder="{{new_address !==null ?new_address.detail:'详细地址'}}"/>
+                <textarea style="height:50px"  bindchange="input_detail" value="{{new_address.detail}}" placeholder="详细地址50个字"/>
                 </view>
             </view>
         </view>

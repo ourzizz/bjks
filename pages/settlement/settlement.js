@@ -34,6 +34,7 @@ Page({
     })
     this.get_user_defualt_address()
   }, 
+
     get_user_defualt_address:function (open_id)
     {//https://www.alemao.club/bjks/index.php?/user_address/get_user_default_address/o9pU65LTYEE8tVWQR_yClRc1466k
         let that = this
