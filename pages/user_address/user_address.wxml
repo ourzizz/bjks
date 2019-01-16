@@ -38,9 +38,11 @@
 <view class="page-section">
 
         <view class="weui-cells weui-cells_after-title">
-            <view class="weui-cell">
-                <view class="weui-cell__bd">收货人:</view>
-                <view class="weui-cell__gt">
+            <view class="weui-cell" style="margin:0 0 0 10px;">
+                <view class="weui-cell__bd" >
+                    <view class='text'> 收货人: </view>
+                </view>
+                <view class="weui-cell__gt" >
                 <input class="weui-input" bindchange="input_name" value="{{new_address.name}}"  placeholder="姓名"/>
                 </view>
             </view>
@@ -51,31 +53,32 @@
             <view class="weui-cell">
                 <view class="weui-cell__bd">联系方式:</view>
                 <view class="weui-cell__gt">
-                <input class="weui-input" bindchange="input_telphone" value="{{new_address.telphone}}"  placeholder="电话"/>
+                <input class="weui-input" maxlength="11" bindchange="input_telphone" value="{{new_address.telphone}}"  placeholder="电话"/>
                 </view>
             </view>
         </view>
 
-        <view class="weui-cells weui-cells_after-title">
+        <view style="height:100rpx" class="weui-cells weui-cells_after-title">
             <view class="weui-cell">
-  <view class="weui-cell__bd">选择省市区:</view>
-  <picker mode="region" bindchange="bindRegionChange" value="{{region}}" custom-item="{{customItem}}">
-    <view class="weui-cell__gt"> {{region[0]}}，{{region[1]}}，{{region[2]}} </view>
-  </picker>
-  </view>
-  </view>
+            <view class="weui-cell__bd">选择省市区:</view>
+            <picker  mode="region" bindchange="bindRegionChange" value="{{region}}" custom-item="{{customItem}}">
+                <view class="weui-cell__gt"> {{region[0]}}，{{region[1]}}，{{region[2]}} </view>
+            </picker>
+            </view>
+        </view>
 
-        <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cells weui-cells_after-title" style="height:50px">
             <view class="weui-cell">
                 <view class="weui-cell__bd">详细地址:</view>
-                <view class="weui-cell__gt">
-                <textarea style="height:50px"  bindchange="input_detail" value="{{new_address.detail}}" placeholder="详细地址50个字"/>
+                <view class="weui-cell__gt" style="height:50px">
+                <textarea  auto-height	maxlength="50" bindinput="input_detail" value="{{new_address.detail}}" placeholder="详细地址50个字"/>
                 </view>
             </view>
         </view>
 
   <view class="foot">
-      <button style="position:relative;top:16rpx;" bindtap="submit"> 确定</button>
+      <button style="position:relative;top:16rpx;" bindtap="submit"> 保存</button>
+      <button style="position:relative;top:16rpx;" bindtap="cancle"> 取消</button>
   </view>
 </view>
 </view>

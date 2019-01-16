@@ -36,7 +36,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": -1,
+			"current": 7,
 			"list": [
 				{
 					"id": 0,
@@ -83,7 +83,7 @@
 					"query": "open_id=o9pU65LTYEE8tVWQR_yClRc1466k"
 				},
 				{
-					"id": 8,
+					"id": 7,
 					"name": "useraddress",
 					"pathName": "pages/user_address/user_address",
 					"query": "open_id=o9pU65LTYEE8tVWQR_yClRc1466k"

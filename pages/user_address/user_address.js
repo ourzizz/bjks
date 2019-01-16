@@ -51,22 +51,11 @@ Page({
   },
 
   input_name:function(e){
-    console.log(e.detail.value)
-    if(e.detail.value != null){
       this.data.new_address.name = e.detail.value
-    }
   },
   
-  reg_tel:function(phoneno){
-    return true;
-  },
-
-  input_telphone:function(e){//input失去焦点才触发，bindinput是每输入一个字符就触发一次
-    console.log("intelphone")
-    if(this.reg_tel(e.detail.value)){
+  input_telphone:function(e){//textarea 触发
       this.data.new_address.telphone = e.detail.value
-    }
-    console.log("输入电话号码错误请重新输入")
   },
 
   input_detail:function(e){
@@ -114,6 +103,10 @@ Page({
     })
   },
 
+  insert_address: function () {
+    console.log('insert new address into databases')
+  },
+
   get_change: function () {
     var modify = []
     let idx = this.data.edit_index
@@ -134,47 +127,69 @@ Page({
     return modify
   },
 
+  check_data: function () {
+    let newad = this.data.new_address
+    var error = ''
+    var regtel = new RegExp('(^1[3|4|5|7|8][0-9]{9}$)', 'g');
+    if (newad.name == undefined || newad.name.length == 0) {
+      error = '收货人未填'
+      util.showModel('收货人未填',error)
+      return false
+    }
+    if (newad.detail == undefined || newad.detail.length == 0) {
+      error = '详细地址未填'
+      util.showModel('详细地址未填',error)
+      return false
+    }
+    if (!regtel.exec(newad.telphone)) { //电话不正确不能通过
+      error = '手机格式错误'
+      util.showModel('手机格式错误',error)
+        return false
+    } 
+    return true
+  },
+
   submit: function () {
-    let that = this
-    if (this.data.new_address.address_id != null) {//addressid存在表示这是保存编辑，编辑后modify[{key:1,value:'exmple'}...]后台根据key选择不同的操作将value update到数据库
-      var modify = this.get_change()
-      var address_str = JSON.stringify(modify)//得到modify数组,转字符串
-      if (modify.length !== 0) {//没有改变就没有必要对后台进行请求，节约服务器资源
-        var address_id = this.data.address_list[this.data.edit_index].address_id
-        this.data.address_list[this.data.edit_index] = this.data.new_address//把修改后的值传给list渲染
+    if (this.check_data()) {//提交前要进行数据校验,checkdata返回true才能进行后续操作
+      let that = this
+      if (this.data.new_address.address_id != null && this.data.new_address.address_id != undefined) {//addressid存在表示这是保存编辑，编辑后modify[{key:1,value:'exmple'}...]后台根据key选择不同的操作将value update到数据库
+        var modify = this.get_change()
+        var address_str = JSON.stringify(modify)//得到modify数组,转字符串
+        if (modify.length !== 0) {//没有改变就没有必要对后台进行请求，节约服务器资源
+          var address_id = this.data.address_list[this.data.edit_index].address_id
+          this.data.address_list[this.data.edit_index] = this.data.new_address//把修改后的值传给list渲染
+          qcloud.request({
+            url: `${config.service.host}/weapp/user_address/user_update_address/` + this.data.open_id + '/' + address_id + '/' + address_str,
+            success(result) {return null},
+            fail(error) {
+              util.showModel('请求失败', error);
+              console.log('request fail', error);
+            }
+          })
+        }//end_if(modify.length !== 0)
+        that.setData({//就算是异步也可以放在请求外面执行,放在里面会导致modify为空时不能渲染step1
+          step: 1,
+          address_list: that.data.address_list
+        })
+      } else {//id不存在表示新建的
+        console.log("保存新建地址")
+        this.data.address_list.push(this.data.new_address)
+        let address_str = JSON.stringify(this.data.new_address)
         qcloud.request({
-          url: `${config.service.host}/weapp/user_address/user_update_address/` + this.data.open_id + '/' + address_id + '/' + address_str,
+          url: `${config.service.host}/weapp/user_address/user_add_address/` + this.data.open_id + '/' + address_str,
           success(result) {
-            console.log('request successful');
+            that.get_address_list(that.data.open_id)
+            that.setData({
+              step: 1
+            })
           },
           fail(error) {
             util.showModel('请求失败', error);
             console.log('request fail', error);
           }
         })
-      }
-      that.setData({//就算是异步也可以放在请求外面执行,放在里面会导致modify为空时不能渲染step1
-        step: 1,
-        address_list: that.data.address_list
-      })
-    } else {//id不存在表示新建的
-      console.log("pre")
-      this.data.address_list.push(this.data.new_address)
-      let address_str = JSON.stringify(this.data.new_address)
-      qcloud.request({
-        url: `${config.service.host}/weapp/user_address/user_add_address/` + this.data.open_id + '/' + address_str,
-        success(result) {
-          that.get_address_list(that.data.open_id)//避开插入数据库同时需要取出id，在并发情况可能会取错的情况，前台重新请求地址列表
-          that.setData({
-            step: 1
-          })
-        },
-        fail(error) {
-          util.showModel('请求失败', error);
-          console.log('request fail', error);
-        }
-      })
-    }
+      }//end_else
+    }//end_if(check_data)
   },
 
 db_set_default_address: function (idx) {
@@ -204,4 +219,14 @@ db_set_default_address: function (idx) {
       delta: 1
     })
   },
+
+  cancle: function () {
+    this.data.new_address = {}
+    this.setData({
+      step: 1
+    })
+  },
+
 })
+
+//log detail不能通过 textarea不能触发
