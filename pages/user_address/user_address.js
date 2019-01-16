@@ -4,7 +4,8 @@ var config = require('../../config')
 var util = require('../../utils/util.js')
 Page({
   data: {
-    region: ['贵州省', '毕节市', '七星关区'],
+    // region: ['贵州省', '毕节市', '七星关区'],
+    region: ['新疆维吾尔自治区','昌吉回族自治州','木垒哈萨克自治县'],
     step:1,
     address_list:[],
     new_address:{},
@@ -18,7 +19,7 @@ Page({
       url: `${config.service.host}/user_address/get_user_all_address/` + open_id,
       success(result) {
         util.showSuccess('请求成功完成')
-        result.data[0].checked = true
+        // result.data[0].checked = true
         that.setData({
           address_list: result.data
         })

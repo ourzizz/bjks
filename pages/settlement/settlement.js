@@ -46,5 +46,20 @@ Page({
               that.setData({ user_default_address: result.data[0] })
           }
       })
+    },
+
+    pay: function () {
+      console.log('pay');
+    wx.requestPayment({
+      timeStamp: 'now',
+      nonceStr: 'asdfasdf',
+      package: 'asdfsdf',
+      signType: 'MD5',
+      paySign: '22',
+      success(res) {
+        console.log('p1');
+      },
+      fail(res) {}
+    })
     }
-})
+    })

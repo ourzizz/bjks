@@ -13,7 +13,7 @@
             </view>
             <view class="opera_box">
                 <radio id="{{item.address_id}}" value="{{idx}}" checked="{{item.checked}}"></radio>
-                <label class="label-2-text" for="{{item.name}}">设为默认地址</label>
+                <label class="label-2-text" for="{{item.name}}">使用该地址</label>
                 <view class="edit_button" style="display:inline;" >
                   <button data-idx="{{idx}}" bindtap="edit_address" style="display:inline;margin:10rpx;font-size:40rpx">编辑</button>
                   <button data-idx="{{idx}}" bindtap="delete_address" style="display:inline;font-size:40rpx">删除</button>
@@ -40,10 +40,10 @@
         <view class="weui-cells weui-cells_after-title">
             <view class="weui-cell" style="margin:0 0 0 10px;">
                 <view class="weui-cell__bd" >
-                    <view class='text'> 收货人: </view>
+                    <view  style="font-size:30rpx"> 收货人: </view>
                 </view>
-                <view class="weui-cell__gt" >
-                <input class="weui-input" bindchange="input_name" value="{{new_address.name}}"  placeholder="姓名"/>
+                <view class="weui-cell__gt"  style="font-size:30rpx">
+                <input  class="weui-input" bindchange="input_name" value="{{new_address.name}}"  placeholder="姓名"/>
                 </view>
             </view>
         </view>
@@ -51,35 +51,38 @@
 
         <view class="weui-cells weui-cells_after-title">
             <view class="weui-cell">
-                <view class="weui-cell__bd">联系方式:</view>
+                <view class="weui-cell__bd" style="font-size:30rpx;width:30%">联系方式:</view>
                 <view class="weui-cell__gt">
-                <input class="weui-input" maxlength="11" bindchange="input_telphone" value="{{new_address.telphone}}"  placeholder="电话"/>
+                <input style="font-size:30rpx;" class="weui-input" maxlength="11" bindchange="input_telphone" value="{{new_address.telphone}}"  placeholder="电话"/>
                 </view>
             </view>
         </view>
 
-        <view style="height:100rpx" class="weui-cells weui-cells_after-title">
+        <view style="" class="weui-cells weui-cells_after-title">
             <view class="weui-cell">
-            <view class="weui-cell__bd">选择省市区:</view>
+            <view style="font-size:30rpx;width:30%">选择省市区:</view>
             <picker  mode="region" bindchange="bindRegionChange" value="{{region}}" custom-item="{{customItem}}">
-                <view class="weui-cell__gt"> {{region[0]}}，{{region[1]}}，{{region[2]}} </view>
+                <view class="" style="font-size:30rpx;width:100%;margin:10rpx"> {{region[0]}}，{{region[1]}}，{{region[2]}} </view>
             </picker>
             </view>
         </view>
 
-        <view class="weui-cells weui-cells_after-title" style="height:50px">
-            <view class="weui-cell">
-                <view class="weui-cell__bd">详细地址:</view>
-                <view class="weui-cell__gt" style="height:50px">
-                <textarea  auto-height	maxlength="50" bindinput="input_detail" value="{{new_address.detail}}" placeholder="详细地址50个字"/>
+        <view class="weui-cells weui-cells_after-title" style="height:120rpx">
+            <view class="weui-cell" >
+                <view style="font-size:30rpx;width:30%" class="">详细地址:</view>
+                <view style="height:50px;width:70%">
+                <textarea class="textarea"  auto-height	maxlength="50" bindinput="input_detail" value="{{new_address.detail}}" placeholder="详细地址50个字"/>
                 </view>
             </view>
         </view>
 
-  <view class="foot">
-      <button style="position:relative;top:16rpx;" bindtap="submit"> 保存</button>
-      <button style="position:relative;top:16rpx;" bindtap="cancle"> 取消</button>
+  <view class="" >
+    <view  style="margin:0px auto;right:0;left:0;"> 
+        <button style="backgroud:#d9d9d9;margin:10rpx;display:inline-block;width:42%" bindtap="submit"> 保存</button>
+        <button style="backgroud:#d9d9d9;margin:10rpx;display:inline-block;width:42%;float:right" bindtap="cancle"> 取消</button>
+    </view>
   </view>
+
 </view>
 </view>
   </view>

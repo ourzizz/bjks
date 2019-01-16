@@ -82,3 +82,8 @@ color: red;
     border-top: solid 1rpx #e5e5e5;
     width: 100%;
 }
+
+.address_box{
+    padding:10rpx;
+}
+

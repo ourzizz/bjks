@@ -1,18 +1,17 @@
 <view class="cart_box">
 <navigator url="/pages/user_address/user_address?open_id={{open_id}}"  hover-class="other-navigator-hover" >
-  <view class="address" hover-class="none" hover-stop-propagation="false">
+  <view class="address_box" hover-class="none" hover-stop-propagation="false">
     <block wx:if="{{user_default_address.address_id !== undefined}}">
-          {{user_default_address.name}}
-          {{user_default_address.telphone}}
-          {{user_default_address.province}}
-          {{user_default_address.city}}
-          {{user_default_address.county}}
-          {{user_default_address.detail}}
+    <view class="address">
+    <view style="font-size:30rpx;color:red"> 收货地址:{{user_default_address.name}} {{user_default_address.telphone}} </view>
+    <view style="font-size:30rpx;border-bottom: 5rpx #999 solid"> {{user_default_address.province}} {{user_default_address.city}} {{user_default_address.county}} {{user_default_address.detail}} </view>
+  </view> <!-- class address -->
     </block>
     <block wx:else>
           您还没有填写收货地址，点击添加地址!!
     </block>
   </view>
+
   </navigator>
 
   <!--商品展示s-->
@@ -36,8 +35,8 @@
 
 <view class="foot">
   <view style="position:relative;top:16rpx;left:30rpx;display:inline;">合计￥:{{cost}}元</view>
-  <view bindtap="submit_order" style="background:red;color:white;float:right;width:60%;height:90rpx;text-align:center">
-    <view style="position:relative;top:16rpx;"> 去支付</view>
+  <view bindtap="pay" style="background:red;color:white;float:right;width:60%;height:90rpx;text-align:center">
+    <view  style="position:relative;top:16rpx;"> 去支付</view>
   </view>
 </view>
 
