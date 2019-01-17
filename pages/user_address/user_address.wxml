@@ -76,7 +76,7 @@
             </view>
         </view>
 
-  <view class="" >
+  <view class="foot" >
     <view  style="margin:0px auto;right:0;left:0;"> 
         <button style="backgroud:#d9d9d9;margin:10rpx;display:inline-block;width:42%" bindtap="submit"> 保存</button>
         <button style="backgroud:#d9d9d9;margin:10rpx;display:inline-block;width:42%;float:right" bindtap="cancle"> 取消</button>

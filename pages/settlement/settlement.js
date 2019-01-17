@@ -48,8 +48,9 @@ Page({
       })
     },
 
-    pay: function () {
-      console.log('pay');
+  pay: function () {//生成order_json {open_id,cost,address_id,goods_list[]} 发往后台
+  //php将订单写入数据库返回订单Id,去微信后台拿支付prepay_id,打包成json发前端调用wx.requrestPayment方法,完成支付
+    console.log('pay');
     wx.requestPayment({
       timeStamp: 'now',
       nonceStr: 'asdfasdf',
@@ -59,7 +60,8 @@ Page({
       success(res) {
         console.log('p1');
       },
-      fail(res) {}
+      fail(res) { }
     })
-    }
+  },
+
     })

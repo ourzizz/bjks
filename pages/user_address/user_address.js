@@ -4,8 +4,8 @@ var config = require('../../config')
 var util = require('../../utils/util.js')
 Page({
   data: {
-    // region: ['贵州省', '毕节市', '七星关区'],
-    region: ['新疆维吾尔自治区','昌吉回族自治州','木垒哈萨克自治县'],
+    region: ['贵州省', '毕节市', '七星关区'],
+    // region: ['新疆维吾尔自治区','昌吉回族自治州','木垒哈萨克自治县'],
     step:1,
     address_list:[],
     new_address:{},
