@@ -16,7 +16,7 @@
 
   <!--商品展示s-->
   <scroll-view style="height:980rpx; color:black;" scroll-y="true">
-      <view wx:for="{{order_list}}" wx:key="{{order_list.name}}" wx:for-index="idx">
+      <view wx:for="{{goods_list}}" wx:key="{{goods_list.name}}" wx:for-index="idx">
         <view class="cart_item" bindtap="test">
         <view class='goods_info_box weui-cell weui-cell_access' hover-class="weui-cell_active" style="padding: 15rpx; margin: 0;border:0px">
           <navigator url="" class=""  >

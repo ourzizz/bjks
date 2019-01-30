@@ -3,6 +3,8 @@
  * 为了兼容微信修改的登录逻辑
  * 这里对登录的 SDK 进行重构
  * 微信公告：https://developers.weixin.qq.com/blogdetail?action=get_post_info&lang=zh_CN&token=&docid=0000a26e1aca6012e896a517556c01
+ * 每次登陆如果前台不给点东西，是不能知道该user是否存在db中，那么前台每次登陆都要先wx.log拿code给后台，后台再到微信拿openid，再来查询db看看是不是已经存在数据库中，
+ * 是就直接返回user_info
  */
 var constants = require('./constants');
 var Session = require('./session');
@@ -11,11 +13,11 @@ var Session = require('./session');
  * 微信登录，获取 code 和 encryptData
  */
 function getWxLoginResult (cb) {//cb callback
-    wx.login({
-        success (loginResult) {
-            wx.getUserInfo({
-                success (userResult) {
-                    cb(null, {
+    wx.login({//调用接口获取登录凭证（code）。通过凭证进而换取用户登录态信息，包括用户的唯一标识（openid）及本次登录的会话密钥（session_key）等。
+        success (loginResult) {//获取到code loginResult:{code,emsg}
+            wx.getUserInfo({//用户授权后才能使用
+                success (userResult) {//用户授权成功
+                    cb(null, {//
                         code: loginResult.code,
                         encryptedData: userResult.encryptedData,
                         iv: userResult.iv,
@@ -53,15 +55,15 @@ const defaultOptions = {
  * @param {Function} [opts.success] 可选。登录成功后的回调函数，参数 userInfo 微信用户信息
  * @param {Function} [opts.fail]    可选。登录失败后的回调函数，参数 error 错误信息
  */
-function login (opts) {
+function login (opts) {//调用者只需要传入成功和失败的回调函数，其他参数通过assign 默认参数加进去
     opts = Object.assign({}, defaultOptions, opts)
 
     if (!opts.loginUrl) {
         return opts.fail(new Error('登录错误：缺少登录地址，请通过 setLoginUrl() 方法设置登录地址'))
     }
 
-    getWxLoginResult((err, loginResult) => {
-        if (err) {
+    getWxLoginResult((err, loginResult) => { 
+        if (err) {//默认为null
             return opts.fail(err)
         }
 
@@ -74,7 +76,7 @@ function login (opts) {
 
         // 请求服务器登录地址，获得会话信息
         wx.request({
-            url: opts.loginUrl,
+            url: opts.loginUrl,//这里给的是自己后台的sdk的登陆url
             header: header,
             method: opts.method,
             success (result) {
@@ -92,7 +94,7 @@ function login (opts) {
 
                 // 成功地响应会话信息
                 Session.set(res)
-                opts.success(res.userinfo)
+                opts.success(res.userinfo)//将成功获取到的userinfo给回调函数的回调函数,就是最前端的调用
             },
             fail (err) {
                 console.error('登录失败，可能是网络错误或者服务器发生异常')
@@ -105,7 +107,7 @@ function login (opts) {
 /**
  * @method
  * 只通过 wx.login 的 code 进行登录
- * 已经登录过的用户，只需要用 code 换取 openid，从数据库中查询出来即可
+ * 已经登录过的用户，只需要用 code 换取 openid，从数据库中查询出来即可,如何判断已经登录过了(后台Authapi里面有数据库判断)
  * 无需每次都使用 wx.getUserInfo 去获取用户信息
  * 后端 Wafer PHP SDK 需 2.2.x 及以上版本
  * 
