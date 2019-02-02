@@ -1,0 +1,9 @@
+<view>
+{{total_fee}}
+{{address.name}}
+{{address.province}}
+{{address.city}}
+{{address.detail}}
+{{address.tephone}}
+</view>
+

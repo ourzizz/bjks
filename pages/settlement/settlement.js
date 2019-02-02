@@ -54,7 +54,8 @@ Page({
         order_info.open_id = this.data.open_id
         order_info.address_id = this.data.user_default_address.address_id
         order_info.goods_list = []
-        order_info.total_fee = 1
+        //order_info.total_fee = this.data.cost
+        order_info.total_fee = 0.1
         goods_list = this.data.goods_list
         for(var i=0;i<goods_list.length;i++) {
             order_info.goods_list[i] = {'goods_id':goods_list[i].goods_id,'count':goods_list[i].count}
@@ -83,17 +84,18 @@ Page({
                         wx.showToast({
                             title: '支付成功',
                             icon: 'success',
-                            duration: 3000
+                            duration: 3000 //跳转到成功订单页面
                         })
+                                wx.redirectTo({ //付款失败，1用户取消支付 2余额不足,直接跳转到待支付页面
+                                    url: '../paysuccess/paysuccess',
+                                })
+            
                     }, 
                     fail: function (res) {
                         console.log('付款失败');
                         wx.showModal({
-                            title: '提醒',
-                            content: '付款失败,如要出题请重新编辑题目',
-                            showCancel: false,
                             success:function(){
-                                wx.redirectTo({
+                                wx.redirectTo({//付款失败，1用户取消支付 2余额不足,直接跳转到待支付页面
                                     url: '/pa*******ndex',
                                 })
                             }
@@ -106,58 +108,4 @@ Page({
             }
         });
     },
-    // pay:function (out_trade_no, true_money){    //out_trade_no 后台统一下单接口需要用
-    //     var that = this
-    //     wx.hideToast()                   //隐藏toast
-    //     wx.request({
-    //         method: 'POST',
-    //         data: {
-    //             openid: '************',    //调用人的openid
-    //             out_trade_no: out_trade_no,
-    //             body: '答题奖金',  
-    //             norl: 'https://www.q**************.php',//后台接口自动修改订单状态
-    //             te: true_money     //支付金额
-    //         },
-    //         url: 'https://b***************gn.php',        //服务器接口（微信统一下单接口）
-    //         header: {
-    //             'Content-Type': 'application/x-www-form-urlencoded'
-    //         },
-    //         success: function (res) {
-    //             console.log(res.data)
-    //             console.log('调起支付')
-    //             wx.requestPayment({                //成功之后，调用小程序微信支付
-    //                 'timeStamp': res.data.timeStamp,
-    //                 'nonceStr': res.data.nonceStr,
-    //                 'package': res.data.package,
-    //                 'signType': 'MD5',
-    //                 'paySign': res.data.paySign,
-    //                 success: function (res) {
-    //                     console.log(res)
-    //                     wx.showToast({
-    //                         title: '支付成功',
-    //                         icon: 'success',
-    //                         duration: 3000
-    //                     })
-    //                 }, 
-    //                 fail: function (res) {
-    //                     console.log('付款失败');
-    //                     wx.showModal({
-    //                         title: '提醒',
-    //                         content: '付款失败,如要出题请重新编辑题目',
-    //                         showCancel: false,
-    //                         success:function(){
-    //                             wx.redirectTo({
-    //                                 url: '/pa*******ndex',
-    //                             })
-    //                         }
-    //                     })
-    //                     return
-    //                 },
-    //             })
-    //         },
-    //         fail: function (res) {
-    //             console.log(res.data)
-    //         }
-    //     })
-    // }
 })
