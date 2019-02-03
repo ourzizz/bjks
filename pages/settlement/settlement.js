@@ -63,8 +63,19 @@ Page({
         return order_info;
     },
 
+    modify_father_page_goodslist: function () {
+        pages = getCurrentPages();
+        currPage = pages[pages.length - 1]; //当前页面
+        prevPage = pages[pages.length - 2];//上一个页面//直接调用上一个页面的setData()方法，把数据存到上一个页面中去
+        prevPage.onLoad()
+        // prevPage.setData({//修改父页面
+        //     user_default_address: this.data.address_list[idx]
+        // })
+    },
+
     pay: function (out_trade_no, true_money) {    //out_trade_no 后台统一下单接口需要用
         // 请求服务器登录地址，获得会话信息
+        let that = this
         wx.request({
             url: 'https://www.alemao.club/bjks/index.php?/order/pay',
             data: {order_info: JSON.stringify(this.g_order_info())},
@@ -103,6 +114,7 @@ Page({
                         return
                     },
                 })
+                that.modify_father_page_goodslist()
             },
             fail(err) {
             }

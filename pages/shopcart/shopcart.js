@@ -23,11 +23,12 @@ Page({
       user_default_address:{},
   },
   onLoad: function (options) {
+      console.log('father');
       var that = this
       const session = qcloud.Session.get()
       this.setData({ userInfo: session.userinfo })
       qcloud.request({
-          url: `${config.service.host}/weapp/shopcart/get_user_has_goods/` + options.open_id,
+          url: `${config.service.host}/weapp/shopcart/get_user_has_goods/` + session.userinfo.openId,
           success(result) {
               util.showSuccess('请求成功完成')
               for (var i in result.data) {
@@ -208,6 +209,5 @@ Page({
       step: this.data.step - 1
     })
   },
-
 
 })
