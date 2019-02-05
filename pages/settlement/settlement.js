@@ -135,7 +135,7 @@ Page({
                     fail: function (res) {
                         console.log('付款失败');
                         wx.showModal({
-                            success:function(){
+                           success:function(){
                                 wx.redirectTo({
                                     url: '../payfail/payfail?order_id=' + order_id,
                                 })

@@ -10,6 +10,12 @@
     </view>
   </view>
 
+<view>
+  <view style='display:inline'  bindtap='go_order'>待支付 </view>
+  <view style='display:inline'  bindtap='go_order'>待收货 </view>
+  <view style='display:inline'  bindtap='go_order'>待评价 </view>
+  <view style='display:inline'  bindtap='go_order'>全部订单 </view>
+</view>
 
   <view class="uploader">
     <view class="uploader-text" bindtap="setUserFiles">

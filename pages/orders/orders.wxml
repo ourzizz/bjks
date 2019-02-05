@@ -1,0 +1,17 @@
+<!--pages/orders/orders.wxml-->
+<view wx:for='{{nav}}'>
+asdf
+</view>
+<view wx:for="{{wait_pay_order_list}}" hidden='{{idx}}'>
+{{item.order.name}}
+{{item.order.total_fee}}
+<view wx:for="{{item.goods_list}}"> {{item.name}} {{item.price}} </view>
+<button>去支付</button> <button>取消订单</button>
+</view>
+
+<view wx:for="{{wait_pay_order_list}}">
+{{item.order.name}}
+{{item.order.total_fee}}
+<view wx:for="{{item.goods_list}}"> {{item.name}} {{item.price}} </view>
+<button>去支付</button> <button>取消订单</button>
+</view>

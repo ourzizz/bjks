@@ -1,4 +1,5 @@
-//index.js
+//user.js
+//
 var qcloud = require('../../vendor/wafer2-client-sdk/index')
 var config = require('../../config')
 var util = require('../../utils/util.js')
@@ -130,6 +131,13 @@ Page({
                     return 
                 }
             }
+        })
+    },
+
+    go_order:function (){
+        this.bindGetUserInfo()
+        wx.redirectTo({
+            url: '../orders/orders?open_id=' + this.data.userInfo.openId + '&type=1',
         })
     }
 })

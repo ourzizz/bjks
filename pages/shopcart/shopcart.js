@@ -23,12 +23,11 @@ Page({
       user_default_address:{},
   },
   onLoad: function (options) {
-      console.log('father');
       var that = this
       const session = qcloud.Session.get()
       this.setData({ userInfo: session.userinfo })
       qcloud.request({
-          url: `${config.service.host}/weapp/shopcart/get_user_has_goods/` + session.userinfo.openId,
+          url: `${config.service.host}/weapp/shopcart/get_user_has_goods/` + options.open_id,
           success(result) {
               util.showSuccess('请求成功完成')
               for (var i in result.data) {
@@ -185,7 +184,7 @@ Page({
      })//}}}
     },
 
-  next_step: function () {//进入到结算步骤,user may be goto settlement page without click the save button directly
+  next_step: function () {//进入到结算步骤,user may be not click the save button,directly goto settlement page
       this.save_modify()
       this.data.settlement.cost = this.data.cost
       if (this.data.settlement.goods_list != null && this.data.settlement.goods_list.length != 0) {//提交订单不为空
@@ -209,5 +208,5 @@ Page({
       step: this.data.step - 1
     })
   },
-
 })
+

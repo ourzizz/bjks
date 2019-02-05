@@ -1,2 +1,16 @@
 <!--pages/payfail/payfail.wxml-->
-<text>pages/payfail/payfail.wxml</text>
+<view>
+{{order.total_fee}}
+{{address.name}}
+{{address.telphone}}
+{{address.detail}}
+</view>
+
+<view wx:for="{{goods_list}}">
+{{item.name}}
+{{item.price}}
+{{item.count}}
+</view>
+
+<button bindtap="re_pay">支付</button>
+<button>取消订单</button>

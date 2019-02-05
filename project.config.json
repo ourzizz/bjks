@@ -36,7 +36,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 10,
+			"current": 11,
 			"list": [
 				{
 					"id": 0,
@@ -105,6 +105,12 @@
 					"name": "pays",
 					"pathName": "pages/paysuccess/paysuccess",
 					"query": "order_id=1549039676q0PEV"
+				},
+				{
+					"id": -1,
+					"name": "failpay",
+					"pathName": "pages/payfail/payfail",
+					"scene": null
 				}
 			]
 		}
