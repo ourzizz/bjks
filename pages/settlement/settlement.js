@@ -67,47 +67,77 @@ Page({
         pages = getCurrentPages();
         currPage = pages[pages.length - 1]; //当前页面
         prevPage = pages[pages.length - 2];//上一个页面//直接调用上一个页面的setData()方法，把数据存到上一个页面中去
-        prevPage.onLoad()
-        // prevPage.setData({//修改父页面
-        //     user_default_address: this.data.address_list[idx]
-        // })
+        prevPage.onLoad()//父页面刷新
     },
 
-    pay: function (out_trade_no, true_money) {    //out_trade_no 后台统一下单接口需要用
-        // 请求服务器登录地址，获得会话信息
+    /*拉起支付需要的参数实例
+     *appId : "wxfa21ea4bdaef03e9" 
+     *nonceStr : "qrgtif83m9658zl1nbroe545qbqr5k43"
+     *order_id : "1549254920lryMm"
+     *package : "prepay_id=wx041235207234486943dc7ca33362991804"
+     *paySign : "F0A5C7B4AAE310FA19CDCCDB468D939C"
+     *signType : "MD5"
+     *timeStamp : "1549254920"
+     *
+     *
+
+     Array (
+    [open_id] => opexV46WZFz9Is4xAI2zZWc4YiQE
+    [address_id] => 31
+    [goods_list] => Array
+        (
+            [0] => Array
+                (
+                    [goods_id] => 5
+                    [count] => 1
+                )
+
+        )
+
+    [total_fee] => 0.1
+    [order_id] => 1549269385vI3xw
+    [appId] => wxfa21ea4bdaef03e9
+    [timeStamp] => 1549269385
+    [nonceStr] => hn757ysk8okp5dgtccxwwnrlf3bhfz8g
+    [package] => prepay_id=wx0416362547560110c98f10750545498454
+    [signType] => MD5
+    [paySign] => BC3CF69860C3932AC104B9420ED552D8
+    )
+     * */
+
+    pay: function (out_trade_no, true_money) {    
         let that = this
         wx.request({
+            // 请求服务器登录地址，获得会话信息
             url: 'https://www.alemao.club/bjks/index.php?/order/pay',
             data: {order_info: JSON.stringify(this.g_order_info())},
             method: 'POST',
-            header: { 
-                'content-type':'application/x-www-form-urlencoded'
-            },
+            header: { 'content-type':'application/x-www-form-urlencoded' },
+            //成功之后，调用小程序微信支付
             success(res) {
-                wx.requestPayment({                //成功之后，调用小程序微信支付
+                order_id = res.data.order_id
+                wx.requestPayment({                
                     'timeStamp': res.data.timeStamp,
                     'nonceStr': res.data.nonceStr,
                     'package': res.data.package,
                     'signType': 'MD5',
                     'paySign': res.data.paySign,
                     success: function (res) {
-                        console.log(res)
                         wx.showToast({
                             title: '支付成功',
                             icon: 'success',
-                            duration: 3000 //跳转到成功订单页面
+                            duration: 3000 
                         })
-                                wx.redirectTo({ //付款失败，1用户取消支付 2余额不足,直接跳转到待支付页面
-                                    url: '../paysuccess/paysuccess',
-                                })
-            
+                        wx.redirectTo({ 
+                            url: '../paysuccess/paysuccess?order_id=' + order_id,
+                        })
                     }, 
                     fail: function (res) {
                         console.log('付款失败');
                         wx.showModal({
                             success:function(){
-                                wx.redirectTo({//付款失败，1用户取消支付 2余额不足,直接跳转到待支付页面
-                                    url: '/pa*******ndex',
+                                wx.redirectTo({
+                                    url: '../payfail/payfail?order_id=' + order_id,
                                 })
                             }
                         })
