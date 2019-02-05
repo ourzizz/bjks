@@ -1,17 +1,27 @@
 <!--pages/orders/orders.wxml-->
-<view wx:for='{{nav}}'>
-asdf
-</view>
-<view wx:for="{{wait_pay_order_list}}" hidden='{{idx}}'>
-{{item.order.name}}
-{{item.order.total_fee}}
-<view wx:for="{{item.goods_list}}"> {{item.name}} {{item.price}} </view>
-<button>去支付</button> <button>取消订单</button>
+<view class="page">
+  <view class="page__bd">
+    <view class="weui-tab">
+      <view class="weui-navbar">
+        <block wx:for="{{tabs}}" wx:key="*this">
+          <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
+            <view class="weui-navbar__title">{{item[0]}}</view>
+          </view>
+        </block>
+        <view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
+      </view>
+
+      <view class="weui-tab__panel">
+            <view hidden="{{activeIndex != 0}}">
+            <view wx:for="{{wait_pay_order_list}}" wx:key="*this" wx:for-index="idx">
+            {{item.order.name}}
+            {{item.order.total_fee}}
+            <view wx:for="{{item.goods_list}}" wx:key="*this"> {{item.name}} {{item.price}} </view>
+            <button data-idx="{{idx}}" bindtap="re_pay">去支付</button> <button>取消订单</button>
+            </view>
+            </view>
+      </view>
+    </view>
+  </view>
 </view>
 
-<view wx:for="{{wait_pay_order_list}}">
-{{item.order.name}}
-{{item.order.total_fee}}
-<view wx:for="{{item.goods_list}}"> {{item.name}} {{item.price}} </view>
-<button>去支付</button> <button>取消订单</button>
-</view>
