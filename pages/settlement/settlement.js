@@ -1,4 +1,5 @@
 // pages/settlement/settlement.js 
+// bug:支付不管失败与否，购物车页面都要进行更新,但是没有起作用
 var qcloud = require('../../vendor/wafer2-client-sdk/index') 
 var config = require('../../config') 
 var util = require('../../utils/util.js') 
@@ -128,12 +129,14 @@ Page({
                             icon: 'success',
                             duration: 3000 
                         })
+                        that.modify_father_page_goodslist()
                         wx.redirectTo({ 
                             url: '../paysuccess/paysuccess?order_id=' + order_id,
                         })
                     }, 
                     fail: function (res) {
                         console.log('付款失败');
+                        that.modify_father_page_goodslist()
                         wx.showModal({
                            success:function(){
                                 wx.redirectTo({
@@ -144,7 +147,6 @@ Page({
                         return
                     },
                 })
-                that.modify_father_page_goodslist()
             },
             fail(err) {
             }

@@ -17,10 +17,32 @@
             {{item.order.name}}
             {{item.order.total_fee}}
             <view wx:for="{{item.goods_list}}" wx:key="*this"> {{item.name}} {{item.price}} </view>
-            <button data-idx="{{idx}}" bindtap="re_pay">去支付</button> <button>取消订单</button>
+            <button data-idx="{{idx}}" bindtap="re_pay">去支付</button> <button data-idx="{{idx}}" bindtap='delete_order'>取消订单</button>
+
+            </view>
+            </view>
+
+            <view hidden="{{activeIndex != 1}}">
+            <view wx:for="{{wait_sign_order_list}}" wx:key="*this" wx:for-index="idx">
+            下单日期:{{item.order.date}}
+            {{item.order.name}}
+            {{item.order.total_fee}}
+            <view wx:for="{{item.goods_list}}" wx:key="*this"> {{item.name}} {{item.price}} </view>
+            <button data-idx="{{idx}}" bindtap="sign_order">确认收货</button> 
+            </view>
+            </view>
+
+            <view hidden="{{activeIndex != 2}}">
+            <view wx:for="{{finished_order_list}}" wx:key="*this" wx:for-index="idx">
+            本单价格{{item.order.total_fee}}
+            下单日期:{{item.order.date}}
+            {{item.order.name}}
+            <view wx:for="{{item.goods_list}}" wx:key="*this"> {{item.name}} {{item.price}} </view>
+            <button>删除订单</button> <button>退换</button>
             </view>
             </view>
       </view>
+
     </view>
   </view>
 </view>

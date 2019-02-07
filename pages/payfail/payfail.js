@@ -20,8 +20,7 @@ Page({
     onLoad: function (options) {
         let that = this
         qcloud.request({
-            //url: `${config.service.host}/order/re_pay/` + options.order_id,
-            url: `${config.service.host}/order/re_pay/` + '1549369624MGExt',
+            url: `${config.service.host}/order/re_pay/` + options.order_id,
             success(result) {
                 util.showSuccess('请求成功完成')
                 that.setData({

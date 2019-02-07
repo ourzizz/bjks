@@ -136,7 +136,7 @@ Page({
 
     go_order:function (){
         this.bindGetUserInfo()
-        wx.redirectTo({
+        wx.navigateTo({
             url: '../orders/orders?open_id=' + this.data.userInfo.openId + '&type=1',
         })
     }
