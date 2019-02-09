@@ -115,7 +115,7 @@
 
   <view class="weui-footer">
     <view class="weui-footer__links">
-      <navigator url="" class="weui-footer__link">PowerBy七星诺必达</navigator>
+      <navigator url="/pages/qxnbd/qxnbd" class="weui-footer__link">PowerBy七星诺必达</navigator>
     </view>
     <view class="weui-footer__text">Copyright © www.qixingnbd.com</view>
   </view>

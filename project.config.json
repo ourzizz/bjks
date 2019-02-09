@@ -36,7 +36,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 11,
+			"current": 12,
 			"list": [
 				{
 					"id": 0,
@@ -110,6 +110,14 @@
 					"id": -1,
 					"name": "failpay",
 					"pathName": "pages/payfail/payfail",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "orders",
+					"pathName": "pages/orders/orders",
+					"query": "open_id=opexV46WZFz9Is4xAI2zZWc4YiQE",
 					"scene": null
 				}
 			]

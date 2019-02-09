@@ -17,6 +17,8 @@ Page({
         wait_sign_order_list:[],//待签收后台给出pay为success,给出送货员的联系电话
         wait_comment_order_list:[],
         finished_order_list:[],
+        userinfo:{},
+        logged:false,
         open_id:''
     },
 
@@ -25,24 +27,24 @@ Page({
      */
     onLoad: function (options) {
         let that = this
+        const session = qcloud.Session.get()
+        if(session) {//session存在
+            this.setData({
+                userInfo:session.userinfo,
+                open_id:session.userinfo.openId,
+                logged:true
+            })
+        }
         wx.getSystemInfo({
             success: function (res) {
                 that.setData({
-                    open_id:options.open_id,
                     sliderLeft: (res.windowWidth / that.data.tabs.length - sliderWidth) / 2,
                     sliderOffset: res.windowWidth / that.data.tabs.length * that.data.activeIndex
                 });
             }
         });
-        qcloud.request({
-            url: `${config.service.host}/order/get_wait_pay_order/` + options.open_id,
-            success(result) {
-                util.showSuccess('请求成功完成')
-                that.setData({
-                    wait_pay_order_list:result.data,
-                })
-            }
-        })
+        //this.set_page_data('1')
+        this.set_page_data(options.idx)
     },
 
     delete_order:function (event){
@@ -130,7 +132,7 @@ Page({
         })
     },
 
-    get_order_list:function (url){
+    request_order_list:function (url){
         let that = this
         return new Promise(function(resolve,reject){
             qcloud.request({
@@ -138,7 +140,7 @@ Page({
                 success(result) {
                     let list = result.data
                     for(let i=0;i<list.length;i++){
-                        list[i].order.date = Date(list[i].order.timeStamp)
+                        list[i].order.date = Date("Y-m-d",(list[i].order.timeStamp))
                     }
                     resolve(list)
                 }
@@ -146,23 +148,32 @@ Page({
         })
     },
 
-    tabClick: function (e) {
+    set_page_data:function (idx){
         let url = ''
         let list = []
         let that = this
-        switch(e.currentTarget.id) {
+        switch(idx) {
             case '0':
-                //this.get_wait_pay_list()
+                url = `${config.service.host}/order/get_wait_pay_order/` + that.data.open_id
+                that.request_order_list(url).then(function (list){ that.setData({ wait_pay_order_list:list, }) })
                 break;
             case '1':
-                url = `${config.service.host}/order/get_wait_sign_order_list/` + this.data.open_id
-                this.get_order_list(url).then(function (list){ that.setData({ wait_sign_order_list:list, }) })
+                url = `${config.service.host}/order/get_wait_sign_order_list/` + that.data.open_id
+                that.request_order_list(url).then(function (list){ that.setData({ wait_sign_order_list:list, }) })
                 break;
             case '2':
-                url = `${config.service.host}/order/get_finished_order_list/` + this.data.open_id
-                this.get_order_list(url).then(function (list){ that.setData({ finished_order_list:list, }) })
+                url = `${config.service.host}/order/get_finished_order_list/` + that.data.open_id
+                that.request_order_list(url).then(function (list){ that.setData({ finished_order_list:list, }) })
                 break;
         }
+        this.setData({
+            //sliderOffset: e.currentTarget.offsetLeft,
+            activeIndex: idx
+        });
+    },
+
+    tabClick: function (e) {
+        this.set_page_data(e.currentTarget.id)
         this.setData({
             sliderOffset: e.currentTarget.offsetLeft,
             activeIndex: e.currentTarget.id

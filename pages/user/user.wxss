@@ -132,12 +132,35 @@ page {
 }
 /*userpage_delete*/
 .delete-image{
-position:absolute;
-right:10rpx;
-top:15rpx;
-height:50rpx;
-width:50rpx;
+    position:absolute;
+    right:10rpx;
+    top:15rpx;
+    height:50rpx;
+    width:50rpx;
 }
 .uploader{
-padding:2rpx 0 2rpx 10rpx;
+    /*padding:2rpx 0 2rpx 10rpx;*/
 }
+
+.weui-flex__item{
+    display:inline;
+    margin:15rpx;
+    font-size:30rpx;
+    color:red;
+    justify-content: space-around;
+}
+.weui-flex{
+background:#fff;
+width:100%;
+margin:10rpx;
+}
+
+.order_image{
+    display:block;
+    margin:10rpx;
+    height:55rpx;
+    width:55rpx;
+    position:relative;
+    left:10rpx;
+}
+

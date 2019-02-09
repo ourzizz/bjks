@@ -10,16 +10,15 @@
     </view>
   </view>
 
-<view>
-  <view style='display:inline'  bindtap='go_order'>待支付 </view>
-  <view style='display:inline'  bindtap='go_order'>待收货 </view>
-  <view style='display:inline'  bindtap='go_order'>待评价 </view>
-  <view style='display:inline'  bindtap='go_order'>全部订单 </view>
+<view class="weui-flex">
+  <view class="weui-flex__item" style='display:inline;' data-idx="0"  bindtap='go_order'><image class="order_image" src="/image/pay.png"/>待支付   </view>
+  <view class="weui-flex__item" style='display:inline;' data-idx="1"  bindtap='go_order'><image class="order_image" src="/image/sign.png"/>待收货   </view>
+  <view class="weui-flex__item" style='display:inline;' data-idx="2"  bindtap='go_order'><image class="order_image" src="/image/kuaidi.png"/>全部订单 </view>
 </view>
 
-  <view class="uploader">
+  <view class="weui-flex">
     <view class="uploader-text" bindtap="setUserFiles">
-      <text>我的收藏</text>
+      <text style="font-size:35rpx;margin:auto">我收藏的考试</text>
     </view>
   </view>
 
@@ -48,10 +47,10 @@
     </view>
   </view>
 
-  <!-- 上传图片测试 -->
-  <!--view class="uploader">
-    <navigator url="../addCgi/addCgi" open-type="navigate" class="uploader-text">
-      <text>我的订单</text>
-    </navigator>
-  </view-->
+  <view class="weui-footer">
+    <view class="weui-footer__links">
+      <navigator url="/pages/qxnbd/qxnbd" class="weui-footer__link">PowerBy七星诺必达</navigator>
+    </view>
+    <view class="weui-footer__text">Copyright © www.qixingnbd.com</view>
+  </view>
 </view>

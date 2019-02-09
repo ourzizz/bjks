@@ -11,7 +11,7 @@ Page({
         takeSession: false,
         requestResult: '',
         userFiles: {},
-        hidecollect: false 
+        hidecollect: true
     },
     onLoad:function()
     {
@@ -134,10 +134,10 @@ Page({
         })
     },
 
-    go_order:function (){
+    go_order:function (event){
         this.bindGetUserInfo()
         wx.navigateTo({
-            url: '../orders/orders?open_id=' + this.data.userInfo.openId + '&type=1',
+            url: '../orders/orders?open_id=' + this.data.userInfo.openId + '&idx=' + event.currentTarget.dataset.idx,
         })
     }
 })

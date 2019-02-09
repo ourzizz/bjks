@@ -10,9 +10,5 @@
 {{address.tephone}}
 </view>
 
-<button>
-查看订单
-</button>
-<button>
-回到首页
-</button>
+<button bindtap=""> 查看订单 </button>
+<button> 回到首页 </button>
