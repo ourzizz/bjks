@@ -4,10 +4,6 @@ var qcloud = require('../../vendor/wafer2-client-sdk/index')
 var config = require('../../config') 
 var util = require('../../utils/util.js') 
 Page({
-
-    /**
-     * 页面的初始数据
-     */
     data: {
         order_info:{},
         address:{},
@@ -51,17 +47,32 @@ Page({
                 })
             }, 
             fail: function (res) {
-                console.log('付款失败');
-                wx.showModal({
-                    success:function(){
-                        wx.redirectTo({
-                            url: '../payfail/payfail?order_id=' + order_id,
-                        })
-                    }
-                })
                 return
             },
         })
-    }
+    },
+    delete_order:function (){
+        let that = this
+        let order_id = this.data.order_info.order_id
+        wx.showModal({
+            title: '提示',
+            content: '确定删除订单',
+            success (res) {
+                if (res.confirm) {
+                    qcloud.request({
+                        url: `${config.service.host}/order/delete_order/` + order_id,
+                        success(result) {
+                            util.showSuccess('成功删除')
+                            that.setData({ 
+                                order_info :{}
+                            })
+                        }
+                    })
+                } else if (res.cancel) {
+                    return 
+                }
+            }
+        })
+    },
 
 })

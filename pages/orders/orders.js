@@ -38,8 +38,8 @@ Page({
         wx.getSystemInfo({
             success: function (res) {
                 that.setData({
-                    sliderLeft: (res.windowWidth / that.data.tabs.length - sliderWidth) / 2,
-                    sliderOffset: res.windowWidth / that.data.tabs.length * that.data.activeIndex
+                    sliderLeft: (res.windowWidth / that.data.tabs.length - sliderWidth) / 2, /*横向条离左边的间距*/
+                    sliderOffset: res.windowWidth / that.data.tabs.length * options.idx /*横向条离左边的距离偏移量*/
                 });
             }
         });
@@ -48,7 +48,6 @@ Page({
     },
 
     delete_order:function (event){
-        //console.log(this.data.wait_pay_order_list[idx].order.order_id)
         let idx = event.currentTarget.dataset.idx
         let that = this
         let order_id = this.data.wait_pay_order_list[idx].order.order_id
@@ -78,7 +77,6 @@ Page({
         let that = this
         let idx = event.currentTarget.dataset.idx
         let order = this.data.wait_pay_order_list[idx].order
-        console.log('test') 
         wx.requestPayment({                
             'timeStamp': order.timeStamp,
             'nonceStr': order.nonceStr,
@@ -91,7 +89,6 @@ Page({
                     icon: 'success',
                     duration: 3000 
                 })
-                //pay success then insert order into wait_sign_list and delete it from wait_pay_list,finaly updata page
                 that.data.wait_sign_order_list.push(that.data.wait_pay_order_list[idx])
                 that.data.wait_pay_order_list.splice(idx,1)
                 that.setData({ 
@@ -132,7 +129,7 @@ Page({
         })
     },
 
-    request_order_list:function (url){
+    request_order_list:function (url){//异步执行不能返回值，promise解决
         let that = this
         return new Promise(function(resolve,reject){
             qcloud.request({
@@ -148,6 +145,10 @@ Page({
         })
     },
 
+    //根据idx
+    //idx 0 请求等待支付列表
+    //idx 1 请求带签收列表
+    //idx 0 请求已完成订单列表
     set_page_data:function (idx){
         let url = ''
         let list = []

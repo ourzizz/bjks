@@ -1,5 +1,5 @@
 // pages/settlement/settlement.js 
-// bug:支付不管失败与否，购物车页面都要进行更新,但是没有起作用
+// debug:支付不管失败与否，购物车页面都要进行更新,但是没有起作用,openid设置有误所以出错
 var qcloud = require('../../vendor/wafer2-client-sdk/index') 
 var config = require('../../config') 
 var util = require('../../utils/util.js') 
@@ -55,7 +55,6 @@ Page({
         order_info.open_id = this.data.open_id
         order_info.address_id = this.data.user_default_address.address_id
         order_info.goods_list = []
-        //order_info.total_fee = this.data.cost
         order_info.total_fee = 0.1
         goods_list = this.data.goods_list
         for(var i=0;i<goods_list.length;i++) {
@@ -81,31 +80,7 @@ Page({
      *timeStamp : "1549254920"
      *
      *
-
-     Array (
-    [open_id] => opexV46WZFz9Is4xAI2zZWc4YiQE
-    [address_id] => 31
-    [goods_list] => Array
-        (
-            [0] => Array
-                (
-                    [goods_id] => 5
-                    [count] => 1
-                )
-
-        )
-
-    [total_fee] => 0.1
-    [order_id] => 1549269385vI3xw
-    [appId] => wxfa21ea4bdaef03e9
-    [timeStamp] => 1549269385
-    [nonceStr] => hn757ysk8okp5dgtccxwwnrlf3bhfz8g
-    [package] => prepay_id=wx0416362547560110c98f10750545498454
-    [signType] => MD5
-    [paySign] => BC3CF69860C3932AC104B9420ED552D8
-    )
      * */
-
     pay: function (out_trade_no, true_money) {    
         let that = this
         wx.request({
