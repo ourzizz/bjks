@@ -36,7 +36,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 12,
+			"current": 14,
 			"list": [
 				{
 					"id": 0,
@@ -114,10 +114,24 @@
 					"scene": null
 				},
 				{
-					"id": -1,
+					"id": 12,
 					"name": "orders",
 					"pathName": "pages/orders/orders",
-					"query": "open_id=opexV46WZFz9Is4xAI2zZWc4YiQE",
+					"query": "open_id=opexV46WZFz9Is4xAI2zZWc4YiQE&idx=1",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "qxnbd",
+					"pathName": "pages/qxnbd/qxnbd",
+					"query": "open_id=opexV46WZFz9Is4xAI2zZWc4YiQE&idx=1",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "success",
+					"pathName": "pages/paysuccess/paysuccess",
+					"query": "open_id=opexV46WZFz9Is4xAI2zZWc4YiQE&idx=1",
 					"scene": null
 				}
 			]

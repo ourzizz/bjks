@@ -5,7 +5,8 @@ var config = require('../../config')
 var util = require('../../utils/util.js') 
 Page({
     data: {
-        order_info:{},
+        open_id:'',
+        order:{},
         address:{},
         goods_list:[]
     },
@@ -15,12 +16,13 @@ Page({
      */
     onLoad: function (options) {
         let that = this
+        this.data.open_id = options.order_id
         qcloud.request({
             url: `${config.service.host}/order/re_pay/` + options.order_id,
             success(result) {
                 util.showSuccess('请求成功完成')
                 that.setData({
-                    order_info:result.data.order,
+                    order:result.data.order,
                     address:result.data.address,
                     goods_list:result.data.goods_list
                 })
@@ -29,7 +31,7 @@ Page({
     },
 
     re_pay:function (){
-        let order = this.data.order_info
+        let order = this.data.order
         wx.requestPayment({                
             'timeStamp': order.timeStamp,
             'nonceStr': order.nonceStr,
@@ -51,9 +53,11 @@ Page({
             },
         })
     },
+
+    //成功删除后应该跳转到购物车页面
     delete_order:function (){
         let that = this
-        let order_id = this.data.order_info.order_id
+        let order_id = this.data.order.order_id
         wx.showModal({
             title: '提示',
             content: '确定删除订单',
@@ -63,8 +67,8 @@ Page({
                         url: `${config.service.host}/order/delete_order/` + order_id,
                         success(result) {
                             util.showSuccess('成功删除')
-                            that.setData({ 
-                                order_info :{}
+                            wx.redirectTo({
+                                url: '../shopcart/shopcart?order_id=' + that.data.open_id
                             })
                         }
                     })

@@ -15,7 +15,10 @@ page{
     padding-top: 60px;
     text-align: center;
 }
-
+.weui-btn{
+    padding:10;
+    margin:20;
+}
 .order_box{
     background-color: #FFFFFF;
     font-size: 32rpx;
@@ -58,7 +61,7 @@ top:0;
 .goods_img {
     margin-right: 5px;
     vertical-align: middle;
-    width: 100px;
+    width: 50px;
     height: 50px;
 }
 
@@ -68,29 +71,13 @@ font-size: 28rpx;
 color: red;
 }
 
-/*商品的图片、名称、价格*/
-
-.opra_box {
-    /* float: right;*/
-    width: 600px;  
-    /* position: absolute;
-    right: 0;
-    bottom: 10rpx; */
-}
-
-.modify_count_img {
-    position: relative;
-    top: 15rpx;
-    height: 60rpx;
-    width: 60rpx;
-}
 .goods_name{
-    /* width:30%;
-    height: 60px;
+    width:100%;
     justify-content: center;
     text-align: center;
     font-size: 30rpx;
     overflow: hidden;
     text-overflow:ellipsis;
-    white-space: nowrap; */
+    white-space: nowrap; 
 }
+

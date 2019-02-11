@@ -1,14 +1,17 @@
 <view style="color:red;margin:10rpx"> 您的订单已支付,我们会尽快安排送货</view>
 <view style="margin:10rpx">
+<view class="info_box" style="margin:10rpx">
 <image style="float:left;height:100rpx;width:100rpx" src="/image/order.png" />
-<view>订单总额:{{total_fee}}</view>
-<view>收货信息:{{address.name}} {{address.telphone}}</view>
-{{address.province}}
-{{address.city}}
-{{address.county}}
-{{address.detail}}
-{{address.tephone}}
+<view>订单款额:{{total_fee}}</view>
+    <view>收货信息:{{address.name}} {{address.telphone}}</view>
+            {{address.province}}
+            {{address.city}}
+            {{address.county}}
+            {{address.detail}}
+            {{address.tephone}}
+    </view>
 </view>
-
-<button bindtap=""> 查看订单 </button>
-<button> 回到首页 </button>
+<view class="button-sp-area">
+<button class="weui-btn mini-btn" type="default" plain="true" bindtap="go_order"> 查看订单 </button>
+<button class="weui-btn mini-btn" type="default" plain="true" bindtap="go_home"> 回到首页 </button>
+</view>

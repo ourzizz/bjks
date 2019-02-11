@@ -1,4 +1,98 @@
 /* pages/payfail/payfail.wxss */
 /* 支付失败，1用户取消支付 2余额不足等，跳转到本页，显示订单信息 */
 
+@import '/weui.wxss'
+page{
+    height: 100%;
+    background: rgb(247, 244, 244);
+}
+.page,
+.page__bd{
+    height: 100%;
+}
+.page__bd{
+    padding-bottom: 0;
+}
+.weui-tab__content{
+    padding-top: 60px;
+    text-align: center;
+}
 
+.order_box{
+    background-color: #FFFFFF;
+    font-size: 32rpx;
+    margin: 10rpx;
+    padding: 5rpx;
+    border-radius: 5px;
+    box-shadow: 5px 5px 5px #888888;
+    /* border-bottom: 5rpx #999 solid */
+}
+
+.edit_button{
+    width:30rpx;
+    font-size: 25rpx;
+    /*position: relative;*/
+    /*left:80rpx;*/
+    
+}
+/*goods_list*/
+.cart_box {
+    height: 100%
+}
+.head_editor{
+position:fixed;
+top:0;
+}
+.goods_info_box {
+    padding: 0; margin: 0;
+}
+
+.cart_item {
+    position: relative;
+    border-bottom: 1rpx solid #d9d9d9;
+}
+
+/*商品的图片、名称、价格*/
+.goods_box {
+    display: block
+}
+
+.goods_img {
+    margin-right: 5px;
+    vertical-align: middle;
+    width: 100px;
+    height: 50px;
+}
+
+.price {
+display:inline;
+font-size: 28rpx;
+color: red;
+}
+
+/*商品的图片、名称、价格*/
+
+.opra_box {
+    /* float: right;*/
+    width: 600px;  
+    /* position: absolute;
+    right: 0;
+    bottom: 10rpx; */
+}
+
+.modify_count_img {
+    position: relative;
+    top: 15rpx;
+    height: 60rpx;
+    width: 60rpx;
+}
+.goods_name{
+    /* width:30%;
+    height: 60px;
+    justify-content: center;
+    text-align: center;
+    font-size: 30rpx;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap; */
+}

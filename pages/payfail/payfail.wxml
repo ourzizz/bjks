@@ -1,16 +1,22 @@
 <!--pages/payfail/payfail.wxml-->
-<view>
-{{order.total_fee}}
-{{address.name}}
-{{address.telphone}}
-{{address.detail}}
-</view>
 
-<view wx:for="{{goods_list}}">
-{{item.name}}
-{{item.price}}
-{{item.count}}
-</view>
+<view class="address">
+<view>价格:{{order.total_fee}}</view>
+<view style="font-size:30rpx;color:red"> 收货地址:{{address.name}} {{address.telphone}} </view>
+<view style="font-size:30rpx;border-bottom: 5rpx #999 solid"> {{address.province}} {{address.city}} {{address.county}} {{address.detail}} </view>
+</view> <!-- class address -->
 
-<button bindtap="re_pay">支付</button>
-<button bindtap="delete_order">取消订单</button>
+<view class="order_box">
+<view wx:for="{{goods_list}}" wx:key="*this">
+<view class="cart_item">
+    <view class='goods_info_box weui-cell weui-cell_access' hover-class="weui-cell_active" style="padding: 15rpx; margin: 0;border:0px">
+    <image src="{{item.face_img}}" class="goods_img" /> 
+    <view class="goods_name" style='font-size:25rpx'>{{item.name}} </view>
+    <view style="display:inline" class="price">价格￥{{item.price}} </view>
+    <view style="color:black" class="price">*{{item.count}}件</view>
+    </view> <!--class goods_info"---->
+</view>
+</view>
+<button class="weui-btn mini-btn" type="default" size="mini" bindtap="re_pay">支付</button>
+<button class="weui-btn mini-btn" type="default" size="mini" bindtap="delete_order">取消订单</button>
+</view>

@@ -197,8 +197,6 @@ Page({
     },
     gohome: function()
     {
-        const session = qcloud.Session.get()
-        console.log(session)
         wx.switchTab({
             url: '../index/index'
         })

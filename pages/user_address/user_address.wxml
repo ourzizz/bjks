@@ -15,8 +15,9 @@
                 <radio id="{{item.address_id}}" value="{{idx}}" checked="{{item.checked}}"></radio>
                 <label class="label-2-text" for="{{item.name}}">使用该地址</label>
                 <view class="edit_button" style="display:inline;" >
-                  <button data-idx="{{idx}}" bindtap="edit_address" style="display:inline;margin:10rpx;font-size:40rpx">编辑</button>
-                  <button data-idx="{{idx}}" bindtap="delete_address" style="display:inline;font-size:40rpx">删除</button>
+
+                  <button data-idx="{{idx}}" class="weui-btn mini-btn"  type="default" bindtap="edit_address" style="display:inline;margin:10rpx;font-size:35rpx">编辑</button>
+                  <button data-idx="{{idx}}" class="weui-btn mini-btn"  type="default" bindtap="delete_address" style="display:inline;font-size:35rpx;padding:10">删除</button>
                 </view>
             </view>
         </view> <!-- class='address_info'-->
