@@ -1,5 +1,3 @@
-//user.js
-//
 var qcloud = require('../../vendor/wafer2-client-sdk/index')
 var config = require('../../config')
 var util = require('../../utils/util.js')
@@ -121,7 +119,6 @@ Page({
                         url: `${config.service.host}/weapp/demo/delete_user_file/` + that.data.userInfo.openId + `/` + fileId,
                         fail(error) {
                             util.showModel('请求失败', error);
-                            console.log('request fail', error);
                         }
                     })
                     that.data.userFiles.splice(index,1)
@@ -135,9 +132,12 @@ Page({
     },
 
     go_order:function (event){
-        this.bindGetUserInfo()
-        wx.navigateTo({
-            url: '../orders/orders?open_id=' + this.data.userInfo.openId + '&idx=' + event.currentTarget.dataset.idx,
-        })
+        if(this.data.logged){
+            wx.navigateTo({
+                url: '../orders/orders?open_id=' + this.data.userInfo.openId + '&idx=' + event.currentTarget.dataset.idx,
+            })
+        }else{
+            util.showModel('未登陆', '请先点击登陆');
+        }
     }
 })

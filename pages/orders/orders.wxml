@@ -76,8 +76,7 @@
                   <!--class goods_info"---->
                 </view>
               </view>
-              <button class="weui-btn mini-btn" type="primary"  size="mini" data-idx="{{idx}}" bindtap="delete_order">删除订单</button>
-              <button class="weui-btn mini-btn" style="float:right;" type="warn" size="mini">联系商家</button>
+              <button class="weui-btn mini-btn" style="position:relative;right:0px" type="default" size="mini">联系商家</button>
             </view>
           </view>
         </view>
