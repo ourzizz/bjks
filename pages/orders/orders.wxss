@@ -16,8 +16,7 @@ page{
     text-align: center;
 }
 .weui-btn{
-    padding:10;
-    margin:20;
+margin-top:5rpx;
 }
 .order_box{
     background-color: #FFFFFF;
