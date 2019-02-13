@@ -11,7 +11,8 @@
     "pages/paysuccess/paysuccess",
     "pages/payfail/payfail",
     "pages/orders/orders",
-    "pages/qxnbd/qxnbd"
+    "pages/qxnbd/qxnbd",
+    "pages/refund/refund"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",

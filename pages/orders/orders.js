@@ -180,4 +180,10 @@ Page({
             activeIndex: e.currentTarget.id
         });
     },
+    detail:function (event){
+        let idx = event.currentTarget.dataset.idx
+        wx.navigateTo({
+            url: '../paysuccess/paysuccess?order_id=' + this.data.wait_sign_order_list[idx].order.order_id,
+        })
+    }
 })

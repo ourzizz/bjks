@@ -11,3 +11,11 @@ button{
 .mini-btn{
   margin-right: 10rpx;
 }
+
+.foot {
+    position: fixed;
+    bottom: 0;
+    color: #11cd6e;
+    border-top: solid 1rpx #e5e5e5;
+    width: 100%;
+}

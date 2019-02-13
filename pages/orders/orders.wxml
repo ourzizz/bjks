@@ -56,7 +56,7 @@
               </view>
 
               <button class="weui-btn mini-btn" style="float:right;" type="default" size="mini" data-idx="{{idx}}" bindtap="sign_order">确认收货</button>
-              <button class="weui-btn mini-btn"   size="mini" data-idx="{{idx}}" bindtap="">联系商家</button>
+              <button class="weui-btn mini-btn"   size="mini" data-idx="{{idx}}" bindtap="detail">详细信息</button>
             </view>
           </view>
 
@@ -77,6 +77,7 @@
                 </view>
               </view>
               <button class="weui-btn mini-btn" style="position:relative;right:0px" type="default" size="mini">联系商家</button>
+              <button class="weui-btn mini-btn" style="position:relative;right:0px" type="default" size="mini">再次购买</button>
             </view>
           </view>
         </view>

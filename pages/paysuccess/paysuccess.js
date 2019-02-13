@@ -15,8 +15,9 @@ Page({
   onLoad: function (options) {//订单号支付页面给过来
     let that = this
       qcloud.request({
-          //url: `${config.service.host}/order/pay_success/` + options.order_id,debug
-          url: `${config.service.host}/order/pay_success/` + '1549069451iMHha',
+          //debug
+          url: `${config.service.host}/order/pay_success/` + options.order_id,
+          //url: `${config.service.host}/order/pay_success/` + '1549069451iMHha',
           success(result) {
               util.showSuccess('请求成功完成')
               that.setData({
