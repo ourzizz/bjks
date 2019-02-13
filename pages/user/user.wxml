@@ -6,7 +6,10 @@
     <image class="userinfo-avatar" src="{{logged ? userInfo.avatarUrl : './user-unlogin.png'}}" background-size="cover"></image>
     <view>
       <button class="userinfo-nickname" wx:if="{{!logged}}" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">点击登录</button>
-      <text class="userinfo-nickname" wx:else>{{userInfo.nickName}}</text>
+      <block wx:else>
+      <text class="userinfo-nickname" >{{userInfo.nickName}}</text>
+      <button style="display:inline;position:absolute;right:30rpx" size="mini" wx:if="{{!administrator}}" >商家登录</button>
+      </block>
     </view>
   </view>
 

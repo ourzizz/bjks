@@ -4,6 +4,7 @@ var qcloud = require('../../vendor/wafer2-client-sdk/index')
 var config = require('../../config') 
 var util = require('../../utils/util.js') 
 // o9pU65LTYEE8tVWQR_yClRc1466k 
+// @data pickded 如果该页面用户连续点击支付，会造成多次拉起支付
 Page({ 
     data: { 
         user_default_address: {}, 
@@ -11,6 +12,7 @@ Page({
         order_info:{}, 
         open_id:"",
         res:{} ,
+        picked:false,
         cost:0
     }, 
 
@@ -83,44 +85,47 @@ Page({
      * */
     pay: function (out_trade_no, true_money) {    
         let that = this
-        wx.request({
-            // 请求服务器登录地址，获得会话信息
-            url: 'https://www.alemao.club/bjks/index.php?/order/pay',
-            data: {order_info: JSON.stringify(this.g_order_info())},
-            method: 'POST',
-            header: { 'content-type':'application/x-www-form-urlencoded' },
-            //成功之后，调用小程序微信支付
-            success(res) {
-                order_id = res.data.order_id
-                wx.requestPayment({                
-                    'timeStamp': res.data.timeStamp,
-                    'nonceStr': res.data.nonceStr,
-                    'package': res.data.package,
-                    'signType': 'MD5',
-                    'paySign': res.data.paySign,
-                    success: function (res) {
-                        wx.showToast({
-                            title: '支付成功',
-                            icon: 'success',
-                            duration: 3000 
-                        })
-                        that.modify_father_page_goodslist()
-                        wx.redirectTo({ 
-                            url: '../paysuccess/paysuccess?order_id=' + order_id,
-                        })
-                    }, 
-                    fail: function (res) {
-                        console.log('付款失败');
-                        that.modify_father_page_goodslist()
-                        wx.redirectTo({
-                            url: '../payfail/payfail?order_id=' + order_id,
-                        })
-                        return
-                    },
-                })
-            },
-            fail(err) {
-            }
-        });
+        if(this.data.picked === false){
+            this.data.picked = true
+            wx.request({
+                // 请求服务器登录地址，获得会话信息
+                url: 'https://www.alemao.club/bjks/index.php?/order/pay',
+                data: {order_info: JSON.stringify(this.g_order_info())},
+                method: 'POST',
+                header: { 'content-type':'application/x-www-form-urlencoded' },
+                //成功之后，调用小程序微信支付
+                success(res) {
+                    order_id = res.data.order_id
+                    wx.requestPayment({                
+                        'timeStamp': res.data.timeStamp,
+                        'nonceStr': res.data.nonceStr,
+                        'package': res.data.package,
+                        'signType': 'MD5',
+                        'paySign': res.data.paySign,
+                        success: function (res) {
+                            wx.showToast({
+                                title: '支付成功',
+                                icon: 'success',
+                                duration: 3000 
+                            })
+                            that.modify_father_page_goodslist()
+                            wx.redirectTo({ 
+                                url: '../paysuccess/paysuccess?order_id=' + order_id,
+                            })
+                        }, 
+                        fail: function (res) {
+                            console.log('付款失败');
+                            that.modify_father_page_goodslist()
+                            wx.redirectTo({
+                                url: '../payfail/payfail?order_id=' + order_id,
+                            })
+                            return
+                        },
+                    })
+                },
+                fail(err) {
+                }
+            });
+        }
     },
 })
