@@ -1,4 +1,5 @@
 // pages/refund/refund.js
+//bug退款页面，需要等到后台开发具备商家同意退款功能，再做开发
 Page({
 
   /**

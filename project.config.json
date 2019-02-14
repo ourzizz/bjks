@@ -36,7 +36,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 14,
+			"current": 16,
 			"list": [
 				{
 					"id": 0,
@@ -132,6 +132,19 @@
 					"name": "success",
 					"pathName": "pages/paysuccess/paysuccess",
 					"query": "open_id=opexV46WZFz9Is4xAI2zZWc4YiQE&idx=1",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "manageOrder",
+					"pathName": "pages/manageOrder/manageOrder",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "tunnel",
+					"pathName": "pages/sellerlogin/sellerlogin",
 					"scene": null
 				}
 			]

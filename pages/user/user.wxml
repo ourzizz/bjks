@@ -8,7 +8,10 @@
       <button class="userinfo-nickname" wx:if="{{!logged}}" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">点击登录</button>
       <block wx:else>
       <text class="userinfo-nickname" >{{userInfo.nickName}}</text>
-      <button style="display:inline;position:absolute;right:30rpx" size="mini" wx:if="{{!administrator}}" >商家登录</button>
+      <image style="width:60rpx;height:60rpx;position:relative;left:230rpx" src="/image/refresh.png" bindtap="refresh"/> 
+      <navigator style="display:inline;position:absolute;right:30rpx" url="../manageOrder/manageOrder">
+      <button  size="mini" hidden="{{!is_adm}}" >商家登录</button>
+      </navigator>
       </block>
     </view>
   </view>

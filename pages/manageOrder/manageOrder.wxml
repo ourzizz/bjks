@@ -1,0 +1,88 @@
+<!--pages/orders/orders.wxml-->
+<view class="page">
+  <view class="page__bd">
+    <view class="weui-tab">
+      <view class="weui-navbar">
+        <block wx:for="{{tabs}}" wx:key="*this">
+          <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
+            <view class="weui-navbar__title">{{item[0]}}</view>
+          </view>
+        </block>
+        <view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
+      </view>
+
+      <scroll-view style="postion:relative;top:30rpx;color:black;" class="weui-tab__panel" scroll-y="true">
+        <view>
+          <view hidden="{{activeIndex != 0}}">
+            <view class="order_box" wx:for="{{wait_pay_order_list}}" wx:key="*this" wx:for-index="idx">
+            订单号:{{item.order.order_id}}下单日期:{{item.order.order_date}} {{item.order.name}} ￥{{item.order.total_fee}}元
+              <view wx:for="{{item.goods_list}}" wx:key="*this">
+                <view class="cart_item">
+                  <view class='goods_info_box weui-cell weui-cell_access' hover-class="weui-cell_active" style="padding: 15rpx; margin: 0;border:0px">
+                    <image src="{{item.face_img}}" class="goods_img" />
+                    <view style="width:80%;float:right">
+                      <view class="goods_name" style='font-size:25rpx'>{{item.name}} </view>
+                      <view style="display:inline" class="price">价格￥{{item.price}} </view>
+                      <view style="color:black" class="price">*{{item.count}}件</view>
+                    </view>
+                    <!--textinfo--->
+                  </view>
+                  <!--class goods_info"---->
+                </view>
+              </view>
+
+              <view>
+                <button sytle="float:right;" class="weui-btn mini-btn" type="primary" size="mini" data-idx="{{idx}}" bindtap="re_pay">去支付</button>
+                <button class="weui-btn mini-btn" type="default" style="float:right;" size="mini" data-idx="{{idx}}" bindtap='delete_order'>取消订单</button>
+              </view>
+            </view>
+          </view>
+
+          <view hidden="{{activeIndex != 1}}">
+            <view class="order_box" wx:for="{{wait_sign_order_list}}" wx:key="*this" wx:for-index="idx">
+              单号:{{item.order.order_id}} 日期:{{item.order.order_date}} {{item.order.name}}￥{{item.order.total_fee}}
+              <view wx:for="{{item.goods_list}}" wx:key="*this">
+                <view class="cart_item">
+                  <view class='goods_info_box weui-cell weui-cell_access' hover-class="weui-cell_active" style="padding: 15rpx; margin: 0;border:0px">
+                    <image src="{{item.face_img}}" class="goods_img" />
+                    <view style="width:80%;float:right">
+                      <view class="goods_name">{{item.name}} </view>
+                      <view style="display:inline" class="price">价格￥{{item.price}} </view>
+                      <view style="color:black" class="price">*{{item.count}}件</view>
+                    </view>
+                  </view>
+                  <!--class goods_info"---->
+                </view>
+              </view>
+
+              <button class="weui-btn mini-btn" style="float:right;" type="default" size="mini" data-idx="{{idx}}" bindtap="sign_order">确认收货</button>
+              <button class="weui-btn mini-btn"   size="mini" data-idx="{{idx}}" bindtap="detail">详细信息</button>
+            </view>
+          </view>
+
+          <view hidden="{{activeIndex != 2}}">
+            <view class="order_box" wx:for="{{finished_order_list}}" wx:key="*this" wx:for-index="idx">
+              本单价格{{item.order.total_fee}} 下单日期:{{item.order.order_date}} {{item.order.name}}
+              <view wx:for="{{item.goods_list}}" wx:key="*this">
+                <view class="cart_item">
+                  <view class='goods_info_box weui-cell weui-cell_access' hover-class="weui-cell_active" style="padding: 15rpx; margin: 0;border:0px">
+                    <image src="{{item.face_img}}" class="goods_img" />
+                    <view style="width:80%;float:right">
+                      <view class="goods_name" style='font-size:25rpx'>{{item.name}} </view>
+                      <view style="display:inline" class="price">价格￥{{item.price}} </view>
+                      <view style="color:black" class="price">*{{item.count}}件</view>
+                    </view>
+                  </view>
+                  <!--class goods_info"---->
+                </view>
+              </view>
+              <button class="weui-btn mini-btn" style="position:relative;right:0px" type="default" size="mini">联系商家</button>
+              <button class="weui-btn mini-btn" style="position:relative;right:0px" type="default" size="mini">再次购买</button>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+
+    </view>
+  </view>
+</view>

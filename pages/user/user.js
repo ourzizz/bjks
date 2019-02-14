@@ -1,9 +1,10 @@
 var qcloud = require('../../vendor/wafer2-client-sdk/index')
 var config = require('../../config')
 var util = require('../../utils/util.js')
-
+//is_adm系统判断是否为管理员，是否显示后台入口
 Page({
     data: {
+        is_adm:false,
         userInfo: {},
         logged: false,
         takeSession: false,
@@ -13,12 +14,12 @@ Page({
     },
     onLoad:function()
     {
-        //session = qcloud.Session.get()
         const session = qcloud.Session.get()
         if(session)
         {//session存在
             this.setData({
                 userInfo:session.userinfo,
+                is_adm:session.userinfo.is_adm,
                 logged:true
             })
             this.setUserFiles()
@@ -51,7 +52,7 @@ Page({
         if (session) {
             qcloud.loginWithCode({
                 success: res => {
-                    this.setData({ userInfo: res, logged: true })
+                    this.setData({ userInfo: res, logged: true , is_adm:res.userinfo.is_adm})
                     util.showSuccess('登录成功')
                 },
                 fail: err => {
@@ -139,5 +140,19 @@ Page({
         }else{
             util.showModel('未登陆', '请先点击登陆');
         }
-    }
+    },
+
+    refresh:function (){
+        let that = this
+        qcloud.request({
+            url: `${config.service.host}/weapp/login/is_adm/` + that.data.userInfo.openId,
+            success:function (res) {
+                that.setData({
+                    is_adm : res.data
+                })
+            },
+            fail:function(error) {
+            }
+        })
+    },
 })
