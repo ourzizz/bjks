@@ -222,5 +222,10 @@ Page({
     this.setData({
       tunnelStatus: 'closed'
     })
-  }
+  },
+  openChat() {
+    // 微信只允许一个信道再运行，聊天室使用信道前，我们先把当前的关闭
+    this.closeTunnel();
+    wx.navigateTo({ url: '../chat/chat' });
+  },
 })
