@@ -1,2 +1,5 @@
 <!--pages/sellerlogin/sellerlogin.wxml-->
 <text>pages/sellerlogin/sellerlogin.wxml</text>
+<view bindtap="sendMessage">
+发送消息
+</view>

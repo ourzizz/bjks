@@ -5,6 +5,7 @@ var util = require('../../utils/util.js')
 
 Page({
   data: {
+    tunnelStatus: 'disconnect',
     userInfo: {},
     logged: false,
     takeSession: false,
@@ -206,6 +207,7 @@ Page({
       this.tunnel.emit('speak', {
         'word': 'I say something at ' + new Date(),
       });
+        console.log("I say something at ")
     }
   },
 
