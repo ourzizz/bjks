@@ -3,212 +3,185 @@ var qcloud = require('../../vendor/wafer2-client-sdk/index')
 var config = require('../../config')
 var util = require('../../utils/util.js')
 
+// 显示繁忙提示
+var showBusy = text => wx.showToast({
+  title: text,
+  icon: 'loading',
+  duration: 10000
+});
+
+// 显示成功提示
+var showSuccess = text => wx.showToast({
+  title: text,
+  icon: 'success'
+});
+
+// 显示失败提示
+var showModel = (title, content) => {
+  wx.hideToast();
+
+  wx.showModal({
+    title,
+    content: JSON.stringify(content),
+    showCancel: false
+  });
+};
+
+/**
+ * 使用 Page 初始化页面，具体可参考微信公众平台上的文档
+ */
 Page({
+
+  /**
+   * 初始数据，我们把服务地址显示在页面上
+   */
   data: {
-    tunnelStatus: 'disconnect',
-    userInfo: {},
-    logged: false,
-    takeSession: false,
-    requestResult: ''
-  },
-  onLoad: function() {
-    this.openTunnel()
-  },
-  bindGetUserInfo: function() {
-    if (this.data.logged) return
-
-    util.showBusy('正在登录')
-
-    const session = qcloud.Session.get()
-
-    if (session) {
-      qcloud.loginWithCode({
-        success: res => {
-          this.setData({
-            userInfo: res,
-            logged: true
-          })
-          util.showSuccess('登录成功')
-        },
-        fail: err => {
-          console.error(err)
-          util.showModel('登录错误', err.message)
-        }
-      })
-    } else {
-      qcloud.login({
-        success: res => {
-          this.setData({
-            userInfo: res,
-            logged: true
-          })
-          util.showSuccess('登录成功')
-        },
-        fail: err => {
-          console.error(err)
-          util.showModel('登录错误', err.message)
-        }
-      })
+    loginUrl: config.service.loginUrl,
+    requestUrl: config.service.requestUrl,
+    tunnelUrl: config.service.tunnelUrl,
+    tunnelStatus: 'closed',
+    tunnelStatusText: {
+      closed: '已关闭',
+      connecting: '正在连接...',
+      connected: '已连接'
     }
   },
 
-  // 切换是否带有登录态
-  switchRequestMode: function(e) {
-    this.setData({
-      takeSession: e.detail.value
-    })
-    this.doRequest()
-  },
+  /**
+   * 点击「登录」按钮，测试登录功能
+   */
+  doLogin() {
+    showBusy('正在登录');
 
-  doRequest: function() {
-    util.showBusy('请求中...')
-    var that = this
-    var options = {
-      url: config.service.requestUrl,
-      login: true,
+    // 登录之前需要调用 qcloud.setLoginUrl() 设置登录地址，不过我们在 app.js 的入口里面已经调用过了，后面就不用再调用了
+    qcloud.login({
       success(result) {
-        util.showSuccess('请求成功完成')
-        console.log('request success', result)
-        that.setData({
-          requestResult: JSON.stringify(result.data)
-        })
+        showSuccess('登录成功');
+        console.log('登录成功', result);
       },
+
       fail(error) {
-        util.showModel('请求失败', error);
-        console.log('request fail', error);
+        showModel('登录失败', error);
+        console.log('登录失败', error);
       }
-    }
-    if (this.data.takeSession) { // 使用 qcloud.request 带登录态登录
-      qcloud.request(options)
-    } else { // 使用 wx.request 则不带登录态
-      wx.request(options)
-    }
+    });
   },
 
-  // 上传图片接口
-  doUpload: function() {
-    var that = this
+  /**
+   * 点击「清除会话」按钮
+   */
+  clearSession() {
+    // 清除保存在 storage 的会话信息
+    qcloud.clearSession();
+    showSuccess('会话已清除');
+  },
 
-    // 选择图片
-    wx.chooseImage({
-      count: 1,
-      sizeType: ['compressed'],
-      sourceType: ['album', 'camera'],
-      success: function(res) {
-        util.showBusy('正在上传')
-        var filePath = res.tempFilePaths[0]
+  /**
+   * 点击「请求」按钮，测试带会话请求的功能
+   */
+  doRequest() {
+    showBusy('正在请求');
 
-        // 上传图片
-        wx.uploadFile({
-          url: config.service.uploadUrl,
-          filePath: filePath,
-          name: 'file',
+    // qcloud.request() 方法和 wx.request() 方法使用是一致的，不过如果用户已经登录的情况下，会把用户的会话信息带给服务器，服务器可以跟踪用户
+    qcloud.request({
+      // 要请求的地址
+      url: this.data.requestUrl,
 
-          success: function(res) {
-            util.showSuccess('上传图片成功')
-            console.log(res)
-            res = JSON.parse(res.data)
-            console.log(res)
-            that.setData({
-              imgUrl: res.data.imgUrl
-            })
-          },
+      // 请求之前是否登陆，如果该项指定为 true，会在请求之前进行登录
+      login: true,
 
-          fail: function(e) {
-            util.showModel('上传图片失败')
-          }
-        })
-
+      success(result) {
+        showSuccess('请求成功完成');
+        console.log('request success', result);
       },
-      fail: function(e) {
-        console.error(e)
+
+      fail(error) {
+        showModel('请求失败', error);
+        console.log('request fail', error);
+      },
+
+      complete() {
+        console.log('request complete');
       }
-    })
+    });
   },
 
-  // 预览图片
-  previewImg: function() {
-    wx.previewImage({
-      current: this.data.imgUrl,
-      urls: [this.data.imgUrl]
-    })
-  },
+  switchTunnel(e) {
+    const turnedOn = e.detail.value;
 
-  // 切换信道的按钮
-  switchChange: function(e) {
-    var checked = e.detail.value
+    if (turnedOn && this.data.tunnelStatus == 'closed') {
+      this.openTunnel();
 
-    if (checked) {
-      this.openTunnel()
-    } else {
-      this.closeTunnel()
+    } else if (!turnedOn && this.data.tunnelStatus == 'connected') {
+      this.closeTunnel();
     }
   },
 
-  openTunnel: function() {
-    util.showBusy('信道连接中...')
+  /**
+   * 点击「打开信道」，测试 WebSocket 信道服务
+   */
+  openTunnel() {
     // 创建信道，需要给定后台服务地址
-    var tunnel = this.tunnel = new qcloud.Tunnel(config.service.tunnelUrl)
+    var tunnel = this.tunnel = new qcloud.Tunnel(this.data.tunnelUrl);
 
     // 监听信道内置消息，包括 connect/close/reconnecting/reconnect/error
     tunnel.on('connect', () => {
-      util.showSuccess('信道已连接')
-      console.log('WebSocket 信道已连接')
-      this.setData({
-        tunnelStatus: 'connected'
-      })
-    })
+      console.log('WebSocket 信道已连接');
+      this.setData({ tunnelStatus: 'connected' });
+    });
 
     tunnel.on('close', () => {
-      util.showSuccess('信道已断开')
-      console.log('WebSocket 信道已断开')
-      this.setData({
-        tunnelStatus: 'closed'
-      })
-    })
+      console.log('WebSocket 信道已断开');
+      this.setData({ tunnelStatus: 'closed' });
+    });
 
     tunnel.on('reconnecting', () => {
       console.log('WebSocket 信道正在重连...')
-      util.showBusy('正在重连')
-    })
+      showBusy('正在重连');
+    });
 
     tunnel.on('reconnect', () => {
       console.log('WebSocket 信道重连成功')
-      util.showSuccess('重连成功')
-    })
+      showSuccess('重连成功');
+    });
 
     tunnel.on('error', error => {
-      util.showModel('信道发生错误', error)
-      console.error('信道发生错误：', error)
-    })
+      showModel('信道发生错误', error);
+      console.error('信道发生错误：', error);
+    });
 
     // 监听自定义消息（服务器进行推送）
     tunnel.on('speak', speak => {
-      util.showModel('信道消息', speak)
-      console.log('收到说话消息：', speak)
-    })
+      showModel('信道消息', speak);
+      console.log('收到说话消息：', speak);
+    });
 
     // 打开信道
-    tunnel.open()
+    tunnel.open();
 
-    this.setData({
-      tunnelStatus: 'connecting'
-    })
+    this.setData({ tunnelStatus: 'connecting' });
   },
 
   /**
    * 点击「发送消息」按钮，测试使用信道发送消息
    */
   sendMessage() {
-    if (!this.data.tunnelStatus || !this.data.tunnelStatus === 'connected') return
     // 使用 tunnel.isActive() 来检测当前信道是否处于可用状态
     if (this.tunnel && this.tunnel.isActive()) {
       // 使用信道给服务器推送「speak」消息
       this.tunnel.emit('speak', {
         'word': 'I say something at ' + new Date(),
       });
-        console.log("I say something at ")
     }
+  },
+
+  /**
+   * 点击「测试重连」按钮，测试重连
+   * 也可以断开网络一段时间之后再连接，测试重连能力
+   */
+  testReconnect() {
+    // 不通过 SDK 关闭连接，而是直接用微信断开来模拟连接断开的情况下，考察 SDK 自动重连的能力
+    wx.closeSocket();
   },
 
   /**
@@ -218,14 +191,16 @@ Page({
     if (this.tunnel) {
       this.tunnel.close();
     }
-    util.showBusy('信道连接中...')
-    this.setData({
-      tunnelStatus: 'closed'
-    })
+
+    this.setData({ tunnelStatus: 'closed' });
   },
+
+  /**
+   * 点击「聊天室」按钮，跳转到聊天室综合 Demo 的页面
+   */
   openChat() {
     // 微信只允许一个信道再运行，聊天室使用信道前，我们先把当前的关闭
     this.closeTunnel();
     wx.navigateTo({ url: '../chat/chat' });
   },
-})
+});
