@@ -307,6 +307,7 @@ function Tunnel(serviceUrl) {
      * 解析并处理从信道接收到的包
      */
     function resolvePacket(raw) {
+        console.log(raw) ;
         var packetParts = raw.split(':');
         var packetType = packetParts.shift();
         var packetContent = packetParts.join(':') || null;

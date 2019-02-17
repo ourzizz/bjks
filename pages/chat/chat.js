@@ -44,6 +44,7 @@ Page({
         messages: [],
         inputContent: '大家好啊',
         lastMessageId: 'none',
+        openId : '12312123'
     },
 
     /**
@@ -128,7 +129,8 @@ Page({
         // 有人说话，创建一条消息
         tunnel.on('speak', speak => {
             const { word, who } = speak;
-            this.pushMessage(createUserMessage(word, who, who.openId === this.me.openId));
+            //this.pushMessage(createUserMessage(word, who, who.openId === this.me.openId));
+            this.pushMessage(createUserMessage(word, who, who.openId === this.data.openId));
         });
 
         // 信道关闭后，显示退出群聊
@@ -219,5 +221,8 @@ Page({
                 this.setData({ inputContent: '' });
             }
         });
+        //wx.onSocketMessage(function (message){
+            //console.log(message) ;
+        //})
     },
 });
