@@ -516,8 +516,7 @@ function Tunnel(serviceUrl) {
         switch (me.status) {
         case Tunnel.STATUS_CONNECTING:
             dispatchEvent('error', {
-                code: ERR_SOCKET_ERROR,
-                message: '连接信道失败，网络错误或者信道服务不可用',
+                code: ERR_SOCKET_ERROR, message: '连接信道失败，网络错误或者信道服务不可用',
                 detail: detail,
             });
             break;

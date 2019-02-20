@@ -9,13 +9,12 @@ Page({
    * 页面的初始数据
    */
   data: {
-    tabs: [['待接单', 1], ['待发货', 2], ['完结订单', 3],['退款列表', 3]],
+    tabs: [['待接单', 144], ['待发货', 2], ['完结订单', 3],['退款列表', 3]],
     activeIndex: 0,
     sliderOffset: 0,
     sliderLeft: 0,
-    wait_pay_order_list: [],
-    wait_sign_order_list: [],//待签收后台给出pay为success,给出送货员的联系电话
-    wait_comment_order_list: [],
+    wait_pick_order_list:[],//待接单列表
+    wait_delivery_order_list: [],//待投递订单
     finished_order_list: [],
     userinfo: {},
     logged: false,
@@ -28,13 +27,20 @@ Page({
   onLoad: function (options) {
     let that = this
     const session = qcloud.Session.get()
-    if (session) {//session存在
-      this.setData({
-        userInfo: session.userinfo,
-        open_id: session.userinfo.openId,
-        logged: true
-      })
-    }
+        qcloud.request({
+            url: `${config.service.host}/seller/get_wait_pick_orders` ,
+            success(result) {
+                that.data.tabs[0][1] = result.data.length
+                that.setData({
+                    wait_pick_order_list:result.data,
+                    tabs:that.data.tabs
+                })
+            },
+            fail(error) {
+                util.showModel('请求失败', error);
+                console.log('request fail', error);
+            }
+        })
     wx.getSystemInfo({
       success: function (res) {
         that.setData({
@@ -43,90 +49,7 @@ Page({
         });
       }
     });
-    //this.set_page_data('1')
     this.set_page_data(options.idx)
-  },
-
-  delete_order: function (event) {
-    let idx = event.currentTarget.dataset.idx
-    let that = this
-    let order_id = this.data.wait_pay_order_list[idx].order.order_id
-    wx.showModal({
-      title: '提示',
-      content: '确定删除订单',
-      success(res) {
-        if (res.confirm) {
-          qcloud.request({
-            url: `${config.service.host}/order/delete_order/` + order_id,
-            success(result) {
-              util.showSuccess('成功删除')
-              that.data.wait_pay_order_list.splice(idx, 1)
-              that.setData({
-                wait_pay_order_list: that.data.wait_pay_order_list
-              })
-            }
-          })
-        } else if (res.cancel) {
-          return
-        }
-      }
-    })
-  },
-
-  re_pay: function (event) {
-    let that = this
-    let idx = event.currentTarget.dataset.idx
-    let order = this.data.wait_pay_order_list[idx].order
-    wx.requestPayment({
-      'timeStamp': order.timeStamp,
-      'nonceStr': order.nonceStr,
-      'package': order.package,
-      'signType': 'MD5',
-      'paySign': order.paySign,
-      success: function (res) {
-        wx.showToast({
-          title: '支付成功',
-          icon: 'success',
-          duration: 3000
-        })
-        that.data.wait_sign_order_list.push(that.data.wait_pay_order_list[idx])
-        that.data.wait_pay_order_list.splice(idx, 1)
-        that.setData({
-          wait_sign_order_list: that.data.wait_sign_order_list,
-          wait_pay_order_list: that.data.wait_pay_order_list
-        })
-      },
-      fail: function (res) {
-        return
-      },
-    })
-  },
-
-  //确认收货
-  sign_order: function (event) {
-    let idx = event.currentTarget.dataset.idx
-    let order_id = this.data.wait_sign_order_list[idx].order.order_id
-    let that = this
-    wx.showModal({
-      title: '提示',
-      content: '确定签收订单吗',
-      success(res) {
-        if (res.confirm) {
-          qcloud.request({
-            url: `${config.service.host}/order/user_sign_order/` + that.data.open_id + '/' + order_id,
-            success(result) {
-              util.showSuccess('签收成功')
-              that.data.wait_sign_order_list.splice(idx, 1)
-              that.setData({
-                wait_sign_order_list: that.data.wait_sign_order_list
-              })
-            }
-          })
-        } else if (res.cancel) {
-          return
-        }
-      }
-    })
   },
 
   request_order_list: function (url) {//异步执行不能返回值，promise解决
