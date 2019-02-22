@@ -107,6 +107,9 @@ Page({
      * 连接到聊天室信道服务
      */
     connect  () {
+        //tunnel.on是在tunne.js中进行消息类型与动作函数的注册，
+        //猜测调用是由底层接到信道信息，根据消息类型，查询 var eventHandlers = [];该数组中消息 动作对
+        //进行函数调用
         this.amendMessage(createSystemMessage('正在加入群聊...'));
 
         // 创建信道
@@ -125,7 +128,9 @@ Page({
                 this.pushMessage(createSystemMessage(`${leave.nickName}已退出群聊，当前共 ${total} 人`));
             }
         });
-
+        tunnel.on('order',order => {
+            console.log(order);
+        });
         // 有人说话，创建一条消息
         tunnel.on('speak', speak => {
             const { word, who } = speak;

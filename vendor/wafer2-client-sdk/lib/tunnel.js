@@ -181,6 +181,8 @@ function Tunnel(serviceUrl) {
 
     /**
      * 打开 WebSocket 连接，打开后，注册微信的 Socket 处理方法
+     * me 将tunnel需要实例化的wx信道方法，在本文中进行定义然后注册到wxTunnel文件的定义中
+     * 成为原生函数的回调部分
      */
     function openSocket(url) {
         wxTunnel.listen({
