@@ -11,6 +11,29 @@
             <view wx:if="{{message.type == 'system'}}" class="system-message">
                 {{message.content}}
             </view>
+            <view wx:if="{{message.type == 'order'}}" class="system-message">
+            <view class="order_box" >
+            订单号:{{message.content.order.order_id}}下单日期:{{message.content.order.order_date}} {{message.content.order.name}} ￥{{message.content.order.total_fee}}元
+              <view wx:for="{{message.content.goods_list}}" wx:key="*this">
+                <view class="cart_item">
+                  <view class='goods_info_box weui-cell weui-cell_access' hover-class="weui-cell_active" style="padding: 15rpx; margin: 0;border:0px">
+                    <image src="{{item.face_img}}" class="goods_img" />
+                    <view style="width:80%;float:right">
+                      <view class="goods_name" style='font-size:25rpx'>{{item.name}} </view>
+                      <view style="display:inline" class="price">价格￥{{item.price}} </view>
+                      <view style="color:black" class="price">*{{item.count}}件</view>
+                    </view>
+                    <!--textinfo--->
+                  </view>
+                  <!--class goods_info"---->
+                </view>
+              </view>
+              </view>
+              <view>
+                <button sytle="float:right;" class="weui-btn mini-btn" type="primary" size="mini" data-idx="{{idx}}" bindtap="pick_order">接单</button>
+              </view>
+            </view>
+
         </view>
     </scroll-view>
     <view class="input-panel">
@@ -19,3 +42,4 @@
         <button bindtap="sendMessage" class="send-btn">发送</button>
     </view>
 </view>
+

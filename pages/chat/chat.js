@@ -2,14 +2,8 @@
  * @fileOverview 聊天室综合 Demo 示例
  */
 var util = require('../../utils/util.js')
-
-// 引入 QCloud 小程序增强 SDK
-//var qcloud = require('../../vendor/qcloud-weapp-client-sdk/index');
 var qcloud = require('../../vendor/wafer2-client-sdk/index')
-
-// 引入配置
 var config = require('../../config')
-
 /**
  * 生成一条聊天室的消息的唯一 ID
  */
@@ -32,6 +26,10 @@ function createSystemMessage(content) {
  */
 function createUserMessage(content, user, isMe) {
     return { id: msgUuid(), type: 'speak', content, user, isMe };
+}
+
+function createOrderMessage(content) {
+    return { id: msgUuid(), type: 'order', content};
 }
 
 // 声明聊天室页面
@@ -130,6 +128,7 @@ Page({
         });
         tunnel.on('order',order => {
             console.log(order);
+            this.pushMessage(createOrderMessage(order.order_info));
         });
         // 有人说话，创建一条消息
         tunnel.on('speak', speak => {
