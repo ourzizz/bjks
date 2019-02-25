@@ -38,8 +38,8 @@
 <view class="spring" />
 <view class="foot">
   <view style="position:relative;top:16rpx;left:30rpx;display:inline;" bindtap="go_refund_page">申请退款</view>
-  <view bindtap="pay" style="background:red;color:white;float:right;width:60%;height:90rpx;text-align:center">
-    <view  style="position:relative;top:16rpx;"> 再次购买</view>
+  <view bindtap="call_seller" style="background:red;color:white;float:right;width:60%;height:90rpx;text-align:center">
+    <view  style="position:relative;top:16rpx;">联系商家</view>
   </view>
 </view>
 </view>
@@ -97,7 +97,7 @@
 
     <view class="button-sp-area">
     <button class="weui-btn mini-btn" type="default" plain="true" bindtap="cancel_refund"> 取消 </button>
-    <button class="weui-btn mini-btn" type="primary" plain="true" bindtap="go_home"> 确定 </button>
+    <button class="weui-btn mini-btn" type="primary" plain="true" bindtap="confirm_refund"> 确定 </button>
     </view>
 
     </view>

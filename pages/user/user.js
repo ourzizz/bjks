@@ -19,7 +19,6 @@ Page({
         {//session存在
             this.setData({
                 userInfo:session.userinfo,
-                is_adm:session.userinfo.is_adm,
                 logged:true
             })
             this.setUserFiles()
@@ -142,17 +141,19 @@ Page({
         }
     },
 
-    refresh:function (){
-        let that = this
+    refresh:function(){
+        let that=this
         qcloud.request({
-            url: `${config.service.host}/weapp/login/is_adm/` + that.data.userInfo.openId,
-            success:function (res) {
-                that.setData({
-                    is_adm : res.data
-                })
+            url: `${config.service.host}/order/seller_login/` + that.data.userInfo.openId,
+            success(res){
+                if(res.data){
+                    that.setData({
+                        is_adm : true
+                    }) 
+                }
             },
-            fail:function(error) {
+            fail(){
             }
         })
-    },
+    }
 })
