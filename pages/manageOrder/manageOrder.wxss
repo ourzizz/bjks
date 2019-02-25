@@ -19,6 +19,7 @@ page{
 margin-top:5rpx;
 }
 .order_box{
+    position:relative;
     background-color: #FFFFFF;
     font-size: 32rpx;
     margin: 10rpx;

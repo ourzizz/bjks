@@ -69,11 +69,11 @@
           </view>
 
           <view hidden="{{activeIndex != 1}}">
-            <view style="font-size:35rpx" class="order_box" wx:for="{{wait_delivery_order_list}}" wx:key="*this" wx:for-index="idx">
+            <view class="order_box" wx:for="{{wait_delivery_order_list}}" wx:key="*this" wx:for-index="idx">
               单号:{{item.order.order_id}} ￥{{item.order.total_fee}}
-            <view style="font-size:35rpx">日期:{{item.order.order_date}}</view>
-            <view style="font-size:40rpx">收件人:{{item.address.name}}</view>
-            <view style="font-size:40rpx;">详细地址:{{item.address.detail}}</view>
+            <view style="font-size:40rpx">日期:{{item.order.order_date}}</view>
+            <view style="font-size:39rpx">收件人:{{item.address.name}}</view>
+            <view style="font-size:39rpx";color:red>详细地址:{{item.address.detail}}</view>
             <button data-no="{{item.address.telphone}}" bindtap="call">联系电话:{{item.address.telphone}}</button>
 
               <button class="weui-btn mini-btn" style="position:absolute;top:5rpx;right:10rpx" type="primary" size="mini" data-idx="{{idx}}" bindtap="sign_order">已送达</button>

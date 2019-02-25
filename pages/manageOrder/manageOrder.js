@@ -310,4 +310,9 @@ Page({
             activeIndex: e.currentTarget.id
         });
     },
+    call:function (event){
+        wx.makePhoneCall({
+            phoneNumber: event.currentTarget.dataset.no //仅为示例，并非真实的电话号码
+        })
+    }
 });
