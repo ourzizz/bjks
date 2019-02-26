@@ -144,9 +144,9 @@ Page({
     refresh:function(){
         let that=this
         qcloud.request({
-            url: `${config.service.host}/order/seller_login/` + that.data.userInfo.openId,
+            url: `${config.service.host}/login/is_adm/` + that.data.userInfo.openId,
             success(res){
-                if(res.data){
+                if(res.data.is_adm === "true"){
                     that.setData({
                         is_adm : true
                     }) 

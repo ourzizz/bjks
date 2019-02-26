@@ -54,13 +54,34 @@
                   <!--class goods_info"---->
                 </view>
               </view>
-
               <button class="weui-btn mini-btn" style="float:right;" type="default" size="mini" data-idx="{{idx}}" bindtap="sign_order">确认收货</button>
               <button class="weui-btn mini-btn"   size="mini" data-idx="{{idx}}" bindtap="detail">详细信息</button>
             </view>
           </view>
 
+
           <view hidden="{{activeIndex != 2}}">
+            <view class="order_box" wx:for="{{refund_list}}" wx:key="*this" wx:for-index="idx">
+              单号:{{item.order.order_id}} 日期:{{item.order.order_date}} {{item.order.name}}￥{{item.order.total_fee}}
+              <view wx:for="{{item.goods_list}}" wx:key="*this">
+                <view class="cart_item">
+                  <view class='goods_info_box weui-cell weui-cell_access' hover-class="weui-cell_active" style="padding: 15rpx; margin: 0;border:0px">
+                    <image src="{{item.face_img}}" class="goods_img" />
+                    <view style="width:80%;float:right">
+                      <view class="goods_name">{{item.name}} </view>
+                      <view style="display:inline" class="price">价格￥{{item.price}} </view>
+                      <view style="color:black" class="price">*{{item.count}}件</view>
+                    </view>
+                  </view>
+                  <!--class goods_info"---->
+                </view>
+              </view>
+              <button class="weui-btn mini-btn" style="float:right;" type="default" size="mini" data-idx="{{idx}}" bindtap="sign_order">确认收货</button>
+              <button class="weui-btn mini-btn"   size="mini" data-idx="{{idx}}" bindtap="detail">详细信息</button>
+            </view>
+          </view>
+
+          <view hidden="{{activeIndex != 3}}">
             <view class="order_box" wx:for="{{finished_order_list}}" wx:key="*this" wx:for-index="idx">
               本单价格{{item.order.total_fee}} 下单日期:{{item.order.order_date}} {{item.order.name}}
               <view wx:for="{{item.goods_list}}" wx:key="*this">

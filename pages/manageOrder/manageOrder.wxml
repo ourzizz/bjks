@@ -81,7 +81,7 @@
           </view>
 
           <view hidden="{{activeIndex != 2}}">
-            <view class="order_box" wx:for="{{finished_order_list}}" wx:key="*this" wx:for-index="idx">
+            <view class="order_box" wx:for="{{wait_refund_list}}" wx:key="*this" wx:for-index="idx">
               本单价格{{item.order.total_fee}} 下单日期:{{item.order.order_date}} {{item.order.name}}
               <view wx:for="{{item.goods_list}}" wx:key="*this">
                 <view class="cart_item">
@@ -96,8 +96,8 @@
                   <!--class goods_info"---->
                 </view>
               </view>
-              <button class="weui-btn mini-btn" style="position:relative;right:0px" type="default" size="mini">联系商家</button>
-              <button class="weui-btn mini-btn" style="position:relative;right:0px" type="default" size="mini">再次购买</button>
+              <button class="weui-btn mini-btn" style="position:relative;right:0px" type="default" size="mini">同意退款</button>
+              <button class="weui-btn mini-btn" style="position:relative;right:0px" type="default" size="mini">不同意退款</button>
             </view>
           </view>
         </view>

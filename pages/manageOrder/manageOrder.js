@@ -26,6 +26,7 @@ Page({
         sliderLeft: 0,
         wait_pick_order_list:[],//待接单列表
         wait_delivery_order_list: [],//待投递订单
+        wait_refund_list:[],
         finished_order_list: [],
         userinfo: {},
         logged: false,
@@ -113,6 +114,7 @@ Page({
             }
         })
     },
+
     /**
      * 页面渲染完成后，启动聊天室
      * */
@@ -127,6 +129,14 @@ Page({
                     });
             }
         });
+
+                this.init_list(`${config.service.host}/seller/get_wait_refund_orders`,result => {
+                    this.data.tabs[2][1] = result.data.length
+                    this.setData({
+                        wait_refund_list:result.data,
+                        tabs:this.data.tabs
+                    })
+                })
                 this.init_list(`${config.service.host}/seller/get_wait_pick_orders`,result => {
                     this.data.tabs[0][1] = result.data.length
                     this.setData({

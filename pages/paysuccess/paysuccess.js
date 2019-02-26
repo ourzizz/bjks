@@ -68,12 +68,13 @@ Page({
     },
 
     confirm_refund: function () {
+        let that = this
         const session = qcloud.Session.get()
         if(this.data.reason !== ''){
             qcloud.request({
                 url: `${config.service.host}/order/request_refund`,
                 data: {
-                    order_id: this.data.reason.order_id,
+                    order_id: this.data.order_id,
                     open_id: session.userinfo.openId,
                     reason: this.data.reason
                 },
@@ -82,8 +83,11 @@ Page({
                     'content-type': 'application/x-www-form-urlencoded'
                 },
                 success(result) {
-                    util.showModel('退款申请', '退款申请已经提交请耐心等待');
-                    that.setData({step:0})
+                    if(result.data === true){
+                        util.showModel('退款申请', '退款申请已经提交请耐心等待');
+                        util.sleep(3000)
+                        that.go_order();
+                    }
                 },
                 fail(error) {
                     util.showModel('请求失败', error);
@@ -95,6 +99,7 @@ Page({
         }
     },
 
+    //联系商家
     call_seller:function (){
         let that = this
         qcloud.request({

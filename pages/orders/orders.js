@@ -9,7 +9,7 @@ Page({
      * 页面的初始数据
      */
     data: {
-        tabs: [['待支付', 1], ['待签收', 2],['退款', 3],['完结订单', 3]],
+        tabs: [['待支付', 0], ['待签收', 0],['退款', 0],['完结订单', 0]],
         activeIndex: 0,
         sliderOffset: 0,
         sliderLeft: 0,
@@ -17,6 +17,7 @@ Page({
         wait_sign_order_list:[],//待签收后台给出pay为success,给出送货员的联系电话
         wait_comment_order_list:[],
         finished_order_list:[],
+        refund_list:[],
         userinfo:{},
         logged:false,
         open_id:''
@@ -136,9 +137,6 @@ Page({
                 url: url,
                 success(result) {
                     let list = result.data
-                    for(let i=0;i<list.length;i++){
-                        list[i].order.date = Date("Y-m-d",(list[i].order.timeStamp))
-                    }
                     resolve(list)
                 }
             })
@@ -148,7 +146,7 @@ Page({
     //根据idx
     //idx 0 请求等待支付列表
     //idx 1 请求带签收列表
-    //idx 0 请求已完成订单列表
+    //idx 2 请求已完成订单列表
     set_page_data:function (idx){
         let url = ''
         let list = []
@@ -163,6 +161,10 @@ Page({
                 that.request_order_list(url).then(function (list){ that.setData({ wait_sign_order_list:list, }) })
                 break;
             case '2':
+                url = `${config.service.host}/order/get_refund_list/` + that.data.open_id
+                that.request_order_list(url).then(function (list){ that.setData({ refund_list:list, }) })
+                break;
+            case '3':
                 url = `${config.service.host}/order/get_finished_order_list/` + that.data.open_id
                 that.request_order_list(url).then(function (list){ that.setData({ finished_order_list:list, }) })
                 break;
