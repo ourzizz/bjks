@@ -60,7 +60,7 @@ Page({
                     step:1,
                     assemble_order:that.data.assemble_order
                 })
-                that.remove_order(index)
+                that.remove_order_from_wait_pick(index)
             },
             fail(error) {
                 util.showModel('请求失败', error);
@@ -68,8 +68,18 @@ Page({
             }
         })
     },
+
+    //推入pick掉的订单
+    push_order(order){
+        this.data.wait_pick_order_list.push(order)
+        this.data.tabs[0][1] = this.data.wait_pick_order_list.length
+        this.setData({
+            tabs:this.data.tabs,
+            wait_pick_order_list:this.data.wait_pick_order_list
+        })
+    },
     //删除已经pick掉的订单
-    remove_order(index){
+    remove_order_from_wait_pick(index){
         this.data.wait_pick_order_list.splice(index,1)
         this.data.tabs[0][1] = this.data.wait_pick_order_list.length
         this.setData({
@@ -78,12 +88,12 @@ Page({
         })
     },
 
-    push_order(order){
-        this.data.wait_pick_order_list.push(order)
-        this.data.tabs[0][1] = this.data.wait_pick_order_list.length
+    remove_order_from_delivery(index){
+        this.data.wait_delivery_order_list.splice(index,1)
+        this.data.tabs[1][1] = this.data.wait_delivery_order_list.length
         this.setData({
             tabs:this.data.tabs,
-            wait_pick_order_list:this.data.wait_pick_order_list
+            wait_delivery_order_list:this.data.wait_delivery_order_list 
         })
     },
 
@@ -95,6 +105,16 @@ Page({
             wait_delivery_order_list:this.data.wait_delivery_order_list
         })
     },
+
+    push_refund(order){
+        this.data.wait_refund_list.push(order)
+        this.data.tabs[2][1] = this.data.wait_refund_list.length
+        this.setData({
+            tabs:this.data.tabs,
+            wait_refund_list:this.data.wait_refund_list
+        })
+    },
+
 
     assemble_finish(){//配单
         this.push_delivery(this.data.assemble_order)
@@ -222,7 +242,21 @@ Page({
         // 有人说话，创建一条消息
         tunnel.on('pick', speak => {
             index = findOrderById(pick.order_id)
-            this.remove_order(index)
+            this.remove_order_from_wait_pick(index)
+        });
+
+        // 有人说话，创建一条消息
+        tunnel.on('refund', refund => {
+            refund_order_id = refund.order_id
+            if((index = findOrderById(this.data.wait_pick_order_list,refund_order_id)) !== -1){
+                order = this.data.wait_pick_order_list[index];
+                this.remove_order_from_wait_pick(index)
+                this.push_refund(order)
+            }else if((index = findOrderById(this.data.wait_delivery_order_list,refund_order_id)) !== -1){
+                order = this.data.wait_delivery_order_list[index];
+                this.remove_order_from_delivery(index)
+                this.push_refund(order)
+            }
         });
 
         // 信道关闭后，显示退出群聊
