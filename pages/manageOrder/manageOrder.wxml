@@ -76,13 +76,18 @@
             <view style="font-size:40rpx;">详细地址:{{item.address.detail}}</view>
             <button data-no="{{item.address.telphone}}" bindtap="call">联系电话:{{item.address.telphone}}</button>
 
-              <button class="weui-btn mini-btn" style="position:absolute;top:5rpx;right:10rpx" type="primary" size="mini" data-idx="{{idx}}" bindtap="sign_order">已送达</button>
+              <button class="weui-btn mini-btn" style="position:absolute;top:5rpx;right:10rpx" type="primary" size="mini" data-order_id="{{item.order.order_id}}" data-idx="{{idx}}" bindtap="user_signed">已送达</button>
+            <block wx:if="{{item.order.refund_status != null}}">
+              <button class="weui-btn mini-btn"  type="warn" data-order_id="{{item.order.order_id}}"  data-idx="{{idx}}" bindtap="cancle_delivery">退款中取消送件</button>
+            </block>
             </view>
           </view>
 
           <view hidden="{{activeIndex != 2}}">
             <view class="order_box" wx:for="{{wait_refund_list}}" wx:key="*this" wx:for-index="idx">
-              本单价格{{item.order.total_fee}} 下单日期:{{item.order.order_date}} {{item.order.name}}
+              <view>是否已签收:否</view>
+              订单号:{{item.order.order_id}} 本单价格{{item.order.total_fee}} 下单日期:{{item.order.order_date}} {{item.order.name}}
+              退款原因:{{item.order.refund_reason}}
               <view wx:for="{{item.goods_list}}" wx:key="*this">
                 <view class="cart_item">
                   <view class='goods_info_box weui-cell weui-cell_access' hover-class="weui-cell_active" style="padding: 15rpx; margin: 0;border:0px">

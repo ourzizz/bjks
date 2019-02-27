@@ -254,7 +254,10 @@ Page({
                 this.push_refund(order)
             }else if((index = findOrderById(this.data.wait_delivery_order_list,refund_order_id)) !== -1){
                 order = this.data.wait_delivery_order_list[index];
-                this.remove_order_from_delivery(index)
+                this.data.wait_delivery_order_list[index].order.refund_status = 'W'
+                this.setData({
+                    wait_delivery_order_list:this.data.wait_delivery_order_list
+                })
                 this.push_refund(order)
             }
         });
@@ -358,5 +361,53 @@ Page({
         wx.makePhoneCall({
             phoneNumber: event.currentTarget.dataset.no //仅为示例，并非真实的电话号码
         })
+    },
+
+    cancle_delivery:function (event){
+        let that = this
+        index = event.currentTarget.dataset.idx
+        order_id = event.currentTarget.dataset.order_id
+        wx.showModal({
+            title: '提示',
+            content: '该订单正在退款流程,我已知晓',
+            success (res) {
+                if (res.confirm) {
+                    qcloud.request({
+                        url: `${config.service.host}/seller/cancle_delivery/` + order_id,
+                        success(result) {
+                            that.remove_order_from_delivery(index)
+                        }
+                    })
+                } else if (res.cancel) {
+                    return 
+                }
+            }
+        })
+    },
+
+    /*
+     * 用户签收了，就是送达了
+     * */
+    user_signed:function (event){
+        let that = this
+        index = event.currentTarget.dataset.idx
+        order_id = event.currentTarget.dataset.order_id
+        wx.showModal({
+            title: '提示',
+            content: '确实送到了，不是误操作',
+            success (res) {
+                if (res.confirm) {
+                    qcloud.request({
+                        url: `${config.service.host}/seller/user_signed/` + order_id,
+                        success(result) {
+                            that.remove_order_from_delivery(index)
+                        }
+                    })
+                } else if (res.cancel) {
+                    return 
+                }
+            }
+        })
     }
+
 });
