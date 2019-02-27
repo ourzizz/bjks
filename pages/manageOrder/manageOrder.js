@@ -230,6 +230,7 @@ Page({
 
         // 创建信道
         var tunnel = this.tunnel = new qcloud.Tunnel(config.service.tunnelUrl);
+        //var tunnel = this.tunnel = new qcloud.Tunnel(config.service.orderTunnelUrl);
 
         // 连接成功后，去掉「正在加入群聊」的系统提示
         tunnel.on('connect', () => console.log('getin'));
@@ -290,54 +291,12 @@ Page({
     },
 
     /**
-     * 通用更新当前消息集合的方法
-     */
-    updateMessages (updater) {//updater回调函数
-        var messages = this.data.wait_pick_order_list;
-        updater(messages);
-
-        this.setData({ messages });
-
-        // 需要先更新 messagess 数据后再设置滚动位置，否则不能生效
-        var lastMessageId = messages.length ? messages[messages.length - 1].id : 'none';
-        this.setData({ lastMessageId });
-    },
-
-    /**
-     * 追加一条消息
-     */
-    pushMessage (message) {
-        this.updateMessages(messages => messages.push(message));
-    },
-
-    /**
-     * 替换上一条消息
-     */
-    amendMessage (message) {
-        this.updateMessages(messages => messages.splice(-1, 1, message));
-    },
-
-    /**
-     * 删除列表中的元素
-     */
-    popMessage (list,index) {
-        this.updateMessages(list => list.splice(index,1));
-    },
-
-    /**
-     * 用户输入的内容改变之后
-     */
-    changeInputContent (e) {
-        this.setData({ inputContent: e.detail.value });
-    },
-
-    /**
      * 点击「发送」按钮，通过信道推送消息到服务器
      **/
-    sendMessage (e) {
+    sendMessage (type,content) {
         // 信道当前不可用
         if (!this.tunnel || !this.tunnel.isActive()) {
-            this.pushMessage(createSystemMessage('您还没有加入群聊，请稍后重试'));
+            //this.pushMessage(createSystemMessage('您还没有加入群聊，请稍后重试'));
             if (this.tunnel.isClosed()) {
                 this.enter();
             }
@@ -345,18 +304,20 @@ Page({
         }
 
         setTimeout (() => {
-            if (this.data.inputContent && this.tunnel) {
-                this.tunnel.emit('speak', { word: this.data.inputContent });
+            if (this.tunnel) {
+                this.tunnel.emit(type, { order_id: content });
                 this.setData({ inputContent: '' });
             }
         });
     },
+
     tabClick: function (e) {
         this.setData({
             sliderOffset: e.currentTarget.offsetLeft,
             activeIndex: e.currentTarget.id
         });
     },
+    //打电话给顾客
     call:function (event){
         wx.makePhoneCall({
             phoneNumber: event.currentTarget.dataset.no //仅为示例，并非真实的电话号码
@@ -375,6 +336,7 @@ Page({
                     qcloud.request({
                         url: `${config.service.host}/seller/cancle_delivery/` + order_id,
                         success(result) {
+                            that.sendMessage('delivery_cancle',order_id)
                             that.remove_order_from_delivery(index)
                         }
                     })
@@ -400,6 +362,7 @@ Page({
                     qcloud.request({
                         url: `${config.service.host}/seller/user_signed/` + order_id,
                         success(result) {
+                            that.sendMessage('user_signed',order_id)
                             that.remove_order_from_delivery(index)
                         }
                     })
