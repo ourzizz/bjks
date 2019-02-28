@@ -19,54 +19,20 @@ function findOrderById(list,order_id){
 }
 
 Page({
-
     data: {
-        tabs: [['待接单', 0], ['待发货', 0], ['退款列表', 0]],
+        tabs: [['待接单', 0],['配单',0],['待发货', 0], ['退款列表', 0]],
         activeIndex: 0,
         sliderOffset: 0,
         sliderLeft: 0,
         wait_pick_order_list:[],//待接单列表
+        assemble_list:[],//处在正在配单中的单子
         wait_delivery_order_list: [],//待投递订单
         wait_refund_list:[],
         finished_order_list: [],
-        userinfo: {},
+        userInfo: {},
         logged: false,
-        open_id: '',
-        openId : '12312123',
-        step:0,//接单后进入配单页，step为1，配单后给包裹贴单，点击完成step置0，回到接单页，
-        assemble_order:''
     },
 
-    /*
-     *店员点击接单，
-     *2.通知服务器这个单子谁接了
-     *3.服务器给单子上锁，避免重复配单
-     *4.服务器广播给所有店员端删掉该订单
-     * */
-    pick_order(event){
-        let that = this
-        order_id = event.currentTarget.dataset.order_id
-        index = event.currentTarget.dataset.idx
-        const session = qcloud.Session.get()
-        qcloud.request({
-            url: `${config.service.host}/seller/pick_orders` ,
-            data: {order_id:event.currentTarget.dataset.order_id,open_id:this.data.userInfo.openId},
-            method: 'POST',
-            header: { 'content-type':'application/x-www-form-urlencoded' },
-            success(result) {
-                that.data.assemble_order = that.data.wait_pick_order_list[index]
-                that.setData({
-                    step:1,
-                    assemble_order:that.data.assemble_order
-                })
-                that.remove_order_from_wait_pick(index)
-            },
-            fail(error) {
-                util.showModel('请求失败', error);
-                console.log('request fail', error);
-            }
-        })
-    },
 
     //推入pick掉的订单
     push_order(order){
@@ -89,7 +55,7 @@ Page({
 
     remove_order_from_delivery(index){
         this.data.wait_delivery_order_list.splice(index,1)
-        this.data.tabs[1][1] = this.data.wait_delivery_order_list.length
+        this.data.tabs[2][1] = this.data.wait_delivery_order_list.length
         this.setData({
             tabs:this.data.tabs,
             wait_delivery_order_list:this.data.wait_delivery_order_list 
@@ -98,7 +64,7 @@ Page({
 
     push_delivery(order){
         this.data.wait_delivery_order_list.push(order)
-        this.data.tabs[1][1] = this.data.wait_delivery_order_list.length
+        this.data.tabs[2][1] = this.data.wait_delivery_order_list.length
         this.setData({
             tabs:this.data.tabs,
             wait_delivery_order_list:this.data.wait_delivery_order_list
@@ -107,7 +73,7 @@ Page({
 
     push_refund(order){
         this.data.wait_refund_list.push(order)
-        this.data.tabs[2][1] = this.data.wait_refund_list.length
+        this.data.tabs[3][1] = this.data.wait_refund_list.length
         this.setData({
             tabs:this.data.tabs,
             wait_refund_list:this.data.wait_refund_list
@@ -120,6 +86,9 @@ Page({
         let that = this
         qcloud.request({
             url: weburl,
+            data: {open_id:that.data.userInfo.openId},
+            method: 'POST',
+            header: { 'content-type':'application/x-www-form-urlencoded' },
             success(result) {
                 callback(result)
             },
@@ -131,13 +100,6 @@ Page({
     },
 
     init_list:function (){
-        this.request_model(`${config.service.host}/seller/get_wait_refund_orders`,result => {
-            this.data.tabs[2][1] = result.data.length
-            this.setData({
-                wait_refund_list:result.data,
-                tabs:this.data.tabs
-            })
-        })
         this.request_model(`${config.service.host}/seller/get_wait_pick_orders`,result => {
             this.data.tabs[0][1] = result.data.length
             this.setData({
@@ -145,10 +107,24 @@ Page({
                 tabs:this.data.tabs
             })
         })
-        this.request_model(`${config.service.host}/seller/get_delivery_orders`,result => {
+        this.request_model(`${config.service.host}/seller/get_assemble_orders`,result => {
             this.data.tabs[1][1] = result.data.length
             this.setData({
+                assemble_list:result.data,
+                tabs:this.data.tabs
+            })
+        })
+        this.request_model(`${config.service.host}/seller/get_delivery_orders`,result => {
+            this.data.tabs[2][1] = result.data.length
+            this.setData({
                 wait_delivery_order_list:result.data,
+                tabs:this.data.tabs
+            })
+        })
+        this.request_model(`${config.service.host}/seller/get_wait_refund_orders`,result => {
+            this.data.tabs[3][1] = result.data.length
+            this.setData({
+                wait_refund_list:result.data,
                 tabs:this.data.tabs
             })
         })
@@ -171,11 +147,20 @@ Page({
                 })
             }
         });
-        this.init_list()
-        if (!this.pageReady) {
-            this.pageReady = true;
-            this.enter();
-        }
+        qcloud.loginWithCode({
+            success: res => {
+                this.setData({ userInfo: res, logged: true })
+                this.init_list()
+                if (!this.pageReady) {
+                    this.pageReady = true;
+                    this.enter();
+                }
+            },
+            fail: err => {
+                console.error(err)
+                util.showModel('登录错误', err.message)
+            }
+        })
     },
 
     /**
@@ -242,9 +227,9 @@ Page({
             this.push_order(order.order_info)
         });
 
-        // 后端发来的订单
-        tunnel.on('pick', speak => {
-            index = findOrderById(pick.order_id)
+        // 后端发来已经被接掉的订单号,避免重复配单
+        tunnel.on('picked', picked => {
+            index = findOrderById(picked.order_id)
             this.remove_order_from_wait_pick(index)
         });
 
@@ -369,6 +354,37 @@ Page({
         })
     },
 
+    /*
+     *店员点击接单，
+     *2.通知服务器这个单子谁接了
+     *3.服务器给单子上锁，避免重复配单
+     *4.服务器广播给所有店员端删掉该订单
+     * */
+    pick_order(event){
+        let that = this
+        order_id = event.currentTarget.dataset.order_id
+        index = event.currentTarget.dataset.idx
+        const session = qcloud.Session.get()
+        qcloud.request({
+            url: `${config.service.host}/seller/pick_orders` ,
+            data: {order_id:event.currentTarget.dataset.order_id,open_id:this.data.userInfo.openId},
+            method: 'POST',
+            header: { 'content-type':'application/x-www-form-urlencoded' },
+            success(result) {
+                that.data.assemble_order = that.data.wait_pick_order_list[index]
+                that.setData({
+                    step:1,
+                    assemble_order:that.data.assemble_order
+                })
+                that.remove_order_from_wait_pick(index)
+            },
+            fail(error) {
+                util.showModel('请求失败', error);
+                console.log('request fail', error);
+            }
+        })
+    },
+
     assemble_finish(event){//配单完成
         let that = this
         order_id = event.currentTarget.dataset.order_id
@@ -380,9 +396,12 @@ Page({
             method: 'POST',
             header: { 'content-type':'application/x-www-form-urlencoded' },
             success(result) {
-                that.data.assemble_order = that.data.wait_pick_order_list[index]
-                that.setData({step:0})
-                //this.push_delivery(this.data.assemble_order)
+                that.data.assemble_list.splice(index,1)
+                that.data.tabs[1][1] = that.data.tabs[1][1] - 1
+                that.setData({
+                    assemble_list:that.data.assemble_list,
+                    tabs:that.data.tabs
+                })
             },
             fail(error) {
                 util.showModel('请求失败', error);

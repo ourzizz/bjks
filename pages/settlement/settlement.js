@@ -36,7 +36,6 @@ Page({
                 console.log(res.data)
             }
         })
-        this.get_user_defualt_address()
     }, 
 
     get_user_defualt_address:function (open_id)

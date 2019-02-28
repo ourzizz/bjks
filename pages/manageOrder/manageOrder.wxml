@@ -6,7 +6,7 @@
         <block wx:for="{{tabs}}" wx:key="*this">
           <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
             <view class="weui-navbar__title">{{item[0]}}</view>
-            <view wx:if="{{item[1]!=0}}" class="weui-badge" style="position: absolute;top:1em;">{{item[1]}}</view>
+            <view wx:if="{{item[1]!=0}}" class="weui-badge" style="position: absolute;top:1em;right:5rpx">{{item[1]}}</view>
           </view>
         </block>
         <view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
@@ -16,7 +16,6 @@
         <view>
           <view hidden="{{activeIndex != 0}}">
 
-            <view hidden="{{step != 0}}">
             <view class="order_box" wx:for="{{wait_pick_order_list}}" wx:key="*this" wx:for-index="idx">
             订单号:{{item.order.order_id}}下单日期:{{item.order.order_date}} {{item.order.name}} ￥{{item.order.total_fee}}元
               <view wx:for="{{item.goods_list}}" wx:key="*this">
@@ -37,16 +36,16 @@
                 <button sytle="float:right;" class="weui-btn mini-btn" type="primary" size="mini" data-idx="{{idx}}" data-order_id="{{item.order.order_id}}" bindtap="pick_order">接单</button>
               </view>
             </view> <!--class order_box"---->
-            </view> <!--hidden step---->
+          </view>
 
-            <view hidden="{{step != 1}}">
+          <view hidden="{{activeIndex != 1}}">
             <view>请按以下顺序配单</view>
             <view>->捡齐商品</view>
             <view>->打包</view>
             <view>->贴订单号的顺序配单</view>
-            <view class="order_box">
-            订单号:{{assemble_order.order.order_id}}下单日期:{{item.order.order_date}} {{item.order.name}} ￥{{assemble_order.order.total_fee}}元 {{assemble_order.address.name}}
-              <view wx:for="{{assemble_order.goods_list}}" wx:key="*this">
+            <view class="order_box" wx:for="{{assemble_list}}" wx:key="*this" wx:for-index="idx">
+            订单号:{{item.order.order_id}}下单日期:{{item.order.order_date}} {{item.order.name}} ￥{{item.order.total_fee}}元 {{item.address.name}}
+              <view wx:for="{{item.goods_list}}" wx:key="*this">
                 <view class="cart_item">
                   <view class='goods_info_box weui-cell weui-cell_access' hover-class="weui-cell_active" style="padding: 15rpx; margin: 0;border:0px">
                     <image src="{{item.face_img}}" class="goods_img" />
@@ -61,14 +60,12 @@
                 </view>
               </view>
               <view>
-                <button sytle="float:right;" class="weui-btn" type="primary" size="mini" data-idx="{{idx}}" data-order_id="{{assemble_order.order.order_id}}" bindtap="assemble_finish">配单完成</button>
+                <button sytle="float:right;" class="weui-btn" type="primary" size="mini" data-idx="{{idx}}" data-order_id="{{item.order.order_id}}" bindtap="assemble_finish">配单完成</button>
               </view>
             </view> <!--class order_box"---->
-            </view> <!--hidden step---->
+            </view> <!--activeIndex---->
 
-          </view>
-
-          <view hidden="{{activeIndex != 1}}">
+          <view hidden="{{activeIndex != 2}}">
             <view style="font-size:35rpx" class="order_box" wx:for="{{wait_delivery_order_list}}" wx:key="*this" wx:for-index="idx">
               单号:{{item.order.order_id}} ￥{{item.order.total_fee}}
             <view style="font-size:35rpx">日期:{{item.order.order_date}}</view>
@@ -83,7 +80,7 @@
             </view>
           </view>
 
-          <view hidden="{{activeIndex != 2}}">
+          <view hidden="{{activeIndex != 3}}">
             <view class="order_box" wx:for="{{wait_refund_list}}" wx:key="*this" wx:for-index="idx">
               <view wx:if="{{item.order.seller_act=='SIGNED'}}">已经签收，暂不退款</view>
               <view wx:elif="{{item.order.seller_act=='DELIVERY'}}">快递员送货中</view>
