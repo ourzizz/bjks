@@ -154,19 +154,31 @@ Page({
         switch(idx) {
             case '0':
                 url = `${config.service.host}/order/get_wait_pay_order/` + that.data.open_id
-                that.request_order_list(url).then(function (list){ that.setData({ wait_pay_order_list:list, }) })
+                that.request_order_list(url).then(function (list){ 
+                    that.data.tabs[0][1] = list.length
+                    that.setData({ wait_pay_order_list:list,tabs:that.data.tabs}) 
+                })
                 break;
             case '1':
                 url = `${config.service.host}/order/get_wait_sign_order_list/` + that.data.open_id
-                that.request_order_list(url).then(function (list){ that.setData({ wait_sign_order_list:list, }) })
+                that.request_order_list(url).then(function (list){ 
+                    that.data.tabs[1][1] = list.length
+                    that.setData({ wait_sign_order_list:list,tabs:that.data.tabs}) 
+                })
                 break;
             case '2':
                 url = `${config.service.host}/order/get_refund_list/` + that.data.open_id
-                that.request_order_list(url).then(function (list){ that.setData({ refund_list:list, }) })
+                that.request_order_list(url).then(function (list){
+                    that.data.tabs[2][1] = list.length
+                    that.setData({ refund_list:list,tabs:that.data.tabs}) 
+                })
                 break;
             case '3':
                 url = `${config.service.host}/order/get_finished_order_list/` + that.data.open_id
-                that.request_order_list(url).then(function (list){ that.setData({ finished_order_list:list, }) })
+                that.request_order_list(url).then(function (list){
+                    that.data.tabs[3][1] = list.length
+                    that.setData({ finished_order_list:list,tabs:that.data.tabs}) 
+                })
                 break;
         }
         this.setData({

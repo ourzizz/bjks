@@ -21,7 +21,7 @@ function findOrderById(list,order_id){
 Page({
 
     data: {
-        tabs: [['待接单', 0], ['待发货', 0], ['退款列表', 1]],
+        tabs: [['待接单', 0], ['待发货', 0], ['退款列表', 0]],
         activeIndex: 0,
         sliderOffset: 0,
         sliderLeft: 0,
@@ -39,7 +39,6 @@ Page({
 
     /*
      *店员点击接单，
-     *1.本地的wait_delivery_order_list删除该订单，进入到配单页
      *2.通知服务器这个单子谁接了
      *3.服务器给单子上锁，避免重复配单
      *4.服务器广播给所有店员端删掉该订单
@@ -54,7 +53,6 @@ Page({
             data: {order_id:event.currentTarget.dataset.order_id,open_id:this.data.userInfo.openId},
             method: 'POST',
             header: { 'content-type':'application/x-www-form-urlencoded' },
-            //成功之后，调用小程序微信支付
             success(result) {
                 that.data.assemble_order = that.data.wait_pick_order_list[index]
                 that.setData({
@@ -117,12 +115,8 @@ Page({
     },
 
 
-    assemble_finish(){//配单
-        this.push_delivery(this.data.assemble_order)
-        this.setData({step:0})
-    },
 
-    init_list(weburl,callback){
+    request_model(weburl,callback){
         let that = this
         qcloud.request({
             url: weburl,
@@ -136,6 +130,31 @@ Page({
         })
     },
 
+    init_list:function (){
+        this.request_model(`${config.service.host}/seller/get_wait_refund_orders`,result => {
+            this.data.tabs[2][1] = result.data.length
+            this.setData({
+                wait_refund_list:result.data,
+                tabs:this.data.tabs
+            })
+        })
+        this.request_model(`${config.service.host}/seller/get_wait_pick_orders`,result => {
+            this.data.tabs[0][1] = result.data.length
+            this.setData({
+                wait_pick_order_list:result.data,
+                tabs:this.data.tabs
+            })
+        })
+        this.request_model(`${config.service.host}/seller/get_delivery_orders`,result => {
+            this.data.tabs[1][1] = result.data.length
+            this.setData({
+                wait_delivery_order_list:result.data,
+                tabs:this.data.tabs
+            })
+        })
+    },
+
+
     /**
      * 页面渲染完成后，启动聊天室
      * */
@@ -145,37 +164,18 @@ Page({
         wx.getSystemInfo({
             success: function (res) {
                 that.setData({
-                    sliderLeft: (res.windowWidth / that.data.tabs.length - sliderWidth) / 2, /*横向条离左边的间距*/
-                        sliderOffset: res.windowWidth / that.data.tabs.length * 0 /*横向条离左边的距离偏移量*/
-                    });
+                    /*横向条离左边的间距*/
+                    sliderLeft: (res.windowWidth / that.data.tabs.length - sliderWidth) / 2, 
+                    /*横向条离左边的距离偏移量*/
+                    sliderOffset: res.windowWidth / that.data.tabs.length * 0 
+                })
             }
         });
-
-                this.init_list(`${config.service.host}/seller/get_wait_refund_orders`,result => {
-                    this.data.tabs[2][1] = result.data.length
-                    this.setData({
-                        wait_refund_list:result.data,
-                        tabs:this.data.tabs
-                    })
-                })
-                this.init_list(`${config.service.host}/seller/get_wait_pick_orders`,result => {
-                    this.data.tabs[0][1] = result.data.length
-                    this.setData({
-                        wait_pick_order_list:result.data,
-                        tabs:this.data.tabs
-                    })
-                })
-                this.init_list(`${config.service.host}/seller/get_delivery_orders`,result => {
-                    this.data.tabs[1][1] = result.data.length
-                    this.setData({
-                        wait_delivery_order_list:result.data,
-                        tabs:this.data.tabs
-                    })
-                })
-                if (!this.pageReady) {
-                    this.pageReady = true;
-                    this.enter();
-                }
+        this.init_list()
+        if (!this.pageReady) {
+            this.pageReady = true;
+            this.enter();
+        }
     },
 
     /**
@@ -184,6 +184,7 @@ Page({
     onShow  () {
         if (this.pageReady) {
             this.enter();
+            this.init_list();
         }
     },
 
@@ -241,13 +242,13 @@ Page({
             this.push_order(order.order_info)
         });
 
-        // 有人说话，创建一条消息
+        // 后端发来的订单
         tunnel.on('pick', speak => {
             index = findOrderById(pick.order_id)
             this.remove_order_from_wait_pick(index)
         });
 
-        // 有人说话，创建一条消息
+        // 有客退款
         tunnel.on('refund', refund => {
             refund_order_id = refund.order_id
             if((index = findOrderById(this.data.wait_pick_order_list,refund_order_id)) !== -1){
@@ -263,12 +264,11 @@ Page({
                 this.push_refund(order)
             }
         })
-        // 信道关闭后，显示退出群聊
-        // 当收到广播后，直接从content引用其内容
-        //message:{"type":"delivery_arrived","content":{"order_id":"1549117997flkQN"}}
-        //console.log(order_id) 
-        tunnel.on('delivery_arrived', () => {
+
+        // 快递小哥点击用户签收了
+        tunnel.on('user_signed', user_signed => {
             //bug定位到本段应该是index没有找对
+            order_id = user_signed.order_id
             if((index = findOrderById(this.data.wait_refund_list,order_id)) !== -1){
                 this.data.wait_refund_list[index].order.seller_act = 'SIGNED';
                 this.setData({
@@ -282,6 +282,32 @@ Page({
             });
         });
 
+        // 快递小哥看到退款，取消了送货
+        tunnel.on('cancle_delivery', cancle_delivery => {
+            //bug定位到本段应该是index没有找对
+            order_id = cancle_delivery.order_id
+            if((index = findOrderById(this.data.wait_refund_list,order_id)) !== -1){
+                this.data.wait_refund_list[index].order.seller_act = 'CANCLE';
+                this.setData({
+                    wait_refund_list:this.data.wait_refund_list
+                });
+            }
+            delivery_idx = findOrderById(this.data.wait_delivery_order_list,order_id);
+            this.remove_order_from_delivery(delivery_idx);
+            this.setData({
+                wait_delivery_order_list:this.data.wait_delivery_order_list,
+            });
+        });
+
+        //卖家捡单完成，广播给所有快递员
+        tunnel.on('delivery', delivery => {
+            this.push_delivery(delivery.order_info)
+            order = delivery.order_info.order.order_id
+            if((index = findOrderById(this.data.wait_pick_order_list,order_id)) !== -1){
+                this.remove_order_from_wait_pick(index)
+            }
+        });
+
         // 信道关闭后，显示退出群聊
         tunnel.on('close', () => {
             console.log('quit') ;
@@ -289,11 +315,11 @@ Page({
 
         // 重连提醒
         tunnel.on('reconnecting', () => {
-            //this.pushMessage(createSystemMessage('已断线，正在重连...'));
+            //this.init_list();
         });
 
         tunnel.on('reconnect', () => {
-            //this.amendMessage(createSystemMessage('重连成功'));
+            this.init_list();
         });
 
         // 打开信道
@@ -335,6 +361,7 @@ Page({
             activeIndex: e.currentTarget.id
         });
     },
+
     //打电话给顾客
     call:function (event){
         wx.makePhoneCall({
@@ -342,6 +369,29 @@ Page({
         })
     },
 
+    assemble_finish(event){//配单完成
+        let that = this
+        order_id = event.currentTarget.dataset.order_id
+        index = event.currentTarget.dataset.idx
+        const session = qcloud.Session.get()
+        qcloud.request({
+            url: `${config.service.host}/seller/assemble_finish` ,
+            data: {order_id:event.currentTarget.dataset.order_id,open_id:this.data.userInfo.openId},
+            method: 'POST',
+            header: { 'content-type':'application/x-www-form-urlencoded' },
+            success(result) {
+                that.data.assemble_order = that.data.wait_pick_order_list[index]
+                that.setData({step:0})
+                //this.push_delivery(this.data.assemble_order)
+            },
+            fail(error) {
+                util.showModel('请求失败', error);
+                console.log('request fail', error);
+            }
+        })
+    },
+
+    //快递小哥取消送货
     cancle_delivery:function (event){
         let that = this
         index = event.currentTarget.dataset.idx
@@ -354,8 +404,9 @@ Page({
                     qcloud.request({
                         url: `${config.service.host}/seller/cancle_delivery/` + order_id,
                         success(result) {
-                            that.sendMessage('delivery_cancle',order_id)
-                            that.remove_order_from_delivery(index)
+                            //console.log(result)
+                            ////that.sendMessage('delivery_cancle',order_id)
+                            //that.remove_order_from_delivery(index)
                         }
                     })
                 } else if (res.cancel) {
@@ -377,14 +428,12 @@ Page({
             content: '确实送到了，不是误操作',
             success (res) {
                 if (res.confirm) {
-                    that.sendMessage('user_signed',order_id)
-                    //qcloud.request({
-                        //url: `${config.service.host}/seller/user_signed/` + order_id,
-                        //success(result) {
-                            //that.sendMessage('user_signed',order_id)
-                            ////that.remove_order_from_delivery(index)
-                        //}
-                    //})
+                    qcloud.request({
+                        url: `${config.service.host}/seller/user_signed/` + order_id,
+                        success(result) {
+                            //that.remove_order_from_delivery(index)
+                        }
+                    })
                 } else if (res.cancel) {
                     return 
                 }

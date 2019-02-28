@@ -61,7 +61,7 @@
                 </view>
               </view>
               <view>
-                <button sytle="float:right;" class="weui-btn" type="primary" size="mini" data-idx="{{idx}}" data-order_id="{{item.order.order_id}}" bindtap="assemble_finish">配单完成</button>
+                <button sytle="float:right;" class="weui-btn" type="primary" size="mini" data-idx="{{idx}}" data-order_id="{{assemble_order.order.order_id}}" bindtap="assemble_finish">配单完成</button>
               </view>
             </view> <!--class order_box"---->
             </view> <!--hidden step---->
