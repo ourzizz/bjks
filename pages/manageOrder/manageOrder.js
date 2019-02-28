@@ -11,6 +11,7 @@ var sliderWidth = 96;
 function findOrderById(list,order_id){
     for(i=0;i<list.length;i++){
         if(list[i].order.order_id === order_id){
+            console.log(i)
             return i;
         }
     }
@@ -138,7 +139,7 @@ Page({
     /**
      * 页面渲染完成后，启动聊天室
      * */
-    onReady () {
+    onLoad () {
         let that = this
         wx.setNavigationBarTitle({ title: '商家订单管理' });
         wx.getSystemInfo({
@@ -261,6 +262,24 @@ Page({
                 })
                 this.push_refund(order)
             }
+        })
+        // 信道关闭后，显示退出群聊
+        // 当收到广播后，直接从content引用其内容
+        //message:{"type":"delivery_arrived","content":{"order_id":"1549117997flkQN"}}
+        //console.log(order_id) 
+        tunnel.on('delivery_arrived', () => {
+            //bug定位到本段应该是index没有找对
+            if((index = findOrderById(this.data.wait_refund_list,order_id)) !== -1){
+                this.data.wait_refund_list[index].order.seller_act = 'SIGNED';
+                this.setData({
+                    wait_refund_list:this.data.wait_refund_list
+                });
+            }
+            delivery_idx = findOrderById(this.data.wait_delivery_order_list,order_id);
+            this.remove_order_from_delivery(delivery_idx);
+            this.setData({
+                wait_delivery_order_list:this.data.wait_delivery_order_list,
+            });
         });
 
         // 信道关闭后，显示退出群聊
@@ -296,7 +315,6 @@ Page({
     sendMessage (type,content) {
         // 信道当前不可用
         if (!this.tunnel || !this.tunnel.isActive()) {
-            //this.pushMessage(createSystemMessage('您还没有加入群聊，请稍后重试'));
             if (this.tunnel.isClosed()) {
                 this.enter();
             }
@@ -359,13 +377,14 @@ Page({
             content: '确实送到了，不是误操作',
             success (res) {
                 if (res.confirm) {
-                    qcloud.request({
-                        url: `${config.service.host}/seller/user_signed/` + order_id,
-                        success(result) {
-                            that.sendMessage('user_signed',order_id)
-                            that.remove_order_from_delivery(index)
-                        }
-                    })
+                    that.sendMessage('user_signed',order_id)
+                    //qcloud.request({
+                        //url: `${config.service.host}/seller/user_signed/` + order_id,
+                        //success(result) {
+                            //that.sendMessage('user_signed',order_id)
+                            ////that.remove_order_from_delivery(index)
+                        //}
+                    //})
                 } else if (res.cancel) {
                     return 
                 }

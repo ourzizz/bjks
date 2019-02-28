@@ -85,7 +85,9 @@
 
           <view hidden="{{activeIndex != 2}}">
             <view class="order_box" wx:for="{{wait_refund_list}}" wx:key="*this" wx:for-index="idx">
-              <view>是否已签收:否</view>
+              <view wx:if="{{item.order.seller_act=='SIGNED'}}">已经签收，暂不退款</view>
+              <view wx:elif="{{item.order.seller_act=='DELIVERY'}}">快递员送货中</view>
+              <view wx:else="{{item.order.seller_act=='CANCLE'}}">快递员销单，可以退款</view>
               订单号:{{item.order.order_id}} 本单价格{{item.order.total_fee}} 下单日期:{{item.order.order_date}} {{item.order.name}}
               退款原因:{{item.order.refund_reason}}
               <view wx:for="{{item.goods_list}}" wx:key="*this">
