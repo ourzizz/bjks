@@ -1,9 +1,19 @@
 // pages/orders/orders.js
+// 待解决的问题：用户在点击退款确认后，进入到页面需要将wait_signed列表中被删除的对象去掉
 
 var qcloud = require('../../vendor/wafer2-client-sdk/index')
 var config = require('../../config')
 var util = require('../../utils/util.js')
 var sliderWidth = 96; 
+
+function findOrderById(list,order_id){
+    for(i=0;i<list.length;i++){
+        if(list[i].order.order_id === order_id){
+            return i;
+        }
+    }
+    return -1;
+}
 Page({
     /**
      * 页面的初始数据
@@ -23,6 +33,19 @@ Page({
         open_id:''
     },
 
+    init_tab(index){
+        let that = this
+        wx.getSystemInfo({
+            success: function (res) {
+                that.setData({
+                    /*横向条离左边的间距*/
+                    sliderLeft: (res.windowWidth / that.data.tabs.length - sliderWidth) / 2, 
+                    /*横向条离左边的距离偏移量*/
+                    sliderOffset: res.windowWidth / that.data.tabs.length * index 
+                });
+            }
+        });
+    },
     /**
      *  
      */
@@ -36,16 +59,11 @@ Page({
                 logged:true
             })
         }
-        wx.getSystemInfo({
-            success: function (res) {
-                that.setData({
-                    sliderLeft: (res.windowWidth / that.data.tabs.length - sliderWidth) / 2, /*横向条离左边的间距*/
-                    sliderOffset: res.windowWidth / that.data.tabs.length * options.idx /*横向条离左边的距离偏移量*/
-                });
-            }
+        this.init_tab(options.idx)
+        this.init_list()
+        this.setData({
+            activeIndex: options.idx
         });
-        //this.set_page_data('1')
-        this.set_page_data(options.idx)
     },
 
     delete_order:function (event){
@@ -130,74 +148,147 @@ Page({
         })
     },
 
-    request_order_list:function (url){//异步执行不能返回值，promise解决
+
+    request_model(weburl,callback){
         let that = this
-        return new Promise(function(resolve,reject){
-            qcloud.request({
-                url: url,
-                success(result) {
-                    let list = result.data
-                    resolve(list)
-                }
-            })
+        qcloud.request({
+            url: weburl,
+            data: {open_id:that.data.userInfo.openId},
+            method: 'POST',
+            header: { 'content-type':'application/x-www-form-urlencoded' },
+            success(result) {
+                callback(result)
+            },
+            fail(error) {
+                util.showModel('请求失败', error);
+                console.log('request fail', error);
+            }
         })
     },
-
     //根据idx
     //idx 0 请求等待支付列表
     //idx 1 请求带签收列表
     //idx 2 请求已完成订单列表
-    set_page_data:function (idx){
-        let url = ''
-        let list = []
-        let that = this
-        switch(idx) {
-            case '0':
-                url = `${config.service.host}/order/get_wait_pay_order/` + that.data.open_id
-                that.request_order_list(url).then(function (list){ 
-                    that.data.tabs[0][1] = list.length
-                    that.setData({ wait_pay_order_list:list,tabs:that.data.tabs}) 
-                })
-                break;
-            case '1':
-                url = `${config.service.host}/order/get_wait_sign_order_list/` + that.data.open_id
-                that.request_order_list(url).then(function (list){ 
-                    that.data.tabs[1][1] = list.length
-                    that.setData({ wait_sign_order_list:list,tabs:that.data.tabs}) 
-                })
-                break;
-            case '2':
-                url = `${config.service.host}/order/get_refund_list/` + that.data.open_id
-                that.request_order_list(url).then(function (list){
-                    that.data.tabs[2][1] = list.length
-                    that.setData({ refund_list:list,tabs:that.data.tabs}) 
-                })
-                break;
-            case '3':
-                url = `${config.service.host}/order/get_finished_order_list/` + that.data.open_id
-                that.request_order_list(url).then(function (list){
-                    that.data.tabs[3][1] = list.length
-                    that.setData({ finished_order_list:list,tabs:that.data.tabs}) 
-                })
-                break;
-        }
-        this.setData({
-            //sliderOffset: e.currentTarget.offsetLeft,
-            activeIndex: idx
-        });
+    init_list:function (){
+        this.request_model(`${config.service.host}/order/get_wait_pay_order/`,result => {
+            this.data.tabs[0][1] = result.data.length
+            this.setData({
+                tabs:this.data.tabs,
+                wait_pay_order_list:result.data,
+            })
+        })
+        this.request_model(`${config.service.host}/order/get_wait_sign_order_list/`,result => {
+            this.data.tabs[1][1] = result.data.length
+            this.setData({
+                tabs:this.data.tabs,
+                wait_sign_order_list:result.data
+            })
+        })
+        this.request_model(`${config.service.host}/order/get_refund_list/`,result => {
+            this.data.tabs[2][1] = result.data.length
+            this.setData({
+                tabs:this.data.tabs,
+                refund_list:result.data
+            })
+        })
+        this.request_model(`${config.service.host}/order/get_finished_order_list/`,result => {
+            this.data.tabs[3][1] = result.data.length
+            this.setData({
+                tabs:this.data.tabs,
+                finished_order_list:result.data
+            })
+        })
     },
 
     tabClick: function (e) {
-        this.set_page_data(e.currentTarget.id)
         this.setData({
             sliderOffset: e.currentTarget.offsetLeft,
             activeIndex: e.currentTarget.id
         });
     },
+
+    /*
+     *跳转到支付成功页面，该页面包含有退款联系商家等操作
+     * */
     detail:function (event){
         let idx = event.currentTarget.dataset.idx
         wx.navigateTo({
             url: '../paysuccess/paysuccess?order_id=' + this.data.wait_sign_order_list[idx].order.order_id,
         })
+    },
+
+    onShow  () {
+        if (this.pageReady) {
+            this.enter();
+            this.init_list();
+        }
+    },
+
+    //联系商家
+    call_seller:function (event){
+        let that = this
+        let idx = event.currentTarget.dataset.idx
+        let order_id = this.data.finished_order_list[idx].order.order_id
+        qcloud.request({
+            url: `${config.service.host}/order/get_seller_telphone/` + order_id,
+            success(result) {
+                wx.makePhoneCall({
+                    phoneNumber: result.data.telphone 
+                })
+            },
+            fail(error) {
+                util.showModel('请求失败', error);
+            }
+        })
+    },
+
+    //买家取消退款
+    //以下代码先保留，简化程序，用户一旦进入退款之后就只能等待商家退款
+    //如果想要取消，只能重新购买
+    //cancle_refund:function (event) {
+        //let that = this
+        //order_id = event.currentTarget.dataset.order_id
+        //index = event.currentTarget.dataset.idx
+        //wx.showModal({
+            //title: '提示',
+            //content: '确认取消退款后商家将继续送货！',
+            //success (res) {
+                //if (res.confirm) {
+                    //qcloud.request({
+                        //url: `${config.service.host}/seller/cancle_refund/` ,
+                        //data: {order_id:order_id,open_id:that.data.userInfo.openId},
+                        //method: 'POST',
+                        //header: { 'content-type':'application/x-www-form-urlencoded' },
+                        //success(result) {
+                            //if(result.data === 'SUCCESS'){
+                                //that.data.wait_refund_list.splice(index,1)
+                                //that.setData({
+                                    //wait_refund_list
+                                //})
+                            //}
+                        //},
+                        //fail(error) {
+                            //util.showModel('请求失败', error);
+                            //console.log('request fail', error);
+                        //}
+                    //})
+                //} else if (res.cancel) {
+                    //return 
+                //}
+            //}
+        //})
+    //}
+
+    remove_order_from_wait_sign:function (order_id){
+        let index = findOrderById(this.data.wait_sign_order_list,order_id)
+        this.data.wait_sign_order_list.splice(index,1)
+        this.data.tabs[0][1] = this.data.wait_sign_order_list.length
+        this.init_tab(2)
+        this.setData({
+            activeIndex:2,
+            tabs:this.data.tabs,
+            wait_sign_order_list:this.data.wait_sign_order_list 
+        })
     }
+
 })

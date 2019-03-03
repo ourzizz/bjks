@@ -35,11 +35,15 @@ Page({
         })
     },
 
-    go_order:function (){
+    go_order:function (idx){
+        if(idx !== 2){
+            idx = 1
+        }
+        console.log(idx) 
         const session = qcloud.Session.get()
         open_id = session.userinfo.openId
         wx.navigateTo({
-            url: '../orders/orders?open_id=' + open_id + '&idx=1',
+            url: '../orders/orders?open_id=' + open_id + '&idx=' + idx,
         })
     },
 
@@ -70,6 +74,7 @@ Page({
     confirm_refund: function () {
         let that = this
         const session = qcloud.Session.get()
+        let order_id = this.data.order_id
         if(this.data.reason !== ''){
             qcloud.request({
                 url: `${config.service.host}/order/request_refund`,
@@ -85,8 +90,11 @@ Page({
                 success(result) {
                     if(result.data === true){
                         util.showModel('退款申请', '退款申请已经提交请耐心等待');
-                        util.sleep(3000)
-                        that.go_order();
+                        pages = getCurrentPages();
+                        prevPage = pages[pages.length - 2];//直接调用上一个页面的setData()方法，把数据存到上一个页面中去
+                        prevPage.remove_order_from_wait_sign(that.data.order_id)
+                        //util.sleep(3000);
+                        that.go_order(2);
                     }
                 },
                 fail(error) {

@@ -1,1 +1,8 @@
 /* pages/qxnbd/qxnbd.wxss */
+.head{
+/*margin:auto;*/
+postion:relative;
+left:40rpx;
+color:red;
+font-size:60rpx;
+}

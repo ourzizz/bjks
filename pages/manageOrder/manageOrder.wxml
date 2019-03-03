@@ -6,7 +6,7 @@
         <block wx:for="{{tabs}}" wx:key="*this">
           <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
             <view class="weui-navbar__title">{{item[0]}}</view>
-            <view wx:if="{{item[1]!=0}}" class="weui-badge" style="position: absolute;top:1em;right:5rpx">{{item[1]}}</view>
+            <view wx:if="{{item[1]>0}}" class="weui-badge" style="position: absolute;top:1em;right:5rpx">{{item[1]}}</view>
           </view>
         </block>
         <view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
@@ -40,9 +40,7 @@
 
           <view hidden="{{activeIndex != 1}}">
             <view>请按以下顺序配单</view>
-            <view>->捡齐商品</view>
-            <view>->打包</view>
-            <view>->贴订单号的顺序配单</view>
+            <view>-捡齐商品-打包-贴订单号</view>
             <view class="order_box" wx:for="{{assemble_list}}" wx:key="*this" wx:for-index="idx">
             订单号:{{item.order.order_id}}下单日期:{{item.order.order_date}} {{item.order.name}} ￥{{item.order.total_fee}}元 {{item.address.name}}
               <view wx:for="{{item.goods_list}}" wx:key="*this">
@@ -80,10 +78,12 @@
             </view>
           </view>
 
+        <view wx:if="{{role === 'boss'}}">
           <view hidden="{{activeIndex != 3}}">
             <view class="order_box" wx:for="{{wait_refund_list}}" wx:key="*this" wx:for-index="idx">
               <view wx:if="{{item.order.seller_act=='SIGNED'}}">已经签收，暂不退款</view>
               <view wx:elif="{{item.order.seller_act=='DELIVERY'}}">快递员送货中</view>
+              <view wx:elif="{{item.order.seller_act=='WAIT_PICK'}}">未进入快递流程可以退款</view>
               <view wx:else="{{item.order.seller_act=='CANCLE'}}">快递员销单，可以退款</view>
               订单号:{{item.order.order_id}} 本单价格{{item.order.total_fee}} 下单日期:{{item.order.order_date}} {{item.order.name}}
               退款原因:{{item.order.refund_reason}}
@@ -100,11 +100,14 @@
                   <!--class goods_info"---->
                 </view>
               </view>
-              <button class="weui-btn mini-btn" style="position:relative;right:0px" type="default" size="mini">同意退款</button>
-              <button class="weui-btn mini-btn" style="position:relative;right:0px" type="default" size="mini">不同意退款</button>
+              <block wx:if="{{item.order.seller_act === 'CANCLE' || item.order.seller_act=='WAIT_PICK'}}">
+              <button class="weui-btn mini-btn"  type="default" size="mini" data-order_id="{{item.order.order_id}}"  data-idx="{{idx}}" bindtap="agree_refund">同意退款</button>
+              </block>
+              <button class="weui-btn mini-btn"  type="default" size="mini" data-order_id="{{item.order.order_id}}"  data-idx="{{idx}}" bindtap="refuse_refund">不同意退款</button>
             </view>
           </view>
         </view>
+      </view> <!--wx:if="{{role === 'boss'}}---->
       </scroll-view>
 
     </view>

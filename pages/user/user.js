@@ -4,13 +4,14 @@ var util = require('../../utils/util.js')
 //is_adm系统判断是否为管理员，是否显示后台入口
 Page({
     data: {
-        is_adm:false,
+        is_adm:{},
         userInfo: {},
         logged: false,
         takeSession: false,
         requestResult: '',
         userFiles: {},
-        hidecollect: true
+        hidecollect: true,
+        hiddenEnter: true  //这个地方不能错的啊！
     },
     onLoad:function()
     {
@@ -51,7 +52,7 @@ Page({
         if (session) {
             qcloud.loginWithCode({
                 success: res => {
-                    this.setData({ userInfo: res, logged: true , is_adm:res.userinfo.is_adm})
+                    this.setData({ userInfo: res, logged: true })
                     util.showSuccess('登录成功')
                 },
                 fail: err => {
@@ -148,12 +149,16 @@ Page({
             success(res){
                 if(res.data.is_adm === "true"){
                     that.setData({
-                        is_adm : true
+                        is_adm : res.data,
+                        hiddenEnter: false
                     }) 
                 }
             },
             fail(){
             }
         })
-    }
+    },
+
+    //go_seller_console:function (){
+    //}
 })

@@ -1,5 +1,11 @@
-/**
+/** 
  * @fileOverview 聊天室综合 Demo 示例
+ * bug 快递员没有送达也没有点击取消送件，商家就进行了退款=>待发货列表中有退款单，但是退款列表中没有
+ * 解决办法 退款的前提是:订单的商家态为CANCEL( 表示订单已取消发送了 )
+ * 现阶段，只要程序能满足基本操作，就行
+ * 下一步需要添加功能-》必须进行各个角色登陆分配，捡单员、快递员、超级管理员，各自有各自的页面
+ * 捡单员和快递员需要的功能是留痕，避免失误商家有据可查
+ * 超级管理员需要另外增加订单查询功能，退款功能只能放到超级用户这里
  */
 var util = require('../../utils/util.js')
 var qcloud = require('../../vendor/wafer2-client-sdk/index')
@@ -31,6 +37,7 @@ Page({
         finished_order_list: [],
         userInfo: {},
         logged: false,
+        role:'',
     },
 
 
@@ -134,12 +141,13 @@ Page({
     /**
      * 页面渲染完成后，启动聊天室
      * */
-    onLoad () {
+    onLoad (options) {
         let that = this
         wx.setNavigationBarTitle({ title: '商家订单管理' });
         wx.getSystemInfo({
             success: function (res) {
                 that.setData({
+                    role:options.role,
                     /*横向条离左边的间距*/
                     sliderLeft: (res.windowWidth / that.data.tabs.length - sliderWidth) / 2, 
                     /*横向条离左边的距离偏移量*/
@@ -217,7 +225,6 @@ Page({
 
         // 创建信道
         var tunnel = this.tunnel = new qcloud.Tunnel(config.service.tunnelUrl);
-        //var tunnel = this.tunnel = new qcloud.Tunnel(config.service.orderTunnelUrl);
 
         // 连接成功后，去掉「正在加入群聊」的系统提示
         tunnel.on('connect', () => console.log('getin'));
@@ -229,8 +236,16 @@ Page({
 
         // 后端发来已经被接掉的订单号,避免重复配单
         tunnel.on('picked', picked => {
-            index = findOrderById(picked.order_id)
-            this.remove_order_from_wait_pick(index)
+            index = findOrderById(this.data.wait_pick_order_list,picked.order_id)
+            if(index !== -1){
+                this.data.assemble_list.push(this.data.wait_pick_order_list[index])
+                this.data.tabs[1][1] = this.data.tabs[1][1] + 1
+                this.remove_order_from_wait_pick(index)
+                this.setData({
+                    assemble_list:this.data.assemble_list,
+                    tabs : this.data.tabs
+                })
+            }
         });
 
         // 有客退款
@@ -355,7 +370,7 @@ Page({
     },
 
     /*
-     *店员点击接单，
+     *1.店员点击接单，
      *2.通知服务器这个单子谁接了
      *3.服务器给单子上锁，避免重复配单
      *4.服务器广播给所有店员端删掉该订单
@@ -364,19 +379,13 @@ Page({
         let that = this
         order_id = event.currentTarget.dataset.order_id
         index = event.currentTarget.dataset.idx
-        const session = qcloud.Session.get()
         qcloud.request({
             url: `${config.service.host}/seller/pick_orders` ,
-            data: {order_id:event.currentTarget.dataset.order_id,open_id:this.data.userInfo.openId},
+            data: {order_id:order_id,open_id:this.data.userInfo.openId},
             method: 'POST',
             header: { 'content-type':'application/x-www-form-urlencoded' },
             success(result) {
-                that.data.assemble_order = that.data.wait_pick_order_list[index]
-                that.setData({
-                    step:1,
-                    assemble_order:that.data.assemble_order
-                })
-                that.remove_order_from_wait_pick(index)
+                //that.remove_order_from_wait_pick(index)
             },
             fail(error) {
                 util.showModel('请求失败', error);
@@ -385,27 +394,42 @@ Page({
         })
     },
 
-    assemble_finish(event){//配单完成
+    /*
+     *配单完成 
+     *后台广播DELIVERY
+     * */
+    assemble_finish(event){
         let that = this
         order_id = event.currentTarget.dataset.order_id
         index = event.currentTarget.dataset.idx
         const session = qcloud.Session.get()
-        qcloud.request({
-            url: `${config.service.host}/seller/assemble_finish` ,
-            data: {order_id:event.currentTarget.dataset.order_id,open_id:this.data.userInfo.openId},
-            method: 'POST',
-            header: { 'content-type':'application/x-www-form-urlencoded' },
-            success(result) {
-                that.data.assemble_list.splice(index,1)
-                that.data.tabs[1][1] = that.data.tabs[1][1] - 1
-                that.setData({
-                    assemble_list:that.data.assemble_list,
-                    tabs:that.data.tabs
-                })
-            },
-            fail(error) {
-                util.showModel('请求失败', error);
-                console.log('request fail', error);
+        wx.showModal({
+            title: '提示',
+            content: '确定商品已经配齐',
+            success (res) {
+                if (res.confirm) {
+                    qcloud.request({
+                        url: `${config.service.host}/seller/assemble_finish` ,
+                        data: {order_id:event.currentTarget.dataset.order_id,open_id:that.data.userInfo.openId},
+                        method: 'POST',
+                        header: { 'content-type':'application/x-www-form-urlencoded' },
+                        success(result) {
+                            //因为配单只能一个人做，所以只用删除自己的配单列表中的商品即可
+                            that.data.assemble_list.splice(index,1)
+                            that.data.tabs[1][1] = that.data.tabs[1][1] - 1
+                            that.setData({
+                                assemble_list:that.data.assemble_list,
+                                tabs:that.data.tabs
+                            })
+                        },
+                        fail(error) {
+                            util.showModel('请求失败', error);
+                            console.log('request fail', error);
+                        }
+                    })
+                } else if (res.cancel) {
+                    return 
+                }
             }
         })
     },
@@ -451,6 +475,45 @@ Page({
                         url: `${config.service.host}/seller/user_signed/` + order_id,
                         success(result) {
                             //that.remove_order_from_delivery(index)
+                        }
+                    })
+                } else if (res.cancel) {
+                    return 
+                }
+            }
+        })
+    },
+
+    /*
+     * 商家同意退款
+     * */
+    agree_refund:function (event){
+        let that = this
+        order_id = event.currentTarget.dataset.order_id
+        index = event.currentTarget.dataset.idx
+        wx.showModal({
+            title: '提示',
+            content: '请确保货物并未送达再退款！',
+            success (res) {
+                if (res.confirm) {
+                    qcloud.request({
+                        url: `${config.service.host}/seller/agree_refund/` ,
+                        data: {order_id:order_id,open_id:that.data.userInfo.openId},
+                        method: 'POST',
+                        header: { 'content-type':'application/x-www-form-urlencoded' },
+                        success(result) {
+                            if(result.data.return_code === "SUCCESS"){
+                                that.data.wait_refund_list.splice(index,1);
+                                that.data.tabs[3][1] = that.data.tabs[3][1] - 1
+                                that.setData({
+                                    tabs:that.data.tabs,
+                                    wait_refund_list:that.data.wait_refund_list
+                                })
+                            }
+                        },
+                        fail(error) {
+                            util.showModel('请求失败', error);
+                            console.log('request fail', error);
                         }
                     })
                 } else if (res.cancel) {

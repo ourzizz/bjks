@@ -62,5 +62,11 @@ Page({
    */
   onShareAppMessage: function () {
 
-  }
+  },
+
+    call(){
+        wx.makePhoneCall({
+            phoneNumber: "13308570523" 
+        })
+    }
 })

@@ -77,8 +77,15 @@
                   <!--class goods_info"---->
                 </view>
               </view>
-              <button class="weui-btn mini-btn" style="float:right;" type="default" size="mini" data-idx="{{idx}}" bindtap="sign_order">确认收货</button>
-              <button class="weui-btn mini-btn"   size="mini" data-idx="{{idx}}" bindtap="detail">详细信息</button>
+
+              <block wx:if='{{item.order.refund_status == "SUCCESS"}}'>
+              <view>退款已按原路退回</view>
+              <button class="weui-btn mini-btn" style="" type="default" size="mini" data-idx="{{idx}}" bindtap="shutdown_order">删除订单</button>
+              </block>
+              <block wx:else>
+              <view>商家正在处理退款中</view>
+              <button class="weui-btn mini-btn"   size="mini" data-idx="{{idx}}" bindtap="call_seller">联系商家</button>
+              </block>
             </view>
           </view>
 
@@ -98,8 +105,8 @@
                   <!--class goods_info"---->
                 </view>
               </view>
-              <button class="weui-btn mini-btn" style="position:relative;right:0px" type="default" size="mini">联系商家</button>
-              <button class="weui-btn mini-btn" style="position:relative;right:0px" type="default" size="mini">再次购买</button>
+              <button class="weui-btn mini-btn" style="position:relative;right:0px" type="default" data-idx="{{idx}}" bindtap="call_seller" size="mini">联系商家</button>
+              <button class="weui-btn mini-btn" style="position:relative;right:0px" type="default" data-idx="{{idx}}" size="mini">再次购买</button>
             </view>
           </view>
         </view>
