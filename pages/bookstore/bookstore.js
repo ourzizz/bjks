@@ -268,6 +268,9 @@ Page({
         requestResult: '',
         goods_list: [],
         count_cart: 0,
+        nav_selected_id:[],
+        nav_2:[],
+        nav_3:[],
     },
     onLoad: function () {
         var son_list = this.get_sons_by_id("100")//100是公务员 下阶段 这里需要自动生成
@@ -275,10 +278,17 @@ Page({
         this.show_goods_list_by_class_id(id)
         this.setData({
             nav_list: this.data.parent_son[0].son_list,
-            nav_2: son_list
+            nav_2: son_list,
         })
+        this.drawing_selected_item(0,'100')
+        this.drawing_selected_item(1,id)
         this.get_sum_cart()
     },
+
+    /*
+     *根据class_Id获取到本类的商品列表
+     *
+     * */
     show_goods_list_by_class_id: function (class_id) {
         let that = this
         qcloud.request({
@@ -295,27 +305,53 @@ Page({
         })
     },
 
+
+    drawing_selected_item:function (layer,class_id){
+        this.data.nav_selected_id[layer] = class_id
+        this.setData({
+            nav_selected_id:this.data.nav_selected_id
+        })
+    },
+
+    /*
+     *显示下级导航
+     * @class_id 用户点击的目录ID
+     * @layer 需要渲染的下级目录
+     * @son_list class_id的下级子目录列表
+     * */
     show_next_nav: function (event) {
         var class_id = event.currentTarget.dataset.class_id
         var layer = event.currentTarget.dataset.layer
         var son_list = this.get_sons_by_id(class_id)
-        var id = this.find_first_leave(class_id)
-        this.show_goods_list_by_class_id(id)
+        var leave_id = this.find_first_leave(class_id)
+        var first_son = this.get_first_son(class_id)
+        this.show_goods_list_by_class_id(leave_id)//默认显示的是目录中的第一个类别的商品
 
-        if (layer == '2') { //表示点击了顶层导航，只用渲染二级目录
+        if (layer == '2') { //表示点击了顶层导航，只用渲染二级目录,且默认显示第一个子类为选中状态
+            this.drawing_selected_item(0,class_id)//顶层选中
+            this.drawing_selected_item(1,first_son.class_id)//第一个子类
             this.setData({
-                nav_2: son_list
+                nav_2: son_list,
             })
-        } else if (layer == '3' && son_list != 'NULL') { //表示点击了二级导航而且还有下集目录需要显示
-            if (this.data.activeIndex == class_id) { //表示第二次点击同一按钮，那么就是收起来
-                class_id = 'NULL' //class_id设为null后,使得wxml的判断语句activeIndex != item.class_id 例如('111' != 'null')值is true 就不渲染
+        } else if (layer == '3') { //表示点击了二级导航
+            if(son_list != 'NULL'){//而且还有下集目录需要显示
+                if (this.data.activeIndex == class_id) { //表示第二次点击同一按钮，那么就是收起来
+                    class_id = 'NULL' //渲染三层目录的条件class_id设为null后,使得wxml的判断语句activeIndex != item.class_id 例如('111' != 'null')值is true 就不渲染
+                }
+                this.setData({
+                    nav_3: son_list,
+                    activeIndex: class_id,
+                    nav2_selected_id:class_id,
+                })
+                this.drawing_selected_item(2,leave_id)
             }
-            this.setData({
-                nav_3: son_list,
-                activeIndex: class_id
-            })
+            this.drawing_selected_item(1,class_id)
+        } else{
+            this.drawing_selected_item(2,class_id)
         }
+
     },
+
     get_sons_by_id: function (class_id) {
         for (var key in this.data.parent_son) {
             if (this.data.parent_son[key].parent_id == class_id) {
@@ -324,6 +360,7 @@ Page({
         }
         return 'NULL'
     },
+
     get_first_son: function (pid) {//获得给定id的第一个儿子，不存在返回NULL
         for (var key in this.data.parent_son) {
             if (this.data.parent_son[key].parent_id == pid) {//如果pid有儿子，那么它必然能在parent_id中匹配到
@@ -332,6 +369,7 @@ Page({
         }
         return 'NULL' //如果查找失败了
     },
+
     find_first_leave: function (parent_id) {//递归获得叶子节点
         var first_son = this.get_first_son(parent_id)
         if (first_son == 'NULL') {//递归边界
@@ -344,6 +382,7 @@ Page({
             return this.find_first_leave(first_son.class_id)
         }
     },
+
     insert_user_chose_goods_to_database: function (open_id,goods_id) {
         var that = this
         if (!this.data.logged) {//登录态为null，需要授权
