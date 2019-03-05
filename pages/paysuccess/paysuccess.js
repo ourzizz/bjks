@@ -14,14 +14,28 @@ Page({
         order_info:{},
         step:0,
         refund_reason: ['不想要了', '地址有误', '缺货', '发货时间过长'],
+        express_info:{},
         reason:''
 
+    },
+
+    //获取订单的物流信息，物流公司，订单号，让客户复制到剪切板去官方查询
+    get_express_info:function(){
+        //订单号支付页面给过来
+        let that = this
+        qcloud.request({
+            url: `${config.service.host}/order/get_express_info/` + that.data.order_id,
+            success(result) {
+                that.setData({
+                    express_info:result.data
+                })
+            }
+        })
     },
 
     onLoad: function (options) {//订单号支付页面给过来
         let that = this
         qcloud.request({
-            //url: `${config.service.host}/order/pay_success/` + "1550053898b3mQ6",//debug
             url: `${config.service.host}/order/pay_success/` + options.order_id,
             success(result) {
                 util.showSuccess('请求成功完成')
@@ -31,6 +45,7 @@ Page({
                     goods_list:result.data.goods_list,
                     order_id:options.order_id
                 })
+                that.get_express_info()
             }
         })
     },
@@ -122,6 +137,22 @@ Page({
                 console.log('request fail', error);
             }
         })
-    }
+    },
+
+    copy_express_id:function (e){
+        console.log(e)
+        wx.setClipboardData({
+            data: e.currentTarget.dataset.text,
+            success: function (res) {
+                wx.getClipboardData({
+                    success: function (res) {
+                        wx.showToast({
+                            title: '复制成功'
+                        })
+                    }
+                })
+            }
+        })
+    },
 
 })
