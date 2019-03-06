@@ -38,11 +38,21 @@ page{
     margin:20rpx;
 }
 .contact{
-position:absolute;
-width:100%;
+    padding:8rpx 0 0 0;
+    background:#d9d9d9;
+    /*position:fixed;*/
+    /*bottom:0;*/
+    width:100%;
 }
 text{
     font-size:50rpx;
     /*font-weight:bold*/
     color:dark
+}
+.spring{
+height:120rpx;
+}
+.list-image{
+height:40rpx;
+width:40rpx;
 }

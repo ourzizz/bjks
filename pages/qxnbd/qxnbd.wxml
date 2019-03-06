@@ -5,20 +5,29 @@
             <image style="height:120rpx;width:120rpx;" src="/image/7start.png" />
             <text>七星诺必达</text>
         </view>
-        <image class="company" src="cloud://bjks-0d6765.626a-bjks-0d6765/mycompany/qiye1.png" />
-        <view>助力小微企业扩展线上业务，补齐短板。</view>
-        <view>
-               <view> 企业宣传</view> 
-               <view> 商品展示</view> 
-               <view> 活动预告</view> 
-               <view> 预约取号</view> 
-               <view> 用户支付</view> 
-        </view>
-        <view>所有你想要的，我们都已造好</view>
-        <view>电商化将是必然,欢迎致电</view>
-        <view class="contact">
-            <image style="height:80rpx;width:80rpx;" src="/image/phone2.png" />
-            <button style="width:60%;height:80rpx;position:relative;button:130rpx;display:inline-block" bindtap="call">13308570523</button>
-        </view>
+            <view>助力小微企业扩展线上业务，补齐短板。</view>
+            <view>
+                   <view><image class="list-image" src="/image/point.png" /> 企业宣传</view> 
+                   <view><image class="list-image" src="/image/point.png" /> 商品展示</view> 
+                   <view><image class="list-image" src="/image/point.png" /> 活动预告</view> 
+                   <view><image class="list-image" src="/image/point.png" /> 预约取号</view> 
+                   <view><image class="list-image" src="/image/point.png" /> 用户支付</view> 
+            </view>
+            <view>所有你想要的，我们都已造好</view>
+            <view>电商化将是必然,欢迎洽谈</view>
     </view>
+        <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell" bindtap="call">
+                <view class="weui-cell__bd">联系电话</view>
+                <view class="weui-cell__ft">13308570523</view>
+            </view>
+            <view class="weui-cell">
+                <view class="weui-cell__bd">微信号</view>
+                <view class="weui-cell__ft">qixingnbd</view>
+            </view>
+            <view class="weui-cell">
+                <view class="weui-cell__bd">QQ</view>
+                <view class="weui-cell__ft">552716481</view>
+            </view>
+        </view>
 </view>
