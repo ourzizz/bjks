@@ -16,7 +16,7 @@
       <view wx:if="{{nav_2 != 'NULL'}}"><!--判断nav2是否存在---->
         <view wx:for="{{nav_2}}" wx:key="{{nav_list.class_id}}">
           <view class="nav_2_item {{ nav_selected_id[1] == item.class_id ? 'selected' : 'default'}}" data-layer='3' data-class_id="{{ item.class_id }}" bindtap="show_next_nav">
-            <image style="position:absolute;left:0;padding:6rpx;width:25rpx;height:25rpx;" hidden="{{item.count_sons == '0'}}" src="/image/morebook.png" />
+            <image style="position:absolute;left:0;padding:6rpx;width:25rpx;height:25rpx;" hidden="{{ item.rgt - item.lft < 2}}" src="/image/morebook.png" />
             <view class="nav_2_text">
               {{item.class_name}}
             </view>
