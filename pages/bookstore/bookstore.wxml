@@ -23,10 +23,10 @@
           </view>
 
         <!-- 三层目录s -->
-        <view class='nav_3' hidden="{{activeIndex != item.class_id}}">
+        <view  hidden="{{activeIndex != item.class_id}}">
           <block wx:for="{{nav_3}}" wx:key="{{nav_list.class_id}}" wx:for-index="idx">
-          <view class="nav_2_item {{ nav_selected_id[2] == item.class_id ? 'selected' : 'default'}}" data-layer='' data-class_id="{{ item.class_id }}" bindtap="show_next_nav">
-            <view class='nav_3_item'>{{item.class_name}} </view>
+            <view class="nav_3_item {{ nav_selected_id[2] == item.class_id ? 'selected' : 'default'}}" data-layer='' data-class_id="{{ item.class_id }}" bindtap="show_next_nav">
+             <image class="list-image" src="/image/point.png" /> <view class="text">{{item.class_name}} </view>
             </view>
           </block>
         </view>

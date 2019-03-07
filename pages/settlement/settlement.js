@@ -5,6 +5,7 @@ var config = require('../../config')
 var util = require('../../utils/util.js') 
 // o9pU65LTYEE8tVWQR_yClRc1466k 
 // @data pickded 如果该页面用户连续点击支付，会造成多次拉起支付
+// 待增加功能：用户留言
 Page({ 
     data: { 
         user_default_address: {}, 
@@ -54,9 +55,10 @@ Page({
     g_order_info:function (){
         order_info = {}
         order_info.open_id = this.data.open_id
+        order_info.body = "bookstore"
         order_info.address_id = this.data.user_default_address.address_id
         order_info.goods_list = []
-        order_info.total_fee = 0.1
+        order_info.total_fee = this.data.cost //pay_bug
         goods_list = this.data.goods_list
         for(var i=0;i<goods_list.length;i++) {
             order_info.goods_list[i] = {'goods_id':goods_list[i].goods_id,'count':goods_list[i].count}

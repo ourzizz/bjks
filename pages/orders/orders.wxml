@@ -32,9 +32,9 @@
                 </view>
               </view>
 
-              <view>
-                <button sytle="float:right;" class="weui-btn mini-btn" type="primary" size="mini" data-idx="{{idx}}" bindtap="re_pay">去支付</button>
-                <button class="weui-btn mini-btn" type="default" style="float:right;" size="mini" data-idx="{{idx}}" bindtap='delete_order'>取消订单</button>
+              <view style="postion:static">
+                <button class="weui-btn mini-btn" type="primary" size="mini" data-idx="{{idx}}" bindtap="re_pay">去支付</button>
+                <button  class="weui-btn mini-btn" style="postion:absolute;right:0" type="default"  size="mini" data-idx="{{idx}}" bindtap='delete_order'>取消订单</button>
               </view>
             </view>
           </view>
