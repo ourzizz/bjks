@@ -17,26 +17,26 @@ const formatNumber = n => {
 
 // 显示繁忙提示
 var showBusy = text => wx.showToast({
-    title: text,
-    icon: 'loading',
-    duration: 10000
+  title: text,
+  icon: 'loading',
+  duration: 10000
 })
 
 // 显示成功提示
 var showSuccess = text => wx.showToast({
-    title: text,
-    icon: 'success'
+  title: text,
+  icon: 'success'
 })
 
 // 显示失败提示
 var showModel = (title, content) => {
-    wx.hideToast();
+  wx.hideToast();
 
-    wx.showModal({
-        title,
-        content: JSON.stringify(content),
-        showCancel: false
-    })
+  wx.showModal({
+    title,
+    content: JSON.stringify(content),
+    showCancel: false
+  })
 }
 
 /**
@@ -56,13 +56,19 @@ const requestPromise = myUrl => {
 }
 
 const sleep = numberMillis => {
-    var now = new Date();
-    var exitTime = now.getTime() + numberMillis;
-    while (true) {
-        now = new Date();
-        if (now.getTime() > exitTime)
-            return;
-    }
+  var now = new Date();
+  var exitTime = now.getTime() + numberMillis;
+  while (true) {
+    now = new Date();
+    if (now.getTime() > exitTime)
+      return;
+  }
+}
+const isEmptyObject = obj => {
+  　　for (var key in obj) {
+    　　　　return false;//返回false，不为空对象
+  　　}
+  　　return true;//返回true，为空对象
 }
 
-module.exports = { formatTime, showBusy, showSuccess, showModel,requestPromise,sleep}
+module.exports = { formatTime, showBusy, showSuccess, showModel, requestPromise, sleep, isEmptyObject }

@@ -47,7 +47,7 @@ Page({
                     nav_list: result.data[2].son_list,
                     nav_2: son_list,
                 })
-                var id = that.find_first_leave("100")
+                var id = that.find_first_leave(result.data[0].parent_id)
                 that.show_goods_list_by_class_id(id)
                 that.drawing_selected_item(0,'100')
                 that.drawing_selected_item(1,id)

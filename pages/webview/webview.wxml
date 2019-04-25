@@ -17,19 +17,28 @@
           <block wx:for="{{tabs}}" wx:key="*this" wx:for-index="idx">
             <block wx:if="{{item[0] == '时间节点' }}">
               <view class="notify" hidden="{{activeIndex != idx}}">
-                <!--image style='float:right;display:absolute;top:0;height:43rpx;width:43rpx' src="/image/shutdown.png" /-->
                 <view wx:for="{{item[1]}}">
                   <view>
                     <view style='color:white;background:#ff546b;display:inline;padding:4rpx;margin:1rpx; font-size:26rpx;'>*{{item.event}}时间*</view>{{item.startime}}至{{item.endtime}}[{{item.detail}}]</view>
-
-                </view>
+                  </view>
               </view>
             </block>
 
             <block wx:else>
-              <view class="notify" hidden="{{activeIndex != idx}}">
-                <rich-text nodes="{{item[1]}}"></rich-text>
-              </view>
+    <!-- 消息中的图片展示 -->
+              <block wx:if="{{item[2] === 'img'}}">
+                <view class="images_box">
+                  <block wx:for="{{item[1]}}" wx:key="*this" wx:for-index='idx'>
+                    <image src="{{item}}" mode='widthFix' class="file_images" data-index="{{index}}" data-id="{{idx}}" data-src="{{item[1]}}" bindtap="previewImage" />
+                  </block>
+                </view>
+              </block>
+    <!-- 消息中的图片展示 -->
+              <block wx:else="{{item.content_type === 'img'}}">
+                  <view class="notify" hidden="{{activeIndex != idx}}">
+                    <rich-text nodes="{{item[1]}}"></rich-text>
+                  </view>
+              </block>
             </block>
           </block>
         </view>
@@ -55,21 +64,110 @@
     <image src="/image/gotop.png" style='height:80rpx;width:80rpx;position:relative;top:25rpx' />
     <view type="primary" style='position:relative;left:18rpx;font-size:24rpx'>回顶</view>
   </view>
+  <view class="btn-area" style='position:fixed;bottom:120rpx;left:0rpx' bindtap="ScrollToBottom">
+    <image src="/image/bottom.png" style='height:80rpx;width:80rpx;position:relative;top:25rpx' />
+    <view type="primary" style='position:relative;left:18rpx;font-size:24rpx'>底部</view>
+  </view>
   <!-- 回顶部 -->
+<!-- 下面是评论区 -->
+  <view class="weui-panel" id="bottom" style='width:100%'>
+    <block wx:if="{{comments.length !== 0}}">
+      <view class="msg_content">
+        <view wx:for="{{comments}}" wx:for-index="index">
+          <view class="msg_item_box">
+            <view class="msg_left_box">
+              <image class="userinfo-avatar" src="{{item.root.avatarUrl}}" />
+            </view>
+            <view class="msg_right_box">
+              <view class="">
+                <view class="name">{{item.root.name}}</view>
+                <view style="float:right;display:flex">
+                  <button class="bindUserInfoButton" open-type="getUserInfo" data-comment_id="{{item.root.comment_id}}" data-callback="approve" bindgetuserinfo="bindGetUserInfo">
+                    <image style="height:50rpx;width:50rpx;" src="/image/approve.png" />
+                  </button>
+                  <view>{{item.root.approve}}</view>
+                </view>
+              </view>
+              <view class="msg_content">
+                {{item.root.content}}
+                <block wx:if="{{item.root.open_id === userInfo.openId}}">
+                  <view bindtap="modify_comment" data-comment="{{item.root}}" style="display:inline">
+                    (
+                    <image style="height:25rpx;width:25rpx;" src="/image/pen.png" />
+                    修改)
+                  </view>
+                </block>
+              </view>
+              <view class="msg_pub_time">
+                {{item.root.pubtime}}
+                <button class="bindUserInfoButton" open-type="getUserInfo" data-statu="open" data-comment="{{item.root}}" data-callback="reply" bindgetuserinfo="bindGetUserInfo">
+                  回复TA
+                </button>
+              </view>
+              <view style="width:100%;display:flex;margin:20rpx 0 20rpx 0;">
+                <!-- 子评论 -->
+                <block wx:if="{{item.sons.length !== 0}}">
+                  <view style="width:100%;background:#ececec;padding:5rpx">
+                    <view style="position:static">
+                      <block wx:for="{{item.sons}}" wx:for-index='idx'>
+                        <view style="display:block">
+                          <view class="comment_opera_box">
+                            <view class="name">
+                              {{item.name}}
+                              <block wx:if="{{item.talkTo !== ''}}">@{{item.talkTo}}:</block>
+                            </view>
+                            <button class="bindUserInfoButton" style='background:#ececec;' open-type="getUserInfo" data-comment_id="{{item.comment_id}}" data-callback="approve" bindgetuserinfo="bindGetUserInfo">
+                              <image style="height:50rpx;width:50rpx;" src="/image/approve.png" />
+                              <view style="display:inline;position:relative;bottom:12rpx">
+                                {{item.approve}}
+                              </view>
+                            </button>
+                            <button class="bindUserInfoButton" style="background:#ececec" data-comment="{{item}}" open-type="getUserInfo" data-callback="reply" bindgetuserinfo="bindGetUserInfo">
+                              回复TA
+                            </button>
+                          </view>
+                          <view class="msg_content" style="margin:2rpx">
+                            {{item.content}}
+                            <block wx:if="{{item.open_id === userInfo.openId}}">
+                              <view bindtap="modify_comment" data-comment="{{item}}" style="display:inline">
+                                (
+                                <image style="height:25rpx;width:25rpx;" src="/image/pen.png" />
+                                修改)
+                              </view>
+                            </block>
+                          </view>
+                        </view>
+                      </block>
+                    </view>
+                  </view>
+                </block>
+                <!-- 子评论end -->
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </block>
+    <block wx:else>
+      <image mode='widthFix' style="" src="https://community-1252192276.cos.ap-chengdu.myqcloud.com/material/%E6%B2%99%E5%8F%91.png" />
+    </block>
+  </view>
+  <!-- 评论区结束 -->
+  <view style='padding:60rpx'></view>
 
   <!-- 下面是底部导航 -->
 
   <view class="bottomnav">
-    <!-- <view class="weui-cells weui-cells_after-title" style='padding:0 15 0 15'>
-      <view class="weui-cell weui-cell_input">
-        <view class="weui-cell__bd">
-          <input class="weui-input" name="input" placeholder="我说两句" />
-        </view>
-      </view>
-    </view> -->
+
     <view class="navitem" bindtap="gohome">
       <image class="navicon" src="/image/home.png" />
       <view class="navtext">首页</view>
+    </view>
+    <view class="navitem">
+      <button open-type="getUserInfo" class="sharebutton" data-statu="open" data-comment="new" data-callback="new_comment" bindgetuserinfo='bindGetUserInfo'>
+        <image class="navicon" style='float:left;' src="/image/comment.png" />
+        <view class="navtext" style='position:absolute;padding:25rpx 0 0 0;margin:15rpx 0 0 0'>评论</view>
+      </button>
     </view>
     <view class="navitem">
       <button open-type="getUserInfo" class="sharebutton" bindgetuserinfo='collectFile'>
@@ -89,5 +187,20 @@
     </view> -->
   </view>
   <!-- 底部导航  -->
+  <form bindsubmit="formSubmit" bindreset="formReset">
+    <view class="drawer_screen" bindtap="powerDrawer" data-statu="close" wx:if="{{showModalStatus}}"></view>
+    <view animation="{{animationData}}" class="drawer_box" wx:if="{{showModalStatus}}">
+      <view class="drawer_content" style="height:250rpx">
+        <view class="top grid" style="margin:8rpx">
+          <input class="input_base input_h60 col-1" style="width:100%" name="replyWords" placeholder="{{current_comment.name}}"></input>
+        </view>
+      </view>
+      <view>{{tip}}</view>
+      <view class="words_button" style="position:relative;bottom:10rpx;">
+        <button class="btn_ok" formType="submit" type="primary">确定</button>
+        <button class="btn_ok" bindtap="powerDrawer" data-statu="close" type="primary">取消</button>
+      </view>
+    </view>
+  </form>
 
 </view>

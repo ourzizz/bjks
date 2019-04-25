@@ -1,16 +1,30 @@
 @import '/weui.wxss';
-.page__bd{
-    height: 100%;
+
+.page__bd {
+  height: 100%;
 }
-.page__bd{
-    padding-bottom: 0;
+
+.page__bd {
+  padding-bottom: 0;
 }
-.weui-tab__content{
-    padding-top: 60px;
-    text-align: center;
+
+.weui-tab__content {
+  padding-top: 60px;
+  text-align: center;
 }
 
 /*-----------下面是HTML页面解析------------------*/
+.images_box {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content:center
+}
+
+.file_images { 
+  padding: 5rpx;
+  width: 45%;
+}
+
 .page-content {
   width: 58vmax;
   margin: 30rpx 0;
@@ -47,37 +61,253 @@ scroll-view {
 }
 
 /***导航内容****/
-.notify{
-   padding:10px 20px;
-   border: solid 1px;
-   background:rgb(110, 189, 209);
-}
-/*底部导航栏*/
-.bottomnav{
-    padding: 8rpx;
-    width: 100%;
-    height: 80rpx;
-    position:fixed;
-    bottom:0;
-    background: #eee;
-    display: flex;
-    /*flex-direction: column;*/
-    justify-content:space-around;
-}
-.navicon{
-  width: 55rpx;
-  height: 55rpx;
-  display: block; /*图片居中需要设置为block*/
-  margin: auto;
-}
-.navtext{
- font-size:24rpx;
+.notify {
+  padding: 10px 20px;
+  border: solid 1px;
+  background: rgb(110, 189, 209);
 }
 
-.sharebutton{
-    padding: 4rpx 30rpx 44rpx 30rpx;
-    background-color: Transparent; 
+/*底部导航栏*/
+.bottomnav {
+  padding: 8rpx;
+  width: 100%;
+  height: 80rpx;
+  position: fixed;
+  bottom: 0;
+  background: #eee;
+  display: flex;
+  justify-content: space-around;
 }
+
+.navicon {
+  width: 55rpx;
+  height: 55rpx;
+  display: block;
+  /*图片居中需要设置为block*/
+  margin: auto;
+}
+
+.navtext {
+  font-size: 24rpx;
+}
+
+.sharebutton {
+  padding: 4rpx 30rpx 44rpx 30rpx;
+  background-color: Transparent;
+}
+
 button[class="sharebutton"]::after {
   border: 0;
-} 
+}
+
+/*comment_opera_boxcomments*/
+comment_opera_box {
+  height: 200rpx
+}
+
+.msg_pub_time {
+  display: inline
+}
+
+.msg_item_box {
+  position: relative;
+  margin: 10rpx 20rpx 20rpx 0;
+  font-size: 30rpx;
+  display: flex
+}
+
+.msg_left_box {
+  height: 100%;
+  width: 10%;
+}
+
+.msg_right_box {
+  width: 90%;
+  margin: 0 0 0 20rpx;
+  border-bottom: 3rpx solid darkgray;
+}
+
+.msg_head {
+  height: 60rpx;
+}
+
+.name {
+  height: 50rpx;
+  display: inline;
+  font-weight: bold;
+  font-size: 25rpx;
+}
+
+.msg_content {
+  margin: 10rpx;
+}
+
+.msg_operator {}
+
+.msg_read_time {
+  display: inline
+}
+
+.userinfo-avatar {
+  width: 60rpx;
+  height: 60rpx;
+  margin: 0 20rpx;
+  border-radius: 50%;
+}
+
+.bindUserInfoButton {
+  background: #fff;
+  float: right;
+  height: 45rpx;
+  font-size: 25rpx;
+  line-height: 2;
+  padding-right: 6rpx;
+  padding-left: 0rpx;
+}
+
+button[class="bindUserInfoButton"]::after {
+  border: 0;
+}
+
+/*comments*/
+
+/*弹出输入框*/
+/*mask*/
+.drawer_screen {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  background: #000;
+  opacity: 0.5;
+  overflow: hidden;
+}
+
+.textarea {
+  font-size: 28rpx;
+  margin: 20rpx 0 0 0;
+  width: 100%;
+  height: 100%;
+  /*height: 260px;*/
+}
+
+.drawer_box {
+  /*height:400rpx;*/
+  width: 650rpx;
+  overflow: hidden;
+  position: fixed;
+  top: 40%;
+  left: 0;
+  z-index: 1001;
+  background: #FAFAFA;
+  margin: -150px 50rpx 0 50rpx;
+  border-radius: 3px;
+}
+
+.drawer_title {
+  padding: 15px;
+  font: 20px "microsoft yahei";
+  text-align: center;
+}
+
+.drawer_content {
+  height: 100%;
+  /*盒子高度*/
+  overflow-y: scroll;
+  /*超出父盒子高度可滚动*/
+}
+
+.btn_ok {
+  padding: 1px;
+  font: 20px "microsoft yahei";
+  text-align: center;
+  border-top: 1px solid #E8E8EA;
+  color: #3CC51F;
+  width: 45%;
+}
+
+.top {
+  padding-top: 8px;
+}
+
+.bottom {
+  padding-bottom: 8px;
+}
+
+.title {
+  height: 30px;
+  line-height: 30px;
+  width: 160rpx;
+  text-align: center;
+  display: inline-block;
+  font: 300 28rpx/30px "microsoft yahei";
+}
+
+.input_base {
+  border: 2rpx solid #ccc;
+  padding-left: 10rpx;
+  margin-right: 50rpx;
+}
+
+.input_h30 {
+  height: 30px;
+  line-height: 30px;
+}
+
+.input_h60 {
+  height: 60px;
+}
+
+.input_full {
+  height: 80px;
+  margin-bottom: 10rpx
+}
+
+.input_view {
+  font: 12px "microsoft yahei";
+  background: #fff;
+  color: #000;
+  line-height: 30px;
+}
+
+input {
+  font: 12px "microsoft yahei";
+  background: #fff;
+  color: #000;
+}
+
+radio {
+  margin-right: 20px;
+}
+
+.grid {
+  display: -webkit-box;
+  display: box;
+}
+
+.col-0 {
+  -webkit-box-flex: 0;
+  box-flex: 0;
+}
+
+.col-1 {
+  -webkit-box-flex: 1;
+  box-flex: 1;
+}
+
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+.words_button {
+  display: flex;
+}
+
+/*弹出输入框*/
+/*mask*/

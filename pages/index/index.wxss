@@ -1,92 +1,93 @@
 /**index.wxss**/
+
 @import '/weui.wxss'
 page {
-    background: #F6F6F6;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+  background: #f6f6f6;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
-.typelist{
-    position: sticky;
-    /*top: 0;*/
-    padding: 20rpx 0;
-    font-size: 35rpx;
-    line-height: 46rpx;
-    word-break: break-all;
-    //display: flex;
-    justify-content:space-around;/*横向导航均匀分布在弹性容器中*/
-    background: #FFF;
+
+.typelist {
+  padding: 10rpx 0;
+  font-size: 35rpx;
+  word-break: break-all;
+  display: flex;
+  justify-content: space-around; /*横向导航均匀分布在弹性容器中*/
+  background: #fff;
 }
-.type-navigation{
-    position: relative;
-    display: flex;
-    flex-direction: column;
+
+.type-navigation {
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }
-.element{/*考试类型横向菜单*/
-    /*padding: 0rpx 32rpx 1rpx 12rpx; [>上右<]*/
-    /*margin:0 3rpx 0 3rpx;这里设置了margin所以auto属性不能工作*/
+
+.element {
+  /*考试类型横向菜单*//*padding: 0rpx 32rpx 1rpx 12rpx; [>上右<]*//*margin:0 3rpx 0 3rpx;这里设置了margin所以auto属性不能工作*/
+    font-size:30rpx;
+    padding: 0rpx 32rpx 1rpx 12rpx; 
+    margin:0 3rpx 0 3rpx;
     border-top: 5rpx solid rgba(0, 0, 0, .1);
-    margin: auto;
 }
-.guideimg { /*横向导航图片样式*/
+
+.guideimg {
+  /*横向导航图片样式*/
   width: 80rpx;
   height: 80rpx;
   display: block; /*图片居中需要设置为block*/
   margin: auto;
 }
 
-.img { /*办事指南里面用的是这个样式*/
+.img {
+  /*办事指南里面用的是这个样式*/
   width: 100rpx;
   height: 100rpx;
 }
 
-.swiper-container{
+.swiper-container {
   box-sizing: border-box;
-  padding: 0 10rpx 0 10rpx;/*swiper四上右下左*/
-  /*width: 100%;*/
+  padding: 0 10rpx 0 10rpx; /*swiper四上右下左*//*width: 100%;*/
   margin-top: 10rpx;
   margin-bottom: 15rpx;
 }
-.swiper-item{
-  /*width: 20rpx;*/
-  /*height: auto;*/
+
+.swiper-item {
+  /*width: 20rpx;*//*height: auto;*/
   border-radius: 3%;
-  /*margin:0 3rpx 0 0;*/
-  /*margin-right: 30px;*/
+  /*margin:0 3rpx 0 0;*//*margin-right: 30px;*/
   background-color: rgb(110, 189, 209);
-  /*padding: 20px 0;*/
-  /*align-items: center;*/
-  /*display: block;*/
-  /*box-shadow: darkgrey 0px 0px 30px 5px ;*/
+  /*padding: 20px 0;*//*align-items: center;*//*display: block;*//*box-shadow: darkgrey 0px 0px 30px 5px ;*/
 }
 
 /* list */
+
 .title {
   margin-left: 90rpx;
   color: black;
   font-weight: bold;
   font-size: 40rpx;
-  font-family: Serif  ;
-  
+  font-family: Serif;
 }
+
 .ksmingchen {
   font-size: 44rpx;
-  margin: 30rpx; /*上下左右边框能起到让元素垂直居中的功能*/
-  /*text-align: center;*/
+  margin: 30rpx; /*上下左右边框能起到让元素垂直居中的功能*//*text-align: center;*/
 }
 
 .navigation {
- width: 100%;
-   line-height: 104rpx;
+  width: 100%;
+  line-height: 104rpx;
   font-size: 34rpx;
-  vertical-align: center;/**/
+  vertical-align: center; /**/
 }
 
-.ksbar { /**/
+.ksbar {
+  /**/
   margin-top: 4rpx;
   height: 130rpx;
   width: 100%;
-  background: #BBFFEE;
+  background: #bfe;
   display: flex;
   flex-direction: row;
   transition: all 300ms ease;
@@ -97,46 +98,56 @@ page {
   border: black;
 }
 
-.adv{
+.adv {
   background: grey;
-  font-size:32rpx;
-  align-content: center; 
+  font-size: 32rpx;
+  align-content: center;
 }
-.weui-media-box__info {
- margin:0 0 0 0;
-}
-/*二级导航横向滑块*/
 
-.scroll_box{
-width: 100%;
-height: 80rpx;
-overflow: hidden;
-padding: 1rpx;
-background: #fff;
-white-space: nowrap;
+.weui-media-box__info {
+  margin: 0 0 0 0;
 }
-.item_list{
-width: 120rpx; /*连边带按钮宽度*/
-height: auto;
-margin-right: 5rpx;
-display: inline-block;
+
+/*二级导航横向滑块*/
+.item_button {
+  width: 120rpx; /*按钮自身宽度*/
+  height: 60rpx;
+  overflow: hidden;
+  /* text-overflow:ellipsis; *//* white-space: nowrap; */
+  margin: 0 4rpx 0 0;
+  padding: 0 0 0 0;
+  font-size: 25rpx;
 }
-.item_book_text{
-width: 120rpx; /*按钮自身宽度*/
-overflow: hidden;
-/* text-overflow:ellipsis; */
-/* white-space: nowrap; */
-margin:0 4rpx 0 0;
-padding: 0 0 0 0;
-font-size:25rpx;
+
+.scroll_box {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  /*height: 80rpx;*/
+  overflow: hidden;
+  padding: 1rpx;
+  background: #fff;
+  white-space: nowrap;
+  padding-bottom:10rpx;
+}
+
+.item_list {
+  display: flex;
+  justify-content: center;
+  width: 120rpx; /*连边带按钮宽度*/
+  height: auto;
+  margin-top:5rpx;
 }
 /*头条表*/
+
 .table {
   border: 3rpx solid darkgray;
-  margin:0 6rpx 6rpx 6rpx;
+  margin: 0 6rpx 6rpx 6rpx;
 }
+
 .tr {
-/*tablerow*/
+  /*tablerow*/
   display: flex;
   width: 100%;
   justify-content: center;
@@ -144,25 +155,29 @@ font-size:25rpx;
   align-items: center;
   font-size: 22rpx;
 }
+
 .td {
-    width:40%;
-    justify-content: center;
-    text-align: center;
-    font-size: 30rpx;
-    overflow: hidden;
-    text-overflow:ellipsis;
-    white-space: nowrap;
+  width: 40%;
+  justify-content: center;
+  text-align: center;
+  font-size: 30rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-.bg-w{
+
+.bg-w {
   background: snow;
 }
-.bg-g{
-  background: #E6F3F9;
+
+.bg-g {
+  background: #e6f3f9;
 }
+
 .th {
   width: 40%;
   justify-content: center;
-  background: #3366FF;
+  background: #36f;
   color: #fff;
   display: flex;
   height: 1.5rem;
