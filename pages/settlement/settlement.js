@@ -90,7 +90,7 @@ Page({
             this.data.picked = true
             wx.request({
                 // 请求服务器登录地址，获得会话信息
-                url: 'https://www.alemao.club/bjks/index.php?/order/pay',
+                url: `${config.service.host}/order/pay`,
                 data: {order_info: JSON.stringify(this.g_order_info())},
                 method: 'POST',
                 header: { 'content-type':'application/x-www-form-urlencoded' },
