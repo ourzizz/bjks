@@ -24,17 +24,15 @@
               </view>
             </block>
 
-            <block wx:else>
-    <!-- 消息中的图片展示 -->
+            <block wx:else> <!-- 消息中的图片展示 -->
               <block wx:if="{{item[2] === 'img'}}">
-                <view class="images_box">
-                  <block wx:for="{{item[1]}}" wx:key="*this" wx:for-index='idx'>
-                    <image src="{{item}}" mode='widthFix' class="file_images" data-index="{{index}}" data-id="{{idx}}" data-src="{{item[1]}}" bindtap="previewImage" />
+                <view class="images_box" hidden="{{activeIndex != idx}}">
+                  <block wx:for="{{item[1]}}" data-src="{{item[1]}}" wx:key="*this" wx:for-index='img_idx'>
+                    <image src="{{item}}" mode='widthFix' class="file_images" data-tab_idx="{{idx}}" data-img_idx="{{img_idx}}"  bindtap="previewImage" />
                   </block>
                 </view>
-              </block>
-    <!-- 消息中的图片展示 -->
-              <block wx:else="{{item.content_type === 'img'}}">
+              </block> <!-- 消息中的图片展示 -->
+            <block wx:else="{{item.content_type === 'img'}}">
                   <view class="notify" hidden="{{activeIndex != idx}}">
                     <rich-text nodes="{{item[1]}}"></rich-text>
                   </view>

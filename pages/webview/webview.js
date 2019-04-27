@@ -70,6 +70,7 @@ Page({
             'src': '/image/collect.png',
             'text': '收藏'
         },
+        images_url:[],
       comments: [],
       select_comment: { 'action': '' },
       replyWords: '',
@@ -86,6 +87,7 @@ Page({
         }
     },
     initTabs: function(webJson) { //从json中的数据进行填充
+        let item = {}
         if (webJson.eventtime != false) {//有时间节点数据
             this.data.tabs.push(['时间节点', webJson.eventtime])
         }
@@ -134,9 +136,10 @@ Page({
     },
     onLoad: function(options) {
         var that = this;
-        this.data.fileId = options.fileid
+        let fileId = options.fileid
+        this.data.fileId = fileId
         this.renderCollect()
-        this.get_comments(options.fileId)
+        this.get_comments(fileId)
         const session = qcloud.Session.get()
         if (session) { //有session就能拿到open_id,在bindGetUserInfo中调用会有不明原因的阻塞
             if (this.data.userApprovedCommentId.length === 0) { //点赞列表为空，就需要初始化
@@ -483,10 +486,11 @@ Page({
 
   previewImage: function (event) {
     var that = this;
-    var dataid = event.currentTarget.dataset.id;
-    var images_url = event.currentTarget.dataset.src;
+    let tab_idx = event.currentTarget.dataset.tab_idx;
+    let img_idx = event.currentTarget.dataset.img_idx;
+    let images_url = this.data.tabs[tab_idx][1]
     wx.previewImage({
-      current: images_url[dataid],
+      current:images_url[img_idx],
       urls: images_url
     });
   },

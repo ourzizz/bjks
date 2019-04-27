@@ -9,7 +9,7 @@ page {
 }
 
 .typelist {
-  padding: 10rpx 0;
+  padding: 15rpx 0;
   font-size: 35rpx;
   word-break: break-all;
   display: flex;
