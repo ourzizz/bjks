@@ -1,15 +1,5 @@
 <!--index.wxml-->
 <view class="page">
-  <!-- <view class="swiper-container">
-    <swiper indicator-dots="true">
-      <block wx:for="{{list.headline}}">
-        <navigator url="../webview/webview?fileid={{item.fileid}}">
-          <swiper-item class="swiper-item">{{item.msgcontent}}</swiper-item>
-        </navigator>
-      </block>
-    </swiper>
-  </view> -->
-
   <view style="position:relative">
     <view class="table">
       <!-- 日历  -->
@@ -31,7 +21,7 @@
             <view class="td">{{item.endtime}} <image style="position:relative;top:8rpx;width:40rpx;height:40rpx" src="/image/goright.png" /> </view> </navigator>
         </view>
         <view class="tr" wx:else>
-          <navigator url="../webview/webview?fileId={{item.ksfileid}}" style='width:100%; display: flex;'>
+          <navigator url="../webview/webview?fileid={{item.ksfileid}}" style='width:100%; display: flex;'>
             <view class="td">{{item.eventtitle}}</view>
             <view class="td">{{item.event}}</view>
             <view class="td">{{item.endtime}} <image class="td" style="position:relative;top:8rpx;width:40rpx;height:40rpx" src="/image/goright.png" /> </view>

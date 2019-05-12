@@ -57,7 +57,7 @@ Page({
     data: {
         fileId: '',
         tabs: [],
-        activeIndex: 0,
+        activeIndex: -1,
         sliderOffset: 0,
         sliderLeft: 0,
         htmlSnip: '',
@@ -83,7 +83,7 @@ Page({
         console.log("inshare")
         return {
             title: '毕节考试',
-            path: 'pages/webview/webview?fileId=' + this.data.fileId
+            path: 'pages/webview/webview?fileid=' + this.data.fileId
         }
     },
     initTabs: function(webJson) { //从json中的数据进行填充
@@ -99,6 +99,7 @@ Page({
                 this.data.tabs.push([webJson.notify[key].typename,webJson.notify[key].content,webJson.notify[key].content_type])
             }
         }
+        //this.data.tabs.push(['评论区'])
     },
     renderCollect: function() {
         const session = qcloud.Session.get()
@@ -211,6 +212,7 @@ Page({
         wx.createSelectorQuery().select('#bottom').boundingClientRect(function (rect) {
             // 使页面滚动到底部
             wx.pageScrollTo({
+                //scrollTop: rect.bottom
                 scrollTop: rect.bottom
             })
         }).exec()

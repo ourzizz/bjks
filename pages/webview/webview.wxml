@@ -16,23 +16,26 @@
         <view class="weui-tab__panel">
           <block wx:for="{{tabs}}" wx:key="*this" wx:for-index="idx">
             <block wx:if="{{item[0] == '时间节点' }}">
-              <view class="notify" hidden="{{activeIndex != idx}}">
-                <view wx:for="{{item[1]}}">
-                  <view>
-                    <view style='color:white;background:#ff546b;display:inline;padding:4rpx;margin:1rpx; font-size:26rpx;'>*{{item.event}}时间*</view>{{item.startime}}至{{item.endtime}}[{{item.detail}}]</view>
+              <view class="notify_box" hidden="{{activeIndex != idx}}">
+                <view class="notify_panel">
+                    <view wx:for="{{item[1]}}" class="event-item">
+                        <view class="head" style='border-radius: 20%;color:white;background:#0F59A4;padding:5rpx 10rpx 5rpx 10rpx;margin-right:5rpx; font-size:26rpx;display:inline'>{{item.event}}</view>
+                        <view class="time" style='margin:1rpx;font-size:26rpx;color:blue;display:inline'>{{item.startime}}至{{item.endtime}}</view>
+                        <view style='margin:1rpx;font-size:26rpx;'>{{item.detail}}</view>
+                    </view>
                   </view>
               </view>
             </block>
 
             <block wx:else> <!-- 消息中的图片展示 -->
               <block wx:if="{{item[2] === 'img'}}">
-                <view class="images_box" hidden="{{activeIndex != idx}}">
+                <view class="notify_panel images_box" hidden="{{activeIndex != idx}}">
                   <block wx:for="{{item[1]}}" data-src="{{item[1]}}" wx:key="*this" wx:for-index='img_idx'>
                     <image src="{{item}}" mode='widthFix' class="file_images" data-tab_idx="{{idx}}" data-img_idx="{{img_idx}}"  bindtap="previewImage" />
                   </block>
                 </view>
               </block> <!-- 消息中的图片展示 -->
-            <block wx:else="{{item.content_type === 'img'}}">
+              <block wx:else>
                   <view class="notify" hidden="{{activeIndex != idx}}">
                     <rich-text nodes="{{item[1]}}"></rich-text>
                   </view>
@@ -55,18 +58,6 @@
       </view>
     </view>
   </view>
-  <view style='padding:40rpx'></view>
-
-  <!-- 回顶部 -->
-  <view class="btn-area" style='position:fixed;bottom:120rpx;right:0rpx' bindtap="scrollToTop">
-    <image src="/image/gotop.png" style='height:80rpx;width:80rpx;position:relative;top:25rpx' />
-    <view type="primary" style='position:relative;left:18rpx;font-size:24rpx'>回顶</view>
-  </view>
-  <view class="btn-area" style='position:fixed;bottom:120rpx;left:0rpx' bindtap="ScrollToBottom">
-    <image src="/image/bottom.png" style='height:80rpx;width:80rpx;position:relative;top:25rpx' />
-    <view type="primary" style='position:relative;left:18rpx;font-size:24rpx'>底部</view>
-  </view>
-  <!-- 回顶部 -->
 <!-- 下面是评论区 -->
   <view class="weui-panel" id="bottom" style='width:100%'>
     <block wx:if="{{comments.length !== 0}}">
@@ -151,6 +142,19 @@
     </block>
   </view>
   <!-- 评论区结束 -->
+  <view style='padding:40rpx'></view>
+
+  <!-- 回顶部 -->
+  <view class="btn-area" style='position:fixed;bottom:120rpx;right:0rpx' bindtap="scrollToTop">
+    <image src="/image/gotop.png" style='height:80rpx;width:80rpx;position:relative;top:25rpx' />
+    <view type="primary" style='position:relative;left:18rpx;font-size:24rpx'>回顶</view>
+  </view>
+  <view class="btn-area" style='position:fixed;bottom:120rpx;left:0rpx' bindtap="ScrollToBottom">
+    <image src="/image/bottom.png" style='height:80rpx;width:80rpx;position:relative;top:25rpx' />
+    <view type="primary" style='position:relative;left:18rpx;font-size:24rpx'>底部</view>
+  </view>
+  <!-- 回顶部 -->
+
   <view style='padding:60rpx'></view>
 
   <!-- 下面是底部导航 -->

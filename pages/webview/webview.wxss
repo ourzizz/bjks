@@ -61,10 +61,19 @@ scroll-view {
 }
 
 /***导航内容****/
-.notify {
-  padding: 10px 20px;
-  border: solid 1px;
-  background: rgb(110, 189, 209);
+.notify_box {
+    padding:5px;
+  background: #E8E8EA;
+}
+.notify_panel{
+  border-radius: 10px;
+  padding: 5px 2px;
+  background: #fff;
+}
+
+.event-item{
+  margin:0 10rpx 0 10rpx;
+ border-bottom: 1rpx solid #d1d1d1;
 }
 
 /*底部导航栏*/
