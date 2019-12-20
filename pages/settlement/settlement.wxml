@@ -1,44 +1,70 @@
 <view class="cart_box">
-<navigator url="/pages/user_address/user_address?open_id={{open_id}}"  hover-class="other-navigator-hover" >
-  <view class="address_box" hover-class="none" hover-stop-propagation="false">
-    <block wx:if="{{user_default_address.address_id !== undefined}}">
-    <view class="address">
-    <view style="font-size:30rpx;color:red"> 收货地址:{{user_default_address.name}} {{user_default_address.telphone}} </view>
-    <view style="font-size:30rpx;border-bottom: 5rpx #999 solid"> {{user_default_address.province}} {{user_default_address.city}} {{user_default_address.county}} {{user_default_address.detail}} </view>
-  </view> <!-- class address -->
-    </block>
-    <block wx:else>
-          您还没有填写收货地址，点击添加地址!!
-    </block>
-  </view>
+  <navigator url="/pages/user_address/user_address?open_id={{open_id}}" hover-class="other-navigator-hover">
+    <view class="address_box" hover-class="none" hover-stop-propagation="false">
+      <block wx:if="{{user_default_address.address_id !== undefined}}">
+        <view class="address">
+          <view style="font-size:30rpx;color:red"> 收货地址:{{user_default_address.name}} {{user_default_address.telphone}} </view>
+          <view style="font-size:30rpx;border-bottom: 5rpx #999 solid"> {{user_default_address.province}} {{user_default_address.city}} {{user_default_address.county}} {{user_default_address.detail}} </view>
+        </view>
+        <!-- class address -->
+      </block>
+      <block wx:else>
+        <button type="primary">您还没有填写收货地址，点击添加地址!!</button>
+      </block>
+    </view>
 
   </navigator>
 
   <!--商品展示s-->
   <scroll-view style="height:980rpx; color:black;" scroll-y="true">
-      <view wx:for="{{goods_list}}" wx:key="{{goods_list.name}}" wx:for-index="idx">
-        <view class="cart_item" bindtap="test">
+    <view wx:for="{{goods_list}}" wx:key="{{goods_list.name}}" wx:for-index="idx">
+      <view class="cart_item" bindtap="test">
         <view class='goods_info_box weui-cell weui-cell_access' hover-class="weui-cell_active" style="padding: 15rpx; margin: 0;border:0px">
-          <navigator url="" class=""  >
-             <image src="{{item.face_img}}" class="goods_img" /> 
-        </navigator>
-            <view class="goods_box"><!--  -->
-              <view class="goods_name" style='font-size:25rpx'>{{item.name}} </view>
-              <view style="display:inline" class="price">价格￥{{item.price}} </view>
-              <view style="color:black" class="price">*{{item.count}}件</view>
-            </view> <!--class goods_info"---->
+          <navigator url="" class="">
+            <image src="{{item.face_img}}" class="goods_img" />
+          </navigator>
+          <view class="goods_box">
+            <!--  -->
+            <view class="goods_name" style='font-size:25rpx'>{{item.name}} </view>
+            <view style="display:inline" class="price">价格￥{{item.price}} </view>
+            <view style="color:black" class="price">*{{item.count}}{{item.danwei}}</view>
+          </view>
+          <!--class goods_info"---->
 
-        </view> <!-- class='goods_info_box'-->
-        </view ><!--class="cart_item"---->
-      </view > <!--wx:for="{{goods_list}}"---->
+        </view>
+        <!-- class='goods_info_box'-->
+      </view>
+      <!--class="cart_item"---->
+    </view>
+    <!--wx:for="{{goods_list}}"---->
+    <view wx:if="{{user_words!=''}}" class="user_words" bindtap="clickme">
+      <text style="margin:0 15rpx 0 15rpx"> 我的留言:{{user_words}}</text>
+    </view>
+    <view style='padding:40rpx'></view>
   </scroll-view>
 
-<view class="foot">
-  <view style="position:relative;top:16rpx;left:30rpx;display:inline;">合计￥:{{cost}}元</view>
-  <view bindtap="pay" style="background:red;color:white;float:right;width:60%;height:90rpx;text-align:center">
-    <view  style="position:relative;top:16rpx;"> 去支付</view>
+  <view class="foot">
+    <view style="background:#586c94;color:white;float:left;width:40%;height:90rpx;text-align:center;">
+      <text style="position:relative;top:15rpx">合计￥:{{cost}}元</text>
+    </view>
+     <view bindtap="pay" style="background:red;color:white;float:right;width:60%;height:90rpx;text-align:center">
+    <view  style="position:relative;top:16rpx;"> 微信支付</view>
+  </view>
+    <!--<view bindtap="pay_offline" style="background:red;color:white;float:right;width:60%;height:90rpx;text-align:center">
+      <view style="position:relative;top:16rpx;"> 货到付款</view>
+    </view> -->
   </view>
 </view>
-
-<view style='padding:40rpx'></view>
+<!--屏幕背景变暗的背景  -->
+<view class="commodity_screen" bindtap="hideModal" wx:if="{{showModalStatus}}"></view>
+<!--弹出框  -->
+<view animation="{{animationData}}"  style="bottom:{{bottom}}px" wx:if="{{showModalStatus}}" class="commodity_attr_box">
+  <form bindsubmit="formSubmit" bindreset="formReset">
+    <view class="input">
+      <view class="area">
+        <input value="{{user_words}}" name="user_words" placeholder='例如:带包软中华' bindconfirm="sendMsgConfirm" bindinput='inputTextChange' adjust-position="{{false}}" bindfocus="foucus" bindblur="blur"></input>
+        <button class="button" formType="submit" type="primary">发送</button>
+      </view>
+    </view>
+  </form>
 </view>

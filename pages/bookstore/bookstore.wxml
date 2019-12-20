@@ -2,7 +2,7 @@
 <view class="container">
   <view class="scroll_box head-nav">
     <scroll-view class="scroll-view_x" scroll-x style="width: auto;overflow:hidden;">
-      <view class='item_list' wx:for="{{nav_list}}" wx:key="{{nav_list.class_id}}">
+      <view class='item_list' wx:for="{{top_nav}}" wx:key="{{top_nav.class_id}}">
         <view class="item_list" data-layer='2' data-class_id="{{ item.class_id }}" bindtap="show_next_nav">
           <button class="item_book_text {{ nav_selected_id[0] == item.class_id ? 'selected' : 'default'}}">{{item.class_name}}</button>
         </view>
@@ -12,59 +12,63 @@
 
   <!--------二级目录分割线s------->
   <view class="left_box">
-    <scroll-view style="height:100%; color:black; background-color: lightblue;" scroll-y="true">
-      <view wx:if="{{nav_2 != 'NULL'}}"><!--判断nav2是否存在---->
-        <view wx:for="{{nav_2}}" wx:key="{{nav_list.class_id}}">
+    <scroll-view style="height:100%; color:black; background-color: rgb(238, 229, 229);" scroll-y="true">
+      <view wx:if="{{nav_2 != 'NULL'}}">
+        <!--判断nav2是否存在---->
+        <view wx:for="{{nav_2}}" wx:key="{{top_nav.class_id}}">
           <view class="nav_2_item {{ nav_selected_id[1] == item.class_id ? 'selected' : 'default'}}" data-layer='3' data-class_id="{{ item.class_id }}" bindtap="show_next_nav">
-            <image style="position:absolute;left:0;padding:6rpx;width:25rpx;height:25rpx;" hidden="{{ item.rgt - item.lft < 2}}" src="/image/morebook.png" />
+            <image style="width:30rpx;height:30rpx;position:absolute;right:4rpx;" hidden="{{nav_selected_id[1] != item.class_id}}" src="/image/selected.png" />
+            <image style="position:absolute;left:0;padding-top:6rpx;padding-left:16rpx;width:35rpx;height:35rpx;" hidden="{{ item.rgt - item.lft < 2}}" src="/image/tree.png" />
             <view class="nav_2_text">
               {{item.class_name}}
             </view>
           </view>
 
-        <!-- 三层目录s -->
-        <view  hidden="{{activeIndex != item.class_id}}">
-          <block wx:for="{{nav_3}}" wx:key="{{nav_list.class_id}}" wx:for-index="idx">
-            <view class="nav_3_item {{ nav_selected_id[2] == item.class_id ? 'selected' : 'default'}}" data-layer='' data-class_id="{{ item.class_id }}" bindtap="show_next_nav">
-             <image class="list-image" src="/image/point.png" /> <view class="text">{{item.class_name}} </view>
-            </view>
-          </block>
+          <!-- 三层目录s -->
+          <view hidden="{{activeIndex != item.class_id}}">
+            <block wx:for="{{nav_3}}" wx:key="{{top_nav.class_id}}" wx:for-index="idx">
+              <view class="nav_3_item {{ nav_selected_id[2] == item.class_id ? 'selected_nva3' : 'default'}}" data-layer='' data-class_id="{{ item.class_id }}" bindtap="show_next_nav">
+                <image class="list-image" src="" />
+                <view class="text">{{item.class_name}}</view>
+              </view>
+            </block>
+          </view>
+          <!-- 三层目录e -->
         </view>
-        <!-- 三层目录e -->
-        </view><!--wx:for="{{nav_2}}"---->
-      </view><!--wx:if="{{nav_2 != 'NULL'---->
-            <view class="spring"/>
+        <!--wx:for="{{nav_2}}"---->
+      </view>
+      <!--wx:if="{{nav_2 != 'NULL'---->
+      <view class="spring" />
     </scroll-view>
   </view>
-  <view class="shop_cart"><!---购物车--->
-    <button  open-type="getUserInfo" style="width;10rpx;height:100rpx"  bindgetuserinfo="goto_shopcart">
-        <image style='position:relative;bottom:0;width:100rpx;height:100rpx' src="/image/shop_cart.png" />
-    </button>
-        <view  class="count_goods weui-badge" bindgetuserinfo="goto_shopcart">{{count_cart}}</view>
-  </view><!---购物车--->
   <!--------二级目录分割线e------->
 
   <!--------商品展示s------->
   <view class="right_box">
-    <scroll-view style="height:100%; color:black;" scroll-y="true">
-      <view class="weui-cells weui-cells_after-title" ><!-- 商品列表s -->
+    <scroll-view style="height:100%;" scroll-y="true">
+      <view class="weui-cells weui-cells_after-title">
+        <!-- 商品列表s -->
         <view wx:for="{{goods_list}}" wx:key="{{item.goods_id}}" style='border-bottom: 1rpx #999 solid; '>
-            <view class='goods_box'>
-              <navigator url="" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
-                <view class="weui-cell__hd" >
-                  <image src="{{item.face_img}}" class="goods_img" />
-                </view>
-                <view class="goods_info">
-                    <view class="weui-cell__bd" style='font-size:25rpx'>{{item.name}} </view>
-                        <view class="price" >价格￥{{item.price}} </view>
-                </view><!--class goods_info"---->
-              </navigator>
-              <button open-type="getUserInfo" data-goods_id="{{item.goods_id}}" bindgetuserinfo="add_goods_to_cart" class="add_cart weui-badge" >加入购物车</button>
-            </view><!-- class='goods_box'-->
-        </view><!--wx:for="{{goods_list}}"---->
-      </view><!-- 商品列表e -->
+          <view class='goods_box'>
+            <navigator url="" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+              <view class="weui-cell__hd">
+                <image src="{{item.face_img}}" class="goods_img" />
+              </view>
+              <view class="goods_info">
+                <view class="weui-cell__bd" style='font-size:25rpx'>{{item.name}} </view>
+                <view class="price">价格￥{{item.price}}元/{{item.danwei}} </view>
+              </view>
+              <!--class goods_info"---->
+            </navigator>
+            <button style="line-height:140%" open-type="getUserInfo" data-goods_id="{{item.goods_id}}" bindgetuserinfo="add_goods_to_cart" class="add_cart weui-badge">加入购物车</button>
+          </view>
+          <!-- class='goods_box'-->
+        </view>
+        <!--wx:for="{{goods_list}}"---->
+      </view>
+      <!-- 商品列表e -->
+      <view class="spring" />
     </scroll-view>
   </view>
   <!--------商品展示e------->
 </view>
-   

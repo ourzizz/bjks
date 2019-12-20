@@ -16,11 +16,11 @@
     </view>
   </view>
 
-<!-- <view class="weui-flex">
+ <view class="weui-flex">
   <view class="weui-flex__item" style='display:inline;' data-idx="0"  bindtap='go_order'><image class="order_image" src="/image/pay.png"/>待支付   </view>
   <view class="weui-flex__item" style='display:inline;' data-idx="1"  bindtap='go_order'><image class="order_image" src="/image/sign.png"/>待收货   </view>
   <view class="weui-flex__item" style='display:inline;' data-idx="2"  bindtap='go_order'><image class="order_image" src="/image/kuaidi.png"/>全部订单 </view>
-</view> -->
+</view> 
 
   <view class="weui-flex">
     <view class="uploader-text" bindtap="setUserFiles">

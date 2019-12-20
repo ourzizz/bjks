@@ -36,6 +36,18 @@
         "text": "首页"
       },
       {
+        "selectedIconPath": "image/book2.png",
+        "iconPath": "image/book1.png",
+        "pagePath": "pages/bookstore/bookstore",
+        "text": "学习资料"
+      },
+      {
+        "selectedIconPath": "image/shop_cart.png",
+        "iconPath": "image/shop_cart2.png",
+        "pagePath": "pages/shopcart/shopcart",
+        "text": "购物车"
+      },
+      {
         "selectedIconPath": "image/usered.png",
         "iconPath": "image/user.png",
         "pagePath": "pages/user/user",

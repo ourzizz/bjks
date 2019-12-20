@@ -2,9 +2,10 @@
 //index.js 
 //本页设计思路
 //数据格式 分类数据 统一为{parent_id,son_list} 每个对象都有自身id和子列表
-//渲染一级目录的时候 在onLoad函数  nav_list: this.data.parent_son[0].son_list
+//渲染一级目录的时候 在onLoad函数  top_nav: this.data.parent_son[0].son_list
 //需要解决，某个商品是父类子类都应该有的，那么设置它的class_id为父类的，拿到叶子id请求的时候
 //后台应该给出从根到叶的所有商品列表
+//var cls = require('../../myclass.js')
 var qcloud = require('../../vendor/wafer2-client-sdk/index')
 var config = require('../../config')
 var util = require('../../utils/util.js')
@@ -18,6 +19,30 @@ function get_sons_by_id (parent_son,class_id) {
     return 'NULL'
 }
 
+//获得给定id的第一个儿子，不存在返回NULL
+function get_first_son (parent_son,pid) {
+    for (var key in parent_son) {
+        if (parent_son[key].parent_id == pid) {//如果pid有儿子，那么它必然能在parent_id中匹配到
+            return parent_son[key].son_list[0]//返回第一个儿子
+        }
+    }
+    return 'NULL' //如果查找失败了
+}
+
+//获得第一个叶子节点
+function find_first_leave(parent_son,parent_id) {
+    var first_son = get_first_son(parent_son,parent_id)
+    if (first_son == 'NULL') {//递归边界
+        return parent_id
+    }
+    else if (first_son.count_sons == '0') {
+        return first_son.class_id
+    }
+    else {
+        return find_first_leave(parent_son,first_son.class_id)
+    }
+}
+
 Page({    
     data: {
         parent_son: [],//}}}
@@ -29,29 +54,38 @@ Page({
         takeSession: false,
         requestResult: '',
         goods_list: [],
-        count_cart: 0,
         nav_selected_id:[],
         nav_2:[],
         nav_3:[],
     },
 
+    onShareAppMessage: function() {
+        return {
+            title: '社区超市招商合作',
+            path: 'pages/bookstore/bookstore'
+        }
+    },
     onLoad:function (){
         let that = this
         qcloud.request({
-            url: `${config.service.host}/goods_class/get_parent_son`,
+            url: `${config.service.host}/goods_class/get_pslist_by_parent_name`,
+            data: {name:'人事考试图书'},
+            method: 'POST',
+            header: { 'content-type':'application/x-www-form-urlencoded' },
             success(result) {
                 that.data.parent_son = result.data
-                var son_list = get_sons_by_id(result.data,"100")//100是公务员 下阶段 这里需要自动生成
+                var top_nav = result.data[0].son_list
+                var default_nav_2 = result.data[0].son_list[0].class_id //默认二级列表是食品的子列表
+                var son_list = get_sons_by_id(result.data,default_nav_2)
                 that.setData({
                     parent_son:result.data,
-                    nav_list: result.data[2].son_list,
+                    top_nav: top_nav,
                     nav_2: son_list,
                 })
-                var id = that.find_first_leave(result.data[0].parent_id)
-                that.show_goods_list_by_class_id(id)
-                that.drawing_selected_item(0,'100')
-                that.drawing_selected_item(1,id)
-                that.get_sum_cart()
+                var leave_id = find_first_leave(that.data.parent_son,top_nav[0].class_id)
+                that.show_goods_list_by_class_id(leave_id)
+                that.drawing_selected_item(1,default_nav_2)
+                that.drawing_selected_item(1,leave_id)
             },
             fail(error) {
                 util.showModel('请求失败', error);
@@ -98,8 +132,8 @@ Page({
         var class_id = event.currentTarget.dataset.class_id
         var layer = event.currentTarget.dataset.layer
         var son_list = get_sons_by_id(this.data.parent_son,class_id)
-        var leave_id = this.find_first_leave(class_id)
-        var first_son = this.get_first_son(class_id)
+        var leave_id = find_first_leave(this.data.parent_son,class_id)
+        var first_son = get_first_son(this.data.parent_son,class_id)
         this.show_goods_list_by_class_id(leave_id)//默认显示的是目录中的第一个类别的商品
 
         if (layer == '2') { //表示点击了顶层导航，只用渲染二级目录,且默认显示第一个子类为选中状态
@@ -119,6 +153,10 @@ Page({
                     nav2_selected_id:class_id,
                 })
                 this.drawing_selected_item(2,leave_id)
+            }else{//无子节点的二级导航被点击了 要关掉上次显示的子列表
+                this.setData({
+                    activeIndex: -1,
+                })
             }
             this.drawing_selected_item(1,class_id)
         } else{
@@ -128,27 +166,6 @@ Page({
     },
 
 
-    get_first_son: function (pid) {//获得给定id的第一个儿子，不存在返回NULL
-        for (var key in this.data.parent_son) {
-            if (this.data.parent_son[key].parent_id == pid) {//如果pid有儿子，那么它必然能在parent_id中匹配到
-                return this.data.parent_son[key].son_list[0]//返回第一个儿子
-            }
-        }
-        return 'NULL' //如果查找失败了
-    },
-
-    find_first_leave: function (parent_id) {//递归获得叶子节点
-        var first_son = this.get_first_son(parent_id)
-        if (first_son == 'NULL') {//递归边界
-            return parent_id
-        }
-        else if (first_son.count_sons == '0') {
-            return first_son.class_id
-        }
-        else {
-            return this.find_first_leave(first_son.class_id)
-        }
-    },
 
     insert_user_chose_goods_to_database: function (open_id,goods_id) {
         var that = this
@@ -162,10 +179,7 @@ Page({
             url: `${config.service.host}/weapp/shopcart/user_add_goods/` + open_id + `/` + goods_id,
             success(res) {
                 if(res.data == true) {
-                    that.setData({
-                        count_cart: that.data.count_cart + 1
-                    })
-                    util.showSuccess('收藏成功')
+                    getApp().raise_cart_sum(1)
                 } else {
                     var error = "亲您的需求已经超过了我们的供给"
                     util.showModel('超过库存',error)
@@ -178,28 +192,8 @@ Page({
         })
         util.showSuccess('添加成功')
     },
-    get_sum_cart:function()
-    {
-        const session = qcloud.Session.get()
-        if(session)
-        {
-            var open_id = session.userinfo.openId
-            var that = this
-            qcloud.request({//加入到购物车表,现阶段先将逻辑代码理顺
-                url: `${config.service.host}/weapp/shopcart/get_cart_sum_count/` + open_id,
-                success(res) {
-                    if(res.data.sum !== null){
-                        that.setData({ count_cart: parseInt(res.data.sum) })
-                        util.showSuccess('收藏成功')
-                    }
-                },
-                fail(error) {
-                    util.showModel('请求失败', error);
-                    console.log('request fail', error);
-                }
-            })
-        }
-    },
+
+
     add_goods_to_cart: function (event) {//第一view改为button 而且一定要加open-type="getUserInfo",bindtap改为bindgetuserinfo小程序只允许用户点击的事件来触发登陆
         var goods_id = event.currentTarget.dataset.goods_id
         const session = qcloud.Session.get()
@@ -211,8 +205,7 @@ Page({
                 success: res => {
                     this.setData({ userInfo: res, logged: true })
                     util.showSuccess('登录成功')
-                    this.insert_user_chose_goods_to_database(goods_id)
-                    this.get_sum_cart()
+                    this.insert_user_chose_goods_to_database(this.data.userInfo.openId,goods_id)
                 },
                 fail: err => {
                     console.error(err)
@@ -221,6 +214,7 @@ Page({
             })
         }
     },
+
     goto_shopcart:function ()
     {//wx.navigateTo/wx.redirectTo
         const session = qcloud.Session.get()

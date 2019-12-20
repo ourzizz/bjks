@@ -1,17 +1,20 @@
 <!--pages/shopcart/shopcart.wxml-->
 <view  wx:if="{{goods_list.length === 0}}">
-    客官，您的购物车空空如也！！
+    <view style="position:relative;top:40rpx;left:20rpx;">客官，您的购物车空空如也！！</view>
+    <image style="position:relative;top:200rpx;left:20rpx;bottom:100rpx;height:100rpx;width:100rpx" src="/image/shop_cart2.png"  />
 </view>
 
-<view class=""  hover-class="none" hover-stop-propagation="false">
+<view wx:else  hover-class="none" hover-stop-propagation="false">
  <div class="nav">
-<button class="prev" size="mini" type="default" data-type="{{opera_option == '编辑' ? 'editor' : 'save'}}"  bindtap="switch_info_opera"> {{opera_option}} </button>
+<view  style="margin-left:10rpx;padding-bottom:10rpx;width:20%;" bindtap="select_all" > 
+<image class="modify_count_img"  src="/image/selectall.png" />
+全选 </view>
 </div>
 </view>
 <view class="cart_box">
   <!--商品展示s-->
   <scroll-view style="height:980rpx; color:black;" scroll-y="true">
-    <checkbox-group style="position:absolute" bindchange="checkboxChange">
+    <checkbox-group style="width:100%; position:absolute" bindchange="checkboxChange">
       <view wx:for="{{goods_list}}" wx:key="{{goods_list.goods_id}}" wx:for-index="idx">
         <view class="cart_item">
             <label class="weui-cell weui-cells_after-title" style='float:left;margin:10px 0px 0 5px'>
@@ -21,21 +24,23 @@
               </view>
             </label>
 
-        <view class='goods_info_box weui-cell weui-cell_access' hover-class="weui-cell_active" style="padding: 15rpx; margin: 0;border:0px">
-          <navigator url="" class=""  >
+        <view class='goods_info_box weui-cell weui-cell_access'  style="padding: 15rpx; margin: 0;border:0px">
+          <navigator url="" hover-class="weui-cell_active"  >
              <image src="{{item.face_img}}" class="goods_img" /> 
-        </navigator>
-            <view class="goods_box" hidden="{{hidden_goodsinfo}}"><!--  -->
+          </navigator>
+        <!--  -->
+            <!-- <view class="goods_box" hidden="{{hidden_goodsinfo}}">
               <view class="goods_name" style='font-size:25rpx'>{{item.name}} </view>
               <view style="display:inline" class="price">价格￥{{item.price}} </view>
-              <view style="color:black" class="price">*{{item.count}}件</view>
-            </view> <!--class goods_info"---->
+              <view style="color:black" class="price">*{{item.count}}{{item.danwei}}</view>
+            </view>  -->
+            <!--class goods_info"---->
 
-           <view class="opra_box" hidden="{{hidden_opera}}"><!--功能区域----> 
-              <view style="display:inline" class="price">价格￥{{item.price}}</view>
-              <view class="price" style="display:block">库存量{{item.remain}}</view>
+           <view class="opra_box"><!--功能区域----> 
+              <view class="price" style="display:block;color:black">{{item.name}}</view>
+              <view style="display:block" class="price">价格￥{{item.price}}/{{item.danwei}}</view>
                 <image class="modify_count_img" style="" src="/image/reduce.png"  data-idx="{{idx}}" data-goods_id="{{item.goods_id}}" bindtap="reduce_count" />
-                <view style="display:inline">{{item.count}}</view>
+                <view  calss="count_text" style="display:inline;padding-left:25rpx;padding-right:25rpx;border-bottom:1px solid;margin-left:5rpx;margin-right:5rpx;">{{item.count}}</view>
                 <image class="modify_count_img"  src="/image/add.png" data-idx="{{idx}}" data-goods_id="{{item.goods_id}}" bindtap="add_count" />
                 <image class="delete-image" style="position:relative;left:120rpx;bottom:100rpx" src="/image/delete.png" data-idx="{{idx}}" bindtap="delete_goods_item" />
           </view><!--功能区域---->
@@ -44,15 +49,18 @@
 
         </view ><!--class="cart_item"---->
       </view > <!--wx:for="{{goods_list}}"---->
+      <view style="height:180rpx"/>
     </checkbox-group>
   </scroll-view>
 <view style='padding:40rpx'></view>
 </view>
 <!--商品展示e-->
 <view class="foot">
-  <view style="position:relative;top:16rpx;left:30rpx;display:inline;">合计￥:{{cost}}元</view>
+  <view style="background:#586c94;color:white;float:left;width:40%;height:90rpx;text-align:center;">
+      <text style="position:relative;top:15rpx">合计￥:{{cost}}元</text>
+  </view> 
   <view bindtap="next_step" style="background:red;color:white;float:right;width:60%;height:90rpx;text-align:center">
-    <view style="position:relative;top:16rpx;" > 去结算</view>
+      <view style="position:relative;top:16rpx;" > 去结算</view>
   </view>
 </view>
 

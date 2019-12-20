@@ -1,89 +1,67 @@
+@import '/weui.wxss';
+@import '/common/wxss/order.wxss';
 
-/* pages/shopcart/shopcart.wxss */
-@import '/weui.wxss'
-
-.weui-cell {
-    margin: 10px 0px 15px 5px;
-}
-.weui-cell__bd{
-margin:0 0 0 20rpx
-}
-.cart_box {
-    height: 100%
-}
-.head_editor{
-position:fixed;
-top:0;
-}
-.goods_info_box {
-    padding: 0; margin: 0;
+.input {
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 90rpx;
 }
 
-.cart_item {
-    position: relative;
-    border-bottom: 1rpx solid #d9d9d9;
+.input input {
+  background: #f1f1f1;
+  height: 80rpx;
+  padding: 10rpx 20rpx;
+  font-size: 34rpx;
+  width: 77%;
 }
 
-/*商品的图片、名称、价格*/
-.goods_box {
-    display: block
+.area {
+  width: 100%;
+  height: 90rpx;
+  position: relative;
+  overflow: hidden;
 }
 
-.goods_img {
-    margin-right: 5px;
-    vertical-align: middle;
-    width: 80px;
-    height: 80px;
+.input .button {
+  width: 20%;
+  position: absolute;
+  background: #42c97f;
+  height: 90rpx;
+  line-height: 87rpx;
+  text-align: center;
+  font-size: 34rpx;
+  color: #fff;
+  right: 0;
+  top: 0;
+  bottom: 0;
 }
 
-.price {
-display:inline;
-font-size: 28rpx;
-color: red;
+/* 遮挡背景变暗 */
+
+.commodity_screen {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #000;
+  opacity: 0.2;
+  overflow: hidden;
+  z-index: 1000;
+  color: #fff;
 }
 
-/*商品的图片、名称、价格*/
+/*对话框 */
 
-.opra_box {
-    /* float: right;*/
-    width: 600px;  
-    /* position: absolute;
-    right: 0;
-    bottom: 10rpx; */
+.commodity_attr_box {
+  height: 200rpx;
+  width: 100%;
+  overflow: hidden;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 2000;
+  background: #fff;
+  padding-top: 20rpx;
 }
-
-.modify_count_img {
-    position: relative;
-    top: 15rpx;
-    height: 60rpx;
-    width: 60rpx;
-}
-.goods_name{
-    /* width:30%;
-    height: 60px;
-    justify-content: center;
-    text-align: center;
-    font-size: 30rpx;
-    overflow: hidden;
-    text-overflow:ellipsis;
-    white-space: nowrap; */
-}
-.delete-image {
-    right: 10rpx;
-    top: 15rpx;
-    height: 50rpx;
-    width: 50rpx;
-}
-
-.foot {
-    position: fixed;
-    bottom: 0;
-    color: #11cd6e;
-    border-top: solid 1rpx #e5e5e5;
-    width: 100%;
-}
-
-.address_box{
-    padding:10rpx;
-}
-
