@@ -1,0 +1,63 @@
+<view class="">
+  <scroll-view style="height:50%; color:black; background-color: lightblue;" scroll-y="true">
+    <view wx:if="{{tree_list != 'NULL'}}">
+      <view wx:for="{{tree_list}}" wx:key="{{tree_list.class_id}}" bindtap="set_idx" data-idx="{{idx}}" wx:for-index="idx">
+        <view hidden="{{!item.show_self}}">
+          <view class="nav_2_text" style="positon:absolute;display:inline-block">
+            <view wx:for="{{[1,2,3,4,5,6]}}" wx:for-item="i" wx:key="{{i}}" style="display:inline-block">
+              <view wx:if="{{ i < item.layer}}" style="padding-left:25px">
+                |
+              </view>
+            </view>
+            <view style="display:inline" bindtap="operate_tree" data-idx="{{idx}}">
+              <view wx:if="{{item.rgt-item.lft > 1 && item.show_sons==false}}" style="display:inline-block">
+                +
+              </view>
+              <view wx:elif="{{item.rgt-item.lft > 1 && item.show_sons==true}}" style="display:inline-block">
+                ~
+              </view>
+              <view wx:else style="display:inline-block">
+                ..
+              </view>
+              <view style="color:{{item.onoff==='off' ? 'gray':'' }};display:inline">
+                {{item.class_name}}
+              </view>
+            </view>
+
+            <view style="float:right;positon:absolute;right:10rpx;background:yellow;margin:0 20rpx 0 50rpx" hidden="{{idx!=activeIndex}}">
+              <image class="opera_img" bindtap="edit_class" data-idx="{{idx}}" src="/image/pen.png" style="width:30rpx;height:30rpx;padding:0 10rpx 0 10rpx" />
+              <image class="opera_img" bindtap="new_class" data-idx="{{idx}}" src="/image/morebook.png" style="width:30rpx;height:30rpx;padding:0 10rpx 0 10rpx" />
+              <image hidden="{{item.rgt-item.lft > 1}}" class="opera_img" bindtap="delete_class" data-idx="{{idx}}" src="/image/delete.png" style="width:30rpx;height:30rpx;padding:0 10rpx 0 10rpx" />
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+    <!--wx:if="{{nav_2 != 'NULL'---->
+  </scroll-view>
+</view>
+<view class="" style="position:fixed;bottom:0;padding:5rpx;background:white" hidden="{{!show_edit}}">
+   <view class="weui-cells__title">编辑</view>
+  <view class="weui-cells weui-cells_after-title">
+    <view class="weui-cell weui-cell_input weui-cell_warn">
+      <view class="weui-cell__hd">
+        <view class="weui-label">类名</view>
+      </view>
+      <view class="weui-cell__bd">
+        <input class="weui-input" placeholder="类名" bindinput="input_class_name" value="{{temp_node.class_name}}" />
+      </view>
+    </view>
+  </view>
+  <view class="weui-cells weui-cells_after-title">
+    <view class="weui-cell weui-cell_switch">
+      <view class="weui-cell__bd">类显示开关</view>
+      <view class="weui-cell__ft">
+        <switch checked="{{temp_node.onoff==='off' ? false : true }}" bindchange="onoff" />
+      </view>
+    </view>
+  </view>
+  <view  style="margin:0px auto;right:0;left:0;"> 
+        <button style="backgroud:#d9d9d9;margin:10rpx;display:inline-block;width:42%" type="primary" bindtap="submit"> 保存</button>
+        <button style="backgroud:#d9d9d9;margin:10rpx;display:inline-block;width:42%;float:right" bindtap="cancle_edit"> 取消</button>
+    </view>
+</view>

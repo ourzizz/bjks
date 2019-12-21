@@ -1,0 +1,62 @@
+<!--pages/houtai/pubmsg/pubmsg.wxml-->
+<view wx:if="{{step==1}}">
+    <button bindtap="new_msg">新增</button>
+    <view wx:for="{{msg_list}}" wx:key="{{item.file_id}}" wx:for-index="idx">
+    <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+            <view class="weui-cell__bd" bindtap="edit_msg"  data-file_id="{{item.file_id}}">{{item.title}}</view>
+            <view class="weui-cell__ft weui-cell__ft_in-access">{{item.pubtime}}</view>
+            <view bindtap="delete_msg" data-idx="{{idx}}"  data-file_id="{{item.file_id}}" class="weui-cell__ft weui-cell__ft_in-access">删除</view>
+        </view>
+    </view>
+</view>
+</view>
+<view class="page" wx:if="{{step==2}}">
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell">
+        <view class="weui-cell__bd" style="font-size:30rpx;width:30%">文件名称:</view>
+        <view class="weui-cell__gt">
+          <input style="font-size:30rpx;" class="weui-input"  bindchange="input_title" value="{{temp_msg.title}}" placeholder="文件名称" />
+        </view>
+      </view>
+    </view>
+
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell">
+        <view class="weui-cell__bd" style="font-size:30rpx;width:30%">发文单位:</view>
+        <view class="weui-cell__gt">
+          <input style="font-size:30rpx;" class="weui-input"  bindchange="input_org" value="{{temp_msg.puborg}}" placeholder="单位" />
+        </view>
+      </view>
+    </view>
+
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell">
+        <view class="weui-cell__bd" style="font-size:30rpx;width:30%">发文日期:</view>
+        <view class="weui-cell__gt">
+          <input style="font-size:30rpx;" class="weui-input"  bindchange="input_date" value="{{temp_msg.pubtime}}" placeholder="日期" />
+        </view>
+      </view>
+    </view>
+
+    <view class="weui" >
+      <view class="weui-uploader">
+          <view class="weui-uploader__files" style="position:static">
+            <block wx:for="{{localImagePaths}}" wx:for-item="image" wx:for-index='idx'>
+              <view class="weui-uploader__file" >
+                <image data-idx="{{idx}}" class="delete-image" style="height:50rpx;width:50rpx;position:absolute;" src="/image/delete.png" bindtap="delete_img"></image>
+                <image class="weui-uploader__img" src="{{image}}" data-id="{{idx}}" data-src="{{image}}" bindtap="previewImage"></image>
+              </view>
+            </block>
+          </view>
+          <view class="weui-uploader__input-box">
+            <view class="weui-uploader__input" bindtap="chooseImage"></view>
+          </view>
+    </view>
+    </view>
+
+    <view  style="margin:0px auto;right:0;left:0;"> 
+        <button style="backgroud:#d9d9d9;margin:10rpx;display:inline-block;width:42%" bindtap="publish_message"> 发布</button>
+        <button style="backgroud:#d9d9d9;margin:10rpx;display:inline-block;width:42%;float:right" bindtap="cancle"> 取消</button>
+    </view>
+</view>

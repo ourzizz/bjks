@@ -15,7 +15,11 @@
     "pages/refund/refund",
     "pages/sellerlogin/sellerlogin",
     "pages/manageOrder/manageOrder",
-    "pages/chat/chat"
+    "pages/chat/chat",
+    "pages/houtai/manageOrder/manageOrder",
+    "pages/houtai/houtaiindex",
+    "pages/houtai/classManage/classManage",
+    "pages/houtai/pubmsg/pubmsg"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",

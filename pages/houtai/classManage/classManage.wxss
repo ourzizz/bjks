@@ -1,0 +1,158 @@
+/* pages/bookstore/bookstore.wxss */
+
+/*总结经验 父元素relative 子元素的position:absolute才不会堆在一坨*/
+
+/*形如class="a b"的选择器，优先渲染a的属性a与b相同地方选择a,所以自己的类要放在最前面*/
+
+@import '/weui.wxss'
+/*一级导航横向滑块*/
+page{
+height: 100%;
+}
+.container{
+height: 100%;
+}
+.weui-badge{
+height:50rpx;
+}
+.head-nav {
+  width: 100%;
+  height: 80rpx;
+  overflow: hidden;
+  padding: 1rpx;
+  background: #fff;
+  white-space: nowrap;
+  position: fixed;
+  top: 0;
+}
+.item_list {
+  width: 180rpx; /*连边带按钮宽度*/
+  height: auto;
+  margin-right: 5rpx;
+  display: inline-block;
+}
+
+.item_book_text {
+  width: 180rpx; /*按钮自身宽度*/
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 0 4rpx 0 0;
+  padding: 0 0 0 0;
+  font-size: 30rpx;
+  height:70rpx;
+}
+
+.left_box {
+  position: fixed;
+  width: 25%;
+  left: 0;
+  top: 80rpx;
+  height:100%;
+}
+
+.nav_2_item {/*{{{*/
+  /*二层目录的样式*/
+  padding: 0 0 5rpx 0;
+  font-size: 30rpx;
+  border-style: solid;
+  border-width: 0 0 1rpx 0;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.selected_nva3{
+background:white;
+}
+
+.selected{
+background:red;
+color:white;
+}
+
+.default{
+/*background:red;*/
+}
+
+.nav_3_item {
+  /*margin:0 0 0 5rpx;*/
+  padding: 10rpx 0 5rpx 0;
+  font-size: 30rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-style: dashed ;
+  border-width: 0 0 1rpx 0;
+}/*}}}*/
+
+.right_box {
+  position: fixed;
+  width: 75%;
+  right: 0;
+  top: 80rpx;
+  height:100%;
+}
+
+.goods_box {
+  position: relative;
+}
+
+.goods_info {
+  display: block;
+}
+
+.goods_img {
+  margin-right: 5px;
+  vertical-align: middle;
+  width: 80px;
+  height: 80px;
+}
+
+.add_cart {
+  /*添加到购物车*/
+  margin: 8rpx;
+  position: absolute;
+  bottom: 28rpx;
+  right: 5rpx;
+  font-size: 28rpx;
+}
+
+.price {
+  font-size: 28rpx;
+  color: red;
+}
+
+/*end of right_box*/
+
+.count_goods {
+  /*购物车上的数字小红标*/
+  margin: 8rpx;
+  position: absolute;
+  top: -20rpx;
+  right: -10rpx;
+  font-size: 28rpx;
+}
+
+.shop_cart {
+  padding: 10rpx;
+  position: absolute;
+  bottom: 0;
+  left: 160rpx;
+}
+
+.spring{
+height:90rpx;
+}
+
+.list-image{
+height:20rpx;
+width:20rpx;
+}
+
+.text{
+  display:inline;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

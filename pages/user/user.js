@@ -10,7 +10,9 @@ Page({
         takeSession: false,
         requestResult: '',
         userFiles: {},
-        hidecollect: true,
+        hidecollect: false,
+        hideEleList: true,
+        elecbookList:[],
         hiddenEnter: true  //这个地方不能错的啊！
     },
     onLoad:function()
@@ -25,15 +27,12 @@ Page({
             this.setUserFiles()
         }
     },
-    setUserFiles:function (){
+    setUserFiles:function(){
         var that = this
-        if(this.data.hidecollect == true)
-        {
-            this.setData({hidecollect: false})
-        }
-        else{
-            this.setData({hidecollect: true})
-        }
+        this.setData({
+            hidecollect: !this.data.hidecollect,
+            hideEleList: !this.data.hideEleList
+        })
         qcloud.request({
             url: `${config.service.host}/weapp/demo/get_user_files_events/` + that.data.userInfo.openId,
             success(res) {
@@ -43,6 +42,32 @@ Page({
                 util.showModel('请求失败', error);
                 console.log('request fail', error);
             }
+        })
+    },
+    setUserElecbooks:function (){
+        var that = this
+        this.setData({
+            hidecollect: !this.data.hidecollect,
+            hideEleList: !this.data.hideEleList
+        })
+        qcloud.request({
+            url: `${config.service.host}/elec_book/get_all_elec_books/`,
+            data: {
+                openId: that.data.userInfo.openId
+              },
+              method: 'POST',
+              header: {
+                'content-type': 'application/x-www-form-urlencoded'
+              },
+              success(result) {
+                that.setData({
+                    elecbookList:result
+                })
+              },
+              fail(error) {
+                util.showModel('请求失败', error);
+                console.log('request fail', error);
+              }
         })
     },
     bindGetUserInfo: function () {

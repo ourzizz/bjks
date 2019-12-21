@@ -1,0 +1,130 @@
+<!--pages/orders/orders.wxml--> <view class="page">
+  <view class="page__bd">
+    <view class="weui-tab">
+      <view class="weui-navbar">
+        <block wx:for="{{tabs}}" wx:key="*this">
+          <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
+            <view class="weui-navbar__title">{{item[0]}}</view>
+            <view wx:if="{{item[1]>0}}" class="weui-badge" style="position: absolute;top:1em;right:5rpx">{{item[1]}}</view>
+          </view>
+        </block>
+        <view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
+      </view>
+
+      <scroll-view style="postion:relative;top:30rpx;color:black;" class="weui-tab__panel" scroll-y="true">
+        <view>
+          <view hidden="{{activeIndex != 0}}">
+
+            <view class="order_box" wx:for="{{wait_pick_order_list}}" wx:key="*this" wx:for-index="idx">
+            订单号:{{item.order.order_id}}下单日期:{{item.order.order_date}} {{item.order.name}} ￥{{item.order.total_fee}}元
+              <view wx:for="{{item.goods_list}}" wx:key="*this">
+                <view class="cart_item">
+                  <view class='goods_info_box weui-cell weui-cell_access' hover-class="weui-cell_active" style="padding: 15rpx; margin: 0;border:0px">
+                    <image src="{{item.face_img}}" class="goods_img" />
+                    <view style="width:80%;float:right">
+                      <view class="goods_name" style='font-size:25rpx'>{{item.name}} </view>
+                      <view style="display:inline" class="price">价格￥{{item.price}} </view>
+                      <view style="color:black" class="price">*{{item.count}}{{item.danwei}}</view>
+                    </view>
+                    <!--textinfo--->
+                  </view>
+                  <!--class goods_info"---->
+                </view>
+              </view>
+              <view class="button_box">
+                <button type="primary" class="order_button" style="width:80%" data-idx="{{idx}}" data-order_id="{{item.order.order_id}}" bindtap="pick_order">接单</button>
+              </view>
+            </view> <!--class order_box"---->
+          </view>
+
+          <view hidden="{{activeIndex != 1}}">
+            <view>请按以下顺序配单:捡齐商品-打包-贴订单号</view>
+            <view class="order_box" wx:for="{{assemble_list}}" wx:key="*this" wx:for-index="idx">
+            订单号:{{item.order.order_id}}下单日期:{{item.order.order_date}} {{item.order.name}} ￥{{item.order.total_fee}}元 {{item.address.name}}
+              <view wx:for="{{item.goods_list}}" wx:key="*this">
+                <view class="cart_item">
+                  <view class='goods_info_box weui-cell weui-cell_access' hover-class="weui-cell_active" style="padding: 15rpx; margin: 0;border:0px">
+                    <image src="{{item.face_img}}" class="goods_img" />
+                    <view style="width:80%;float:right">
+                      <view class="goods_name" style='font-size:25rpx'>{{item.name}} </view>
+                      <view style="display:inline" class="price">价格￥{{item.price}} </view>
+                      <view style="color:black" class="price">*{{item.count}}{{item.danwei}}</view>
+                    </view> <!--textinfo--->
+                  </view><!--class goods_info"---->
+                </view>
+              </view>
+              <view wx:if="{{item.order.user_words!=''}}" class="user_words">
+              <text style="margin:0 15rpx 0 15rpx"> 我的留言:{{item.order.user_words}}</text>
+              </view>
+              <view class="button_box">
+                <button class="order_button"  type="primary"  data-idx="{{idx}}" data-order_id="{{item.order.order_id}}" bindtap="assemble_finish">配单完成</button>
+                <button class="order_button"  type="default"  data-no="{{item.address.telphone}}" bindtap="call">联系顾客</button>
+              </view>
+            </view> <!--class order_box"---->
+            </view> <!--activeIndex---->
+
+          <view hidden="{{activeIndex != 2}}">
+            <view style="font-size:35rpx" class="order_box" wx:for="{{wait_delivery_order_list}}" wx:key="*this" wx:for-index="idx">
+            <view style="color:red;display:inline">应收￥{{item.order.total_fee}}-</view>单号:{{item.order.order_id}}
+            <view style="font-size:35rpx">日期:{{item.order.order_date}}</view>
+            <!--view style="font-size:40rpx">收件人:{{item.address.name}}</view-->
+            <view style="font-size:40rpx;">详细地址:{{item.address.detail}}</view>
+            <image src="/image/detail.png" class="goods_img" style="position:absolute;top:5rpx;right:10rpx" bindtap="show_detail" />
+            <block hidden="{{}}">
+                <view wx:for="{{item.goods_list}}" wx:key="*this">
+                      <view class="goods_name" style='font-size:25rpx'>{{item.name}} </view>
+                      <view style="display:inline" class="price">价格￥{{item.price}} </view>
+                      <view style="color:black" class="price">*{{item.count}}{{item.count}}</view>
+                </view>
+                <view wx:if="{{item.order.user_words!=''}}" class="user_words">
+                    <view style="padding:0 0 0 8rpx">{{item.order.user_words}}</view>
+                </view>
+            </block>
+            <view class="button_box">
+                <button class="order_button" data-no="{{item.address.telphone}}" style="width:40%" bindtap="call">联系顾客</button>
+                <button class="order_button" type="primary" data-order_id="{{item.order.order_id}}" data-idx="{{idx}}" bindtap="user_signed">已送达</button>
+            </view>
+            <block wx:if="{{item.order.refund_status != ''}}">
+              <button class="weui-btn mini-btn"  type="warn" data-order_id="{{item.order.order_id}}"  data-idx="{{idx}}" bindtap="cancle_delivery">退款中取消送件</button>
+            </block>
+            </view>
+          </view>
+
+        <view wx:if="{{role === 'boss'}}">
+          <view hidden="{{activeIndex != 3}}">
+            <view class="order_box" wx:for="{{wait_refund_list}}" wx:key="*this" wx:for-index="idx">
+              <view class="refund_status">
+                  <view wx:if="{{item.order.seller_act=='SIGNED'}}">已经签收，暂不退款</view>
+                  <view wx:elif="{{item.order.seller_act=='DELIVERY'}}">快递员送货中</view>
+                  <view wx:elif="{{item.order.seller_act=='WAIT_PICK'}}">未进入快递流程可以退款</view>
+                  <view wx:else="{{item.order.seller_act=='CANCLE'}}">快递员销单，可以退款</view>
+                  <view style="display:inline;color:red">本单金额￥{{item.order.total_fee}} </view>
+              </view>
+              订单号:{{item.order.order_id}} 下单日期:{{item.order.order_date}} {{item.order.name}}
+              退款原因:{{item.order.refund_reason}}
+              <view wx:for="{{item.goods_list}}" wx:key="*this">
+                <view class="cart_item">
+                  <view class='goods_info_box weui-cell weui-cell_access' hover-class="weui-cell_active" style="padding: 15rpx; margin: 0;border:0px">
+                    <image src="{{item.face_img}}" class="goods_img" />
+                    <view style="width:80%;float:right">
+                      <view class="goods_name" style='font-size:25rpx'>{{item.name}} </view>
+                      <view style="display:inline" class="price">价格￥{{item.price}} </view>
+                      <view style="color:black" class="price">*{{item.count}}{{item.count}}</view>
+                    </view>
+                  </view>
+                  <!--class goods_info"---->
+                </view>
+              </view>
+              <block wx:if="{{item.order.seller_act === 'CANCLE' || item.order.seller_act=='WAIT_PICK'}}">
+              <button class="weui-btn mini-btn"  type="default" size="mini" data-order_id="{{item.order.order_id}}"  data-idx="{{idx}}" bindtap="agree_refund">同意退款</button>
+              </block>
+              <button class="weui-btn mini-btn"  type="default" size="mini" data-order_id="{{item.order.order_id}}"  data-idx="{{idx}}" bindtap="refuse_refund">不同意退款</button>
+            </view>
+          </view>
+        </view>
+      </view> <!--wx:if="{{role === 'boss'}}---->
+      </scroll-view>
+
+    </view>
+  </view>
+</view>

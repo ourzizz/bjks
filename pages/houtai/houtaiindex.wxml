@@ -1,0 +1,11 @@
+<view class="index">
+<view style="display:flex;justify-content:center;padding:10rpx;font-size:25px">
+  欢迎登录后台
+  </view>
+  <view wx:for="{{show_nav_list}}" wx:key="" style="padding-top:15rpx;padding:left:20rpx;border-bottom:5rpx solid">
+    <navigator url="../houtai/{{page_list[item].id}}/{{page_list[item].id}}" >
+      ----{{page_list[item].name}}
+      <image style="position:absolute;right:0;padding:16rpx;width:25rpx;height:25rpx;" src="/image/goright.png" />
+    </navigator>
+  </view>
+</view>

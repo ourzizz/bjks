@@ -25,10 +25,8 @@
                       <view class="goods_name" style='font-size:25rpx'>{{item.name}} </view>
                       <view style="display:inline" class="price">价格￥{{item.price}} </view>
                       <view style="color:black" class="price">*{{item.count}}件</view>
-                    </view>
-                    <!--textinfo--->
-                  </view>
-                  <!--class goods_info"---->
+                    </view> <!--textinfo--->
+                  </view><!--class goods_info"---->
                 </view>
               </view>
 

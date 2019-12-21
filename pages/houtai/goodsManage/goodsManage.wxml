@@ -1,0 +1,153 @@
+<view class="container">
+  <view wx:if="{{step == 1}}">
+    <view class="left_box">
+      <scroll-view style="height:100%;background:#ccc;font-size:30rpx;border-right:solid" scroll-y="true" scroll-x="true">
+        <view wx:if="{{class_list != 'NULL'}}">
+          <view wx:for="{{class_list}}" wx:key="{{class_list.class_id}}" bindtap="set_idx" data-idx="{{idx}}" wx:for-index="idx">
+            <view hidden="{{!item.show_self}}">
+              <view class="nav_2_text" style="positon:absolute;display:inline-block">
+                <view wx:for="{{[1,2,3,4,5,6]}}" wx:for-item="i" wx:key="{{i}}" style="display:inline-block">
+                  <view wx:if="{{ i < item.layer-1}}" style="padding-left:25px">
+                    |
+                  </view>
+                </view>
+                <view style="display:inline" bindtap="operate_tree" data-idx="{{idx}}">
+                  <view wx:if="{{item.rgt-item.lft > 1 && item.show_sons==false}}" style="display:inline-block">
+                    +
+                  </view>
+                  <view wx:elif="{{item.rgt-item.lft > 1 && item.show_sons==true}}" style="display:inline-block">
+                    ~
+                  </view>
+                  <view wx:else style="display:inline-block">
+                    ..
+                  </view>
+                  <view style="color:{{item.onoff==='off' ? 'gray':'' }};display:inline">
+                    {{item.class_name}}
+                  </view>
+                </view>
+
+              </view>
+            </view>
+          </view>
+        </view>
+        <!--wx:if="{{nav_2 != 'NULL'---->
+      </scroll-view>
+      <!---修改商品對話框------>
+    </view>
+    <!----leftboxend----->
+    <!--------商品展示s------->
+    <view class="right_box">
+      <button style="padding:10rpx;font-size:30rpx;height:80rpx" hidden="{{class_list[classListActiveIndex].rgt - class_list[classListActiveIndex].lft > 1}}" bindtap="clicked_new_goods">
+        为{{class_list[classListActiveIndex].class_name}}类新增商品
+      </button>
+      <scroll-view style="height:100%;" scroll-y="true">
+        <view class="weui-cells weui-cells_after-title" style="margin:0">
+          <!-- 商品列表s -->
+          <view wx:for="{{goods_list}}" wx:key="{{item.goods_id}}" style='border-bottom: 1rpx #999 solid;' wx:for-index="goods_idx">
+            <view class='goods_box'>
+              <navigator url="" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+                <view class="weui-cell__hd">
+                  <image src="{{item.face_img}}" class="goods_img" />
+                </view>
+                <view class="goods_info">
+                  <view class="weui-cell__bd" style='font-size:25rpx'>{{item.name}} </view>
+                  <view class="price">价格￥{{item.price}}/{{item.danwei}} </view>
+                </view>
+                <!--class goods_info"---->
+              </navigator>
+              <view class="opera_box">
+                <button style="height:60rpx;font-size:30rpx;" data-goods_idx="{{goods_idx}}" bindtap="delete_goods">删除</button>
+                <button style="height:60rpx;font-size:30rpx;" data-goods_idx="{{goods_idx}}" bindtap="clicked_edit_button">编辑</button>
+              </view>
+            </view>
+            <!-- class='goods_box'-->
+          </view>
+          <!--wx:for="{{goods_list}}"---->
+        </view>
+        <!-- 商品列表e -->
+        <view class="spring" />
+      </scroll-view>
+    </view>
+    <!--------商品展示e------->
+  </view>
+
+  <!--------商品查询页面------->
+  <view wx:if="{{step==2}}">
+
+    <view style="dispaly:flex;flex-direction: row">
+        <image style="height:200rpx;width:200rpx" src="{{temp_goods.face_img === '' ? '/image/defaultimg.png' : temp_goods.face_img}}" />
+        
+        <view wx:if="{{change_img == true}}">
+            <input style="font-size:20rpx;" type="text"  bindblur="input_imgurl" value="{{temp_goods.face_img}}" placeholder="URL" />
+            <view style="dispaly:flex;flex-direction: row;flex-wrap: nowrap">
+              <button bindtap="save_img" style="dispaly:inline;font-gize:30rpx;width:30%;">确定</button>
+              <button bindtap="clicked_change_face_img_button" style="dispaly:inline;font-size:30rpx;width:30%;">撤销</button>
+            </view>
+        </view>
+        <button wx:else bindtap="clicked_change_face_img_button" style="float:right;font-size:20rpx;width:280rpx">更换封面:</button>
+    </view>
+
+
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell">
+        <view class="weui-cell__bd" style="font-size:30rpx;width:30%">商品名称:</view>
+        <view class="weui-cell__gt">
+          <input style="font-size:30rpx;" class="weui-input"  bindchange="input_name" value="{{temp_goods.name}}" placeholder="商品名称" />
+        </view>
+      </view>
+    </view>
+
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell">
+        <view class="weui-cell__bd" style="font-size:30rpx;width:30%">类名:</view>
+        <view class="weui-cell__gt">
+          <input style="font-size:30rpx;" class="weui-input"  bindblur="input_class_name" value="{{temp_goods.class_name}}" placeholder="类名" />
+        </view>
+      </view>
+    </view>
+
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell">
+        <view class="weui-cell__bd" style="font-size:30rpx;width:30%">价格:</view>
+        <view class="weui-cell__gt">
+          <input style="font-size:30rpx;" class="weui-input"  bindchange="input_price" value="{{temp_goods.price}}" placeholder="价格" />
+        </view>
+      </view>
+    </view>
+
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell">
+        <view class="weui-cell__bd" style="font-size:30rpx;width:30%">单位:</view>
+        <view class="weui-cell__gt">
+          <input style="font-size:30rpx;" class="weui-input"  bindchange="input_danwei" value="{{temp_goods.danwei}}" placeholder="单位" />
+        </view>
+      </view>
+    </view>
+
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell">
+        <view class="weui-cell__bd" style="font-size:30rpx;width:30%">库存:</view>
+        <view class="weui-cell__gt">
+          <input style="font-size:30rpx;" class="weui-input"  bindchange="input_remain" value="{{temp_goods.remain}}" placeholder="库存" />
+        </view>
+      </view>
+    </view>
+
+    <view class="weui-cell weui-cell_switch">
+      <view class="weui-cell__bd">
+        上架下架
+      </view>
+      <view class="weui-cell__ft">
+        <switch checked="{{temp_goods.onoff==='off' ? false : true }}" bindchange="onoff" />
+      </view>
+    </view>
+
+  <view class="foot">
+    <view style="margin:0px auto;right:0;left:0;">
+      <button style="backgroud:#d9d9d9;margin:10rpx;display:inline-block;width:42%" type="primary" bindtap="submit"> 保存</button>
+      <button style="backgroud:#d9d9d9;margin:10rpx;display:inline-block;width:42%;float:right" bindtap="click_cancle_button"> 取消</button>
+    </view>
+  </view>
+
+</view>
+</view>

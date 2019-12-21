@@ -37,6 +37,10 @@
 		"game": {
 			"list": []
 		},
+		"gamePlugin": {
+			"current": -1,
+			"list": []
+		},
 		"miniprogram": {
 			"current": 19,
 			"list": [
@@ -169,6 +173,12 @@
 					"name": "webview",
 					"pathName": "pages/webview/webview",
 					"query": "fileid=130",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "elecbook",
+					"pathName": "pages/elec_book/elec_book",
 					"scene": null
 				}
 			]

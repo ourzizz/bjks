@@ -9,7 +9,7 @@
       <block wx:else>
       <text class="userinfo-nickname" >{{userInfo.nickName}}</text>
       <image style="width:60rpx;height:60rpx;position:relative;left:230rpx" src="/image/refresh.png" bindtap="refresh"/> 
-      <navigator style="display:inline;position:absolute;right:30rpx" url="../manageOrder/manageOrder?role={{is_adm.role}}">
+      <navigator style="display:inline;position:absolute;right:30rpx" url="../houtai/houtaiindex?role={{is_adm.role}}">
       <button  size="mini" hidden="{{hiddenEnter}}" >商家登录</button>
       </navigator>
       </block>
@@ -25,6 +25,9 @@
   <view class="weui-flex">
     <view class="uploader-text" bindtap="setUserFiles">
       <text style="font-size:35rpx;margin:auto">我收藏的考试</text>
+    </view>
+    <view class="uploader-text" bindtap="setUserElecbooks">
+      <text style="font-size:35rpx;margin:auto">已购买的电子书</text>
     </view>
   </view>
 

@@ -1,0 +1,7 @@
+<view style="padding:20rpx">
+	<view class="h1">{{shijuan}}</view>
+	<view wx:for="{{timu_list}}" wx:key="{{item.timuid}}">
+		<view>{{item.tihao}}、{{item.tigan}}</view>
+		<view>解析：{{item.jiexi}}</view>
+	</view>
+</view>
