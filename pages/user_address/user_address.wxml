@@ -14,10 +14,10 @@
             <view class="opera_box">
                 <radio id="{{item.address_id}}" value="{{idx}}" checked="{{item.checked}}"></radio>
                 <label class="label-2-text" for="{{item.name}}">使用该地址</label>
-                <view class="edit_button" style="display:inline;" >
+                <view class="button_box" style="display:inline;" >
 
-                  <button data-idx="{{idx}}" class="weui-btn mini-btn"  type="default" bindtap="edit_address" style="display:inline;margin:10rpx;font-size:35rpx">编辑</button>
-                  <button data-idx="{{idx}}" class="weui-btn mini-btn"  type="default" bindtap="delete_address" style="display:inline;font-size:35rpx;padding:10">删除</button>
+                  <button data-idx="{{idx}}" class="weui-btn mini-btn"  type="primary" bindtap="edit_address"   style="display:inline;font-size:35rpx;padding:10rpx 45rpx;margin:10rpx">编辑</button>
+                  <button data-idx="{{idx}}" class="weui-btn mini-btn"  type="default" bindtap="delete_address" style="display:inline;font-size:35rpx;padding:10rpx 45rpx;margin:10rpx">删除</button>
                 </view>
             </view>
         </view> <!-- class='address_info'-->
@@ -28,7 +28,7 @@
 <!-- <view style='padding:40rpx'></view> -->
 
 <view class="foot" hover-class="none" hover-stop-propagation="false">
-<button  bindtap="create_address"> 新增地址</button>
+<button type="primary"  bindtap="create_address"> 新增地址</button>
 </view>
 </view >
 </view>
@@ -72,14 +72,14 @@
             <view class="weui-cell" >
                 <view style="font-size:30rpx;width:30%" class="">详细地址:</view>
                 <view style="height:50px;width:70%">
-                <textarea class="textarea"  auto-height	maxlength="50" bindinput="input_detail" value="{{new_address.detail}}" placeholder="详细地址50个字"/>
+                <textarea class="textarea"  auto-height	maxlength="50" bindinput="input_detail" value="{{new_address.detail}}" placeholder="例:3栋601(只送半岛水湾小区12)"/>
                 </view>
             </view>
         </view>
 
   <view class="foot" >
     <view  style="margin:0px auto;right:0;left:0;"> 
-        <button style="backgroud:#d9d9d9;margin:10rpx;display:inline-block;width:42%" bindtap="submit"> 保存</button>
+        <button style="backgroud:#d9d9d9;margin:10rpx;display:inline-block;width:42%" type="primary" bindtap="submit"> 保存</button>
         <button style="backgroud:#d9d9d9;margin:10rpx;display:inline-block;width:42%;float:right" bindtap="cancle"> 取消</button>
     </view>
   </view>

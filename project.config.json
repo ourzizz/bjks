@@ -107,10 +107,11 @@
 					"query": "order_id=1549039676q0PEV"
 				},
 				{
-					"id": -1,
+					"id": 10,
 					"name": "pays",
 					"pathName": "pages/paysuccess/paysuccess",
-					"query": "order_id=1549039676q0PEV"
+					"query": "order_id=1576999865aPRof",
+					"scene": null
 				},
 				{
 					"id": -1,
@@ -179,6 +180,7 @@
 					"id": -1,
 					"name": "elecbook",
 					"pathName": "pages/elec_book/elec_book",
+					"query": "",
 					"scene": null
 				}
 			]

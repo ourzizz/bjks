@@ -31,7 +31,7 @@ Page({
         var that = this
         this.setData({
             hidecollect: !this.data.hidecollect,
-            hideEleList: !this.data.hideEleList
+            hideEleList: true
         })
         qcloud.request({
             url: `${config.service.host}/weapp/demo/get_user_files_events/` + that.data.userInfo.openId,
@@ -47,9 +47,10 @@ Page({
     setUserElecbooks:function (){
         var that = this
         this.setData({
-            hidecollect: !this.data.hidecollect,
+            hidecollect: true,
             hideEleList: !this.data.hideEleList
         })
+
         qcloud.request({
             url: `${config.service.host}/elec_book/get_all_elec_books/`,
             data: {
@@ -61,7 +62,7 @@ Page({
               },
               success(result) {
                 that.setData({
-                    elecbookList:result
+                    elecbookList:result.data
                 })
               },
               fail(error) {

@@ -24,15 +24,17 @@
                     <view style="width:80%;float:right">
                       <view class="goods_name" style='font-size:25rpx'>{{item.name}} </view>
                       <view style="display:inline" class="price">价格￥{{item.price}} </view>
-                      <view style="color:black" class="price">*{{item.count}}件</view>
-                    </view> <!--textinfo--->
-                  </view><!--class goods_info"---->
+                      <view style="color:black" class="price">*{{item.count}}{{item.danwei}}</view>
+                    </view>
+                    <!--textinfo--->
+                  </view>
+                  <!--class goods_info"---->
                 </view>
               </view>
 
-              <view style="postion:static">
-                <button class="weui-btn mini-btn" type="primary" size="mini" data-idx="{{idx}}" bindtap="re_pay">去支付</button>
-                <button  class="weui-btn mini-btn" style="postion:absolute;right:0" type="default"  size="mini" data-idx="{{idx}}" bindtap='delete_order'>取消订单</button>
+              <view class="button_box">
+                <button class="order_button" data-idx="{{idx}}" bindtap="re_pay">去支付</button>
+                <button class="order_button" data-idx="{{idx}}" bindtap='delete_order'>取消订单</button>
               </view>
             </view>
           </view>
@@ -43,47 +45,67 @@
               <view wx:for="{{item.goods_list}}" wx:key="*this">
                 <view class="cart_item">
                   <view class='goods_info_box weui-cell weui-cell_access' hover-class="weui-cell_active" style="padding: 15rpx; margin: 0;border:0px">
+                  <view wx:if="{{item.type=='ele'}}" style="position:absolute;right:0;">
+                      <navigator url="/pages/elec_book/elec_book?goods_id={{item.goods_id}}&open_id={{userInfo.openId}}" style="display:flex;flex-direction:column">   
+                      <image style="height:50rpx;width:50rpx;float:right" src="/image/ebook.png"/>
+                      <text>点击阅读</text>
+                      </navigator>
+                  </view>
                     <image src="{{item.face_img}}" class="goods_img" />
                     <view style="width:80%;float:right">
                       <view class="goods_name">{{item.name}} </view>
                       <view style="display:inline" class="price">价格￥{{item.price}} </view>
-                      <view style="color:black" class="price">*{{item.count}}件</view>
+                      <view style="color:black" class="price">*{{item.count}}{{item.danwei}}</view>
                     </view>
                   </view>
                   <!--class goods_info"---->
                 </view>
               </view>
-              <button class="weui-btn mini-btn" style="float:right;" type="default" size="mini" data-idx="{{idx}}" bindtap="sign_order">确认收货</button>
-              <button class="weui-btn mini-btn"   size="mini" data-idx="{{idx}}" bindtap="detail">详细信息</button>
+              <view wx:if="{{item.order.user_words!=''}}" class="user_words">
+                    <view style="padding:0 0 0 8rpx">{{item.order.user_words}}</view>
+              </view>
+              <view class="button_box">
+              <button  class="order_button" type="primary"  data-idx="{{idx}}" bindtap="sign_order">确认收货</button>
+              <!--button class="weui-btn  data-idx="{{idx}}" bindtap="detail">详细信息</button-->
+              <button class="order_button" data-order_id="{{item.order.order_id}}" bindtap="call_seller">联系商家</button>
+              </view>
             </view>
           </view>
 
 
-          <view hidden="{{activeIndex != 2}}">
+          <!--view hidden="{{activeIndex != 2}}"-->
+          <view hidden="true">
             <view class="order_box" wx:for="{{refund_list}}" wx:key="*this" wx:for-index="idx">
               单号:{{item.order.order_id}} 日期:{{item.order.order_date}} {{item.order.name}}￥{{item.order.total_fee}}
               <view wx:for="{{item.goods_list}}" wx:key="*this">
                 <view class="cart_item">
                   <view class='goods_info_box weui-cell weui-cell_access' hover-class="weui-cell_active" style="padding: 15rpx; margin: 0;border:0px">
+                  <view wx:if="{{item.type=='ele'}}">
+                      <navigator url="">   </navigator>点击阅读
+                      <image src="/image/ebook.png"/>
+                  </view>
                     <image src="{{item.face_img}}" class="goods_img" />
                     <view style="width:80%;float:right">
                       <view class="goods_name">{{item.name}} </view>
                       <view style="display:inline" class="price">价格￥{{item.price}} </view>
-                      <view style="color:black" class="price">*{{item.count}}件</view>
+                      <view style="color:black" class="price">*{{item.count}}{{item.danwei}}</view>
                     </view>
                   </view>
                   <!--class goods_info"---->
                 </view>
               </view>
 
-              <block wx:if='{{item.order.refund_status == "SUCCESS"}}'>
-              <view>退款已按原路退回</view>
-              <button class="weui-btn mini-btn" style="" type="default" size="mini" data-idx="{{idx}}" bindtap="shutdown_order">删除订单</button>
-              </block>
-              <block wx:else>
-              <view>商家正在处理退款中</view>
-              <button class="weui-btn mini-btn"   size="mini" data-idx="{{idx}}" bindtap="call_seller">联系商家</button>
-              </block>
+              <view class="button_box">
+                  <block wx:if='{{item.order.refund_status == "SUCCESS"}}'>
+                  <view>退款已按原路退回</view>
+                  <button class="order_button" type="default"  data-idx="{{idx}}" bindtap="shutdown_order">删除订单</button>
+                  </block>
+                  <block wx:else>
+                  <view>商家正在处理退款中</view>
+                  <button class="order_button" data-order_id="{{item.order.order_id}}" bindtap="call_seller">联系商家</button>
+                  </block>
+              </view>
+
             </view>
           </view>
 
@@ -93,18 +115,29 @@
               <view wx:for="{{item.goods_list}}" wx:key="*this">
                 <view class="cart_item">
                   <view class='goods_info_box weui-cell weui-cell_access' hover-class="weui-cell_active" style="padding: 15rpx; margin: 0;border:0px">
+                   <view wx:if="{{item.type=='ele'}}" style="position:absolute;right:0;">
+                      <navigator url="/pages/elec_book/elec_book?goods_id={{item.goods_id}}&open_id={{userInfo.openId}}" style="display:flex;flex-direction:column">   
+                      <image style="height:50rpx;width:50rpx;float:right" src="/image/ebook.png"/>
+                      <text>点击阅读</text>
+                      </navigator>
+                  </view>
                     <image src="{{item.face_img}}" class="goods_img" />
                     <view style="width:80%;float:right">
                       <view class="goods_name" style='font-size:25rpx'>{{item.name}} </view>
                       <view style="display:inline" class="price">价格￥{{item.price}} </view>
-                      <view style="color:black" class="price">*{{item.count}}件</view>
+                      <view style="color:black" class="price">*{{item.count}}{{item.danwei}}</view>
                     </view>
                   </view>
                   <!--class goods_info"---->
                 </view>
               </view>
-              <button class="weui-btn mini-btn" style="position:relative;right:0px" type="default" data-idx="{{idx}}" bindtap="call_seller" size="mini">联系商家</button>
-              <button class="weui-btn mini-btn" style="position:relative;right:0px" type="default" data-idx="{{idx}}" size="mini">再次购买</button>
+              <view wx:if="{{item.order.user_words!=''}}" class="user_words">
+                    <view style="padding:0 0 0 8rpx">{{item.order.user_words}}</view>
+              </view>
+              <view class="button_box">
+                  <button class="order_button" type="default" data-order_id="{{item.order.order_id}}" bindtap="call_seller">联系商家</button>
+                  <button class="order_button" type="default" data-idx="{{idx}}" data-order_id="{{item.order.order_id}}" bindtap="user_shutdown_order" >删除</button>
+              </view>
             </view>
           </view>
         </view>

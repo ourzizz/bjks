@@ -52,11 +52,10 @@ word-wrap:break-word;
     /* height: 200rpx; */
 }
 
-.edit_button{
+.button_box{
     position: relative;
     left:80rpx;
     font-size: 25rpx;
-    
 }
 
 .foot{/* fixed导致脱离文档流，按钮居中 */ 

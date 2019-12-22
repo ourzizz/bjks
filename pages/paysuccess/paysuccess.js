@@ -15,8 +15,9 @@ Page({
         step:0,
         refund_reason: ['不想要了', '地址有误', '缺货', '发货时间过长'],
         express_info:{},
-        reason:''
-
+        reason:'',
+        userInfo:{},
+        logined:false
     },
 
     //获取订单的物流信息，物流公司，订单号，让客户复制到剪切板去官方查询
@@ -35,6 +36,13 @@ Page({
 
     onLoad: function (options) {//订单号支付页面给过来
         let that = this
+        const session = qcloud.Session.get()
+        if(session) {//session存在
+            this.setData({
+                userInfo:session.userinfo,
+                logged:true
+            })
+        }
         qcloud.request({
             url: `${config.service.host}/order/pay_success/` + options.order_id,
             success(result) {

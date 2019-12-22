@@ -30,7 +30,13 @@
       <text style="font-size:35rpx;margin:auto">已购买的电子书</text>
     </view>
   </view>
-
+<view class="weui-panel" style="display:static;width:100%" hidden="{{hideEleList}}">
+<view wx:for="{{elecbookList}}" style="margin:20rpx">
+<navigator url="/pages/elec_book/elec_book?goods_id={{item.goods_id}}&open_id={{userInfo.openId}}">
+{{item.name}}
+</navigator>
+</view>
+</view>
   <view class="weui-panel" style='display:static' hidden="{{hidecollect}}">
     <view class="weui-panel__bd">
       <view wx:for="{{userFiles}}">

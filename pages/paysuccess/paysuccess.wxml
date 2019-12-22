@@ -23,6 +23,12 @@
               <view class="order_box" >
               <view  wx:for="{{goods_list}}" wx:key="*this">
                 <view class="cart_item">
+                 <view wx:if="{{item.type=='ele'}}" style="position:absolute;right:0;">
+                      <navigator url="/pages/elec_book/elec_book?goods_id={{item.goods_id}}&open_id={{userInfo.openId}}" style="display:flex;flex-direction:column">   
+                      <image style="height:50rpx;width:50rpx;float:right" src="/image/ebook.png"/>
+                      <text>点击阅读</text>
+                      </navigator>
+                  </view>
                   <view class='goods_info_box weui-cell weui-cell_access' hover-class="weui-cell_active" style="padding: 15rpx; margin: 0;border:0px">
                     <image src="{{item.face_img}}" class="goods_img" />
                     <view style="width:80%;float:right">
