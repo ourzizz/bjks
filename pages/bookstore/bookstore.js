@@ -100,9 +100,11 @@ Page({
      * */
     show_goods_list_by_class_id: function (class_id) {
         let that = this
+        util.showBusy('数据加载中...')
         qcloud.request({
             url: `${config.service.host}/goods_class/get_goods_list_by_class_id/` + class_id,
             success(result) {
+                wx.hideToast()
                 that.setData({
                     goods_list: result.data
                 })
@@ -180,9 +182,8 @@ Page({
             success(res) {
                 if(res.data == true) {
                     getApp().raise_cart_sum(1)
-                } else {
-                    var error = "亲您的需求已经超过了我们的供给"
-                    util.showModel('超过库存',error)
+                } else if(res.data === "payed") {
+                    util.showModel('电子书请勿重复下单','您已购买此书请在我的页面查看')
                 }
             },
             fail(error) {

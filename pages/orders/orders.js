@@ -20,7 +20,6 @@ Page({
      * 页面的初始数据
      */
     data: {
-        //tabs: [['待支付', 0], ['待签收', 0],['退款', 0],['完结订单', 0]],
         tabs: [['待支付', 0], ['待签收', 0], ['退款', 0], ['完结订单', 0]],
         activeIndex: 0,
         sliderOffset: 0,
@@ -112,6 +111,9 @@ Page({
                 })
                 that.data.wait_sign_order_list.push(that.data.wait_pay_order_list[idx])
                 that.data.wait_pay_order_list.splice(idx, 1)
+                this.data.tabs[0][1] = this.data.wait_pay_order_list.length
+                this.data.tabs[1][1] = this.data.wait_sign_order_list.length
+                this.init_tab(3)
                 that.setData({
                     wait_sign_order_list: that.data.wait_sign_order_list,
                     wait_pay_order_list: that.data.wait_pay_order_list

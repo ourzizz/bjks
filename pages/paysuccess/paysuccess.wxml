@@ -6,7 +6,7 @@
 </view>
 </block>
 <block wx:else>
-<view style="color:red;margin:10rpx"> 您的订单已支付,我们会尽快安排送货</view>
+<view style="color:red;margin:10rpx"> 您的订单已支付,我们会尽快安排送货,订单中的电子书一经付费不可退款</view>
 </block>
 <view style="margin:10rpx">
 <view class="info_box" style="margin:10rpx">

@@ -115,17 +115,21 @@ Page({
         //由于orderlist 和goodslist的元素内存地址一样所以再给goodslist做操作的同时也影响到了order
         var idx = event.currentTarget.dataset.idx;
         var settlement_idx = this.find_goods_by_id(this.data.goods_list[idx].goods_id)
-        if (parseInt(this.data.goods_list[idx].count) < parseInt(this.data.goods_list[idx].remain)) {
-            //不能超过库存
-            this.data.goods_list[idx].count = parseInt(this.data.goods_list[idx].count) + 1;
-            if(settlement_idx != -1){
-                this.data.settlement.goods_list[settlement_idx].count = parseInt(this.data.settlement.goods_list[settlement_idx].count) + 1;
-                this.calc_total_cost()
+        if(this.data.goods_list[idx].type === 'ele'){
+            util.showModel('请求失败', "电子书不能重复下单")
+        }else{
+            if (parseInt(this.data.goods_list[idx].count) < parseInt(this.data.goods_list[idx].remain)) {
+                //不能超过库存
+                this.data.goods_list[idx].count = parseInt(this.data.goods_list[idx].count) + 1;
+                if(settlement_idx != -1){
+                    this.data.settlement.goods_list[settlement_idx].count = parseInt(this.data.settlement.goods_list[settlement_idx].count) + 1;
+                    this.calc_total_cost()
+                }
+                this.setData({
+                    goods_list: this.data.goods_list//没有覆盖
+                })
+                getApp().raise_cart_sum(1)
             }
-            this.setData({
-                goods_list: this.data.goods_list//没有覆盖
-            })
-            getApp().raise_cart_sum(1)
         }
     },
 

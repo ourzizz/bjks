@@ -3,5 +3,6 @@
 	<view wx:for="{{timu_list}}" wx:key="{{item.timuid}}">
 		<view>{{item.tihao}}、{{item.tigan}}</view>
 		<view>解析：{{item.jiexi}}</view>
+		<view>参考答案：{{item.answer}}</view>
 	</view>
 </view>
