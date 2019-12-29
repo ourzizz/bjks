@@ -1,7 +1,7 @@
-<view style="padding:20rpx">
-	<view class="h1">{{shijuan}}</view>
+<view class="page" style="padding:20rpx">
+	<view class="title">{{shijuan}}</view>
 	<view wx:for="{{timu_list}}" wx:key="{{item.timuid}}">
-		<view>{{item.tihao}}、{{item.tigan}}</view>
+		<view class="tigan">{{item.tihao}}、{{item.tigan}}</view>
 		<view>解析：{{item.jiexi}}</view>
 		<view>参考答案：{{item.answer}}</view>
 	</view>
