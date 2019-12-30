@@ -1,1 +1,15 @@
 /* pages/baoming/index.wxss */
+/* pages/telphone/telphone.wxss */
+@import '/weui.wxss';
+@import '/pages/user/user.wxss';
+.placeholder{
+    /*posti*/
+    margin: 5px;
+    padding: 0 10px;
+    text-align: center;
+    background-color: #EBEBEB;
+    height: 2.3em;
+    line-height: 2.3em;
+    /*color: ;*/
+}
+

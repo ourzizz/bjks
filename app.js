@@ -16,7 +16,7 @@ App({
       raise_cart_sum: function(count) {
         getApp().globalData.count_cart = parseInt(getApp().globalData.count_cart) + parseInt(count)
         wx.setTabBarBadge({ //这个方法的意思是，为小程序某一项的tabbar右上角添加文本
-          index: 2, //代表哪个tabbar（从0开始）
+          index: 3, //代表哪个tabbar（从0开始）
           text: (getApp().globalData.count_cart).toString() //显示的内容
         })
       },
@@ -24,7 +24,7 @@ App({
       reduce_cart_sum: function (count) {
         getApp().globalData.count_cart = parseInt(getApp().globalData.count_cart) - parseInt(count)
         wx.setTabBarBadge({ 
-          index: 2, 
+          index: 3, 
           text: (getApp().globalData.count_cart).toString()
         })
       },
@@ -32,7 +32,7 @@ App({
         set_cart_sum:function (count){
             getApp().globalData.count_cart = count
             wx.setTabBarBadge({//这个方法的意思是，为小程序某一项的tabbar右上角添加文本
-                index: 2,   //代表哪个tabbar（从0开始）
+                index: 3,   //代表哪个tabbar（从0开始）
                 text: (getApp().globalData.count_cart).toString() //显示的内容
             })
         }

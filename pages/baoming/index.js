@@ -1,66 +1,105 @@
-// pages/baoming/index.js
+var qcloud = require('../../vendor/wafer2-client-sdk/index')
+var config = require('../../config')
+var util = require('../../utils/util.js')
+var config = require('../../config')
+var sliderWidth = 96;
 Page({
 
-  /**
-   * 页面的初始数据
-   */
-  data: {
+    data: {
+        eventtime:{},//这里放的是整个页面数据
+        pageEt:{},//这里是根据用户点击确定是happenning还是impend进行赋值渲染
+        activeIndex: 0,
+        sliderOffset: 0,
+        sliderLeft: 0,
+        userInfo: {},
+        logged: false,
+        takeSession: false
+    },
+    onLoad: function () {
+        var that = this
+        const session = qcloud.Session.get()
+        if (session) { //session存在
+            that.user_get_acts()
+            this.setData({
+                userInfo: session.userinfo,
+                logged: true
+            })
+        }
+    },
+    user_get_acts:function (){
+        var that = this
+        qcloud.request({
+            url: `${config.service.host}/baoming/index/get_all_act` ,
+            data: {
+                open_id: that.data.userInfo.openId
+            },
+            method: 'POST',
+            header: {
+                'content-type': 'application/x-www-form-urlencoded'
+            },
+            success(result) {
+                that.setData({
+                    Hselected: '#EBEBEB',
+                    Iselected: '#33FF00',
+                    eventtime: result.data,
+                    pageEt: result.data
+                })
+            },
+            fail(error) {
+                util.showModel('请求失败', error);
+                console.log('request fail', error);
+            }
+        })
+    },
+    bindGetUserInfo: function () {
+        var that = this
+        if (this.data.logged) return
+        util.showBusy('正在登录')
+        const session = qcloud.Session.get()
+        if (session) {
+            qcloud.loginWithCode({
+                success: res => {
+                    this.setData({
+                        userInfo: res,
+                        logged: true
+                    })
+                    util.showSuccess('登录成功')
+                    that.user_get_acts()
+                },
+                fail: err => {
+                    console.error(err)
+                    util.showModel('登录错误', err.message)
+                }
+            })
+        } else {
+            qcloud.login({
+                success: res => {
+                    this.setData({
+                        userInfo: res,
+                        logged: true
+                    })
+                    that.user_get_acts()
+                    util.showSuccess('登录成功')
+                },
+                fail: err => {
+                    console.error(err)
+                    util.showModel('登录错误', err.message)
+                }
+            })
+        }
+    },
+    tabClick: function (e) {
+        this.setData({
+            sliderOffset: e.currentTarget.offsetLeft,
+            activeIndex: e.currentTarget.id
+        });
+    },
 
-  },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  }
+    goFillInfo: function (event){
+        var ksid = event.currentTarget.dataset.ks_id
+        var openId = this.data.userInfo.openId
+        wx.navigateTo({
+            url: '/pages/baoming/kaoshengInfo/kaoshengInfo?openId='+openId+'&ksid='+ksid
+        })
+    }
 })

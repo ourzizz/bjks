@@ -182,6 +182,13 @@
 					"pathName": "pages/elec_book/elec_book",
 					"query": "",
 					"scene": null
+				},
+				{
+					"id": 21,
+					"name": "pages/baoming/kaoshengInfo/kaoshengInfo",
+					"pathName": "pages/baoming/kaoshengInfo/kaoshengInfo",
+					"query": "open_id=\"opexV46WZFz9Is4xAI2zZWc4YiQE\"",
+					"scene": null
 				}
 			]
 		}

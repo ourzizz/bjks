@@ -1,2 +1,57 @@
-<!--pages/baoming/index.wxml-->
-<text>pages/baoming/index.wxml</text>
+<view class="page">
+  <view wx:if="{{!logged}}">
+      <view class="userinfo">
+        <image class="userinfo-avatar" src="{{logged ? userInfo.avatarUrl : '/pages/user/user-unlogin.png'}}" background-size="cover"></image>
+        <view>
+          <button class="userinfo-nickname" wx:if="{{!logged}}" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">尚未登录，点击此处授权登录</button>
+          <block wx:else>
+          <text class="userinfo-nickname" >{{userInfo.nickName}}</text>
+          </block>
+        </view>
+      </view>
+  </view>
+  <view wx:else class="page__bd">
+    <view class="weui-tab">
+      <view class="weui-navbar">
+        <block wx:for="{{pageEt}}" wx:key="*this">
+          <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
+            <view class="weui-navbar__title">{{item.event}}</view>
+          </view>
+        </block>
+        <!-- <view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view> -->
+      </view>
+
+      <view class="weui-tab__panel">
+        <block wx:for="{{pageEt}}" wx:for-index="idx">
+          <view hidden="{{activeIndex != idx}}">
+            <view class="weui-media-box weui-media-box_small-appmsg" style="font-size:15px;padding:0rpx;margin:2rpx">
+                  <view wx:for="{{item.filelist}}">
+              <view class="weui-cells weui-cells_in-small-appmsg">
+                <navigator url="../webview/webview?fileid={{item.fileid}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+                    <view class="weui-tab__content">{{item.filetitle}} </view>
+                    </navigator>
+                    <view style="display:block; color:white;background:green;padding:2px 4px 2px 4px;margin:1rpx 5rpx 0 0; font-size:12px;">
+                            {{pageEt[idx].event}}开始时间>>>:{{item.startime}}
+                     </view>
+                      <view style="display:block; color:white;background:blue;padding:2px 4px 2px 4px;margin:1rpx 5rpx 0 0; font-size:12px;">
+                            {{pageEt[idx].event}}结束时间>>>>:{{item.endtime}}
+                      </view>
+
+                        <block wx:if="{{item.act === '信息填报'}}">
+                            <button data-ks_id="{{item.ksfileid}}" bindtap="goFillInfo"> 填报 </button>
+                        </block>
+                        <block wx:elif="{{item.act === '成绩查询'}}">
+                            <button> 查询 </button>
+                        </block>
+                </view>
+                
+                  
+              </view>
+            </view>
+          </view>
+        </block>
+      </view>
+
+    </view>
+  </view>
+</view>
