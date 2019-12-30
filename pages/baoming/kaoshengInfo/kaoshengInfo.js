@@ -78,24 +78,26 @@ Page({
     },
 
     check_message: function () {//{{{
-        //var regtel = new RegExp('(^1[3|4|5|7|8][0-9]{9}$)', 'g');
-        //let kaoshengInfo = this.data.kaoshengInfo
-        //if (kaoshengInfo.name == "") {
-            //util.showModel("信息不全", "联系人没有填写");
-            //return false
-        //} else if (kaoshengInfo.telphone == "") {
-            //util.showModel("信息不全", "联系方式没有填写");
-            //return false
-        //} else if (kaoshengInfo.content == "") {
-            //util.showModel("信息不全", "发布内容不能为空");
-            //return false
-        //}
-        //if (!regtel.exec(kaoshengInfo.telphone)) { //电话不正确不能通过
-            //util.showModel('格式错误', '手机格式错误')
-            //return false
-        //}
-        //this.data.kaoshengInfo.images_name =  this.data.imageNameList.join(",")
-        return true
+// ^[\u4E00-\u9FA5]{2,4}$
+// [1-9][0-9]{5}([1][9][0-9]{2}|[2][0][0|1][0-9])([0][1-9]|[1][0|1|2])([0][1-9]|[1|2][0-9]|[3][0|1])[0-9]{3}([0-9]|[X])$
+        // var regtel = new RegExp('(^1[3|4|5|7|8][0-9]{9}$)', 'g');
+        // let kaoshengInfo = this.data.kaoshengInfo
+        // if (kaoshengInfo.name == "") {
+        //     util.showModel("信息不全", "联系人没有填写");
+        //     return false
+        // } else if (kaoshengInfo.telphone == "") {
+        //     util.showModel("信息不全", "联系方式没有填写");
+        //     return false
+        // } else if (kaoshengInfo.content == "") {
+        //     util.showModel("信息不全", "发布内容不能为空");
+        //     return false
+        // }
+        // if (!regtel.exec(kaoshengInfo.telphone)) { //电话不正确不能通过
+        //     util.showModel('格式错误', '手机格式错误')
+        //     return false
+        // }
+        // this.data.kaoshengInfo.images_name =  this.data.imageNameList.join(",")
+        // return true 
     },//}}}
 
     //delete_img_by
@@ -178,19 +180,19 @@ Page({
         if (this.check_message() && this.data.pub_lock === 'unlock') {
             this.setData({pub_lock:'lock'})//避免连续多次点击发布按钮
             if(this.data.kaosheng_flg === "new"){//新发布
-                this.publish_message()
+                this.new_kaosheng()
             }else{//更新数据库
-                this.update_message()
+                this.update_kaosheng()
             }
         }else{
         }
     },//}}}
 
     //保存修改的信息
-    update_message:function (){//{{{
+    update_kaosheng:function (){//{{{
         var that = this
         qcloud.request({
-            url: `${config.service.host}/community/update_message`,
+            url: `${config.service.host}/baoming/kaoshengInfo/update_kaosheng`,
             data: {
                 kaoshengInfo: JSON.stringify(this.data.kaoshengInfo)
             },
@@ -206,7 +208,7 @@ Page({
     },//}}}
 
     //发布消息
-    publish_message: function () {//{{{
+    new_kaosheng: function () {//{{{
         let that = this
         let kaoshengInfo = that.data.kaoshengInfo
         kaoshengInfo.open_id = this.data.userInfo.openId
@@ -322,9 +324,5 @@ Page({
     },//}}}
 
     jump:function (){
-        app.globalData.edit_class_id = this.data.kaoshengInfo.class_id
-        wx.switchTab({
-            url: '../index/index',
-        })
-    }
+    },
 })
