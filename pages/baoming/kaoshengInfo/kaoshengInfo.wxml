@@ -1,6 +1,18 @@
 <!--pages/writeMsg/writeMsg.wxml-->
 <view class="page">
     <view>{{class_name}} </view>
+    <view class="weui" >
+      <view class="weui-uploader">
+          <view class="weui-uploader__files" style="position:static">
+              <view class="weui-uploader__file" >
+                <image mode="aspectFit" class="weui-uploader__img" src="{{kaoshengInfo.photoUrl!=='null' ? kaoshengInfo.photoUrl : '/pages/user/user-unlogin.png'}}" data-id="{{idx}}" data-src="{{image}}" bindtap="previewImage"></image>
+              </view>
+          </view>
+          <view class="weui-uploader__input-box">
+            <view class="weui-uploader__input" bindtap="chooseImage"></view>
+          </view>
+      </view>
+    </view>
     <view class="weui-cells weui-cells_after-title">
         <view class="" style="margin:0 0 0 10px;">
             <view class="weui-cells weui-cells_after-title">
@@ -12,15 +24,15 @@
 
             <view class="weui-cells weui-cells_after-title">
                 <view class="weui-cell">
-                   <view class="weui-cell__bd"> 电话: </view>
-                   <input  class="weui-cell__rg" value="{{kaoshengInfo.telphone}}" bindchange="input_telphone"  placeholder="联系电话"/>
+                   <view class="weui-cell__bd"> 身份证号: </view>
+                   <input  class="weui-cell__rg" value="{{kaoshengInfo.sfzid}}" bindchange="input_sfzid"  placeholder="身份证号码"/>
                 </view>
             </view>
 
             <view class="weui-cells weui-cells_after-title">
                 <view class="weui-cell">
-                   <view class="weui-cell__bd"> 身份证号: </view>
-                   <input  class="weui-cell__rg" value="{{kaoshengInfo.sfzid}}" bindchange="input_sfzid"  placeholder="身份证号码"/>
+                   <view class="weui-cell__bd"> 电话: </view>
+                   <input  class="weui-cell__rg" value="{{kaoshengInfo.telphone}}" bindchange="input_telphone"  placeholder="联系电话"/>
                 </view>
             </view>
 
@@ -45,26 +57,20 @@
                 </view>
             </view>
 
+            <view class="weui-cells weui-cells_after-title">
+                <view class="weui-cell">
+                   <view class="weui-cell__bd"> 专业: </view>
+                   <input  class="weui-cell__rg" value="{{kaoshengInfo.major}}" bindchange="input_major"  placeholder="与毕业证必须一致"/>
+                </view>
+            </view>
         </view>
     </view>
     
-<view class="weui" >
-  <view class="weui-uploader">
-      <view class="weui-uploader__files" style="position:static">
-          <view class="weui-uploader__file" >
-            <image class="weui-uploader__img" src="{{kaoshengInfo.photoUrl!=='null' ? kaoshengInfo.photoUrl : '/pages/user/user-unlogin.png'}}" data-id="{{idx}}" data-src="{{image}}" bindtap="previewImage"></image>
-          </view>
-      </view>
-      <view class="weui-uploader__input-box">
-        <view class="weui-uploader__input" bindtap="chooseImage"></view>
-      </view>
-  </view>
-  </view>
 
   <view class="foot" >
     <view  style="margin:0px auto;right:0;left:0;"> 
-        <button style="backgroud:#d9d9d9;margin:10rpx;display:inline-block;width:42%" bindtap="submit"> 保存下一步</button>
-        <button style="backgroud:#d9d9d9;margin:10rpx;display:inline-block;width:42%;float:right" bindtap="cancle"> 取消</button>
+        <button style="backgroud:#d9d9d9;margin:10rpx;display:inline-block;width:42%" bindtap="submit"> 保存</button>
+        <button style="backgroud:#d9d9d9;margin:10rpx;display:inline-block;width:42%;float:right" bindtap="cancle"> 下一步</button>
     </view>
   </view>
 

@@ -1,4 +1,3 @@
-// pages/writeMsg/writeMsg.js
 var qcloud = require('../../../vendor/wafer2-client-sdk/index')
 var config = require('../../../config')
 var util = require('../../../utils/util.js')
@@ -29,6 +28,7 @@ Page({
                 logged: true
             })
         }
+        util.showBusy("下载数据中")
         qcloud.request({
             url: `${config.service.host}/baoming/kaoshengInfo/get_kaosheng_kaoshi`,
             data: {
@@ -38,6 +38,7 @@ Page({
             method: 'POST',
             header: { 'content-type':'application/x-www-form-urlencoded' },
             success(result) {
+                wx.hideToast()
                 if(result.data == "null"){
                     that.setData({
                         kaosheng_flg:"new",
@@ -76,6 +77,9 @@ Page({
     input_degree:function(e){
         this.data.kaoshengInfo.degree = e.detail.value
     },
+    input_major:function (e){
+        this.data.kaoshengInfo.major = e.detail.value
+    },
 
     check_message: function () {//{{{
         var nameRegx = new RegExp('^[\u4E00-\u9FA5]{2,4}$','g');
@@ -107,21 +111,11 @@ Page({
         this.jump()//返回上级页面
     },//}}}
 
-    //在列表中删除图片并setData
-    image_display:function (idx){//{{{
-        this.data.localImagePaths.splice(idx,1)
-        this.data.imageNameList.splice(idx,1)
-        this.setData({
-            localImagePaths:this.data.localImagePaths
-        })
-    },//}}}
-
-
-    //用户点击发布提交表单
+    //用户点击提交
     submit:function (){//{{{
         if (this.check_message() && this.data.pub_lock === 'unlock') {
             this.setData({pub_lock:'lock'})//避免连续多次点击发布按钮
-            if(this.data.kaosheng_flg === "new"){//新发布
+            if(this.data.kaosheng_flg === "new"){//新增考生信息
                 this.new_kaosheng()
             }else{//更新数据库
                 this.update_kaosheng()
