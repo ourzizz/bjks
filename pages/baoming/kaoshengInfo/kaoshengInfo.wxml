@@ -65,12 +65,45 @@
             </view>
         </view>
     </view>
-    
+
+ <checkbox-group bindchange="checkboxChange">
+  <scroll-view style="height:50%; color:black; background-color: lightblue;" scroll-y="true">
+    <view wx:if="{{tree_list != 'NULL'}}">
+      <view wx:for="{{tree_list}}"  bindtap="set_idx" data-idx="{{idx}}" wx:for-index="idx">
+        <view hidden="{{!item.show_self}}">
+          <view class="nav_2_text" style="font-size:30rpx;positon:absolute;display:inline-block">
+            <view wx:for="{{[1,2,3,4,5,6]}}" wx:for-item="i" wx:key="{{i}}" style="display:inline-block">
+              <view wx:if="{{ i < item.layer + 1}}" style="padding-left:25rpx">
+              </view>
+            </view>
+            <view style="display:inline" bindtap="operate_tree" data-idx="{{idx}}">
+              <view wx:if="{{item.cptr !== '0' && item.show_sons==false}}" style="display:inline-block">
+                +
+              </view>
+              <view wx:elif="{{item.cptr !== '0' && item.show_sons==true}}" style="display:inline-block">
+                ~
+              </view>
+              <view wx:else style="display:inline-block">
+                :.
+              </view>
+                {{item.description}}
+
+                <view  style="float:right;postion:absolute;right:0" hidden="{{item.cptr !== '0'}}">
+                    <checkbox bindchange="checkboxChange" data-idx="{{idx}}" value="{{ item.code }}" checked="{{item.checked}}" />
+                </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+    <!--wx:if="{{nav_2 != 'NULL'---->
+  </scroll-view>
+</checkbox-group>
 
   <view class="foot" >
     <view  style="margin:0px auto;right:0;left:0;"> 
         <button style="backgroud:#d9d9d9;margin:10rpx;display:inline-block;width:42%" bindtap="submit"> 保存</button>
-        <button style="backgroud:#d9d9d9;margin:10rpx;display:inline-block;width:42%;float:right" bindtap="cancle"> 下一步</button>
+        <button style="backgroud:#d9d9d9;margin:10rpx;display:inline-block;width:42%;float:right" bindtap="cancle"> 确认报名</button>
     </view>
   </view>
 

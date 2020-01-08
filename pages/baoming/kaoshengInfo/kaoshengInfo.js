@@ -6,17 +6,21 @@ var cosPath = "http://bjks-1252192276.cos.ap-chengdu.myqcloud.com"
 var app = getApp()
 Page({
     data: {
+        activeIndex: -1,
         kaosheng_flg:"new",
         kaoshengInfo: {
             photoUrl:"null"
         },
+        tree_list:[],
         userInfo:{},
         logged:false,
         localImagePath:'', //小程序wxml页面显示的图片列表,如果是修改那么就是从服务器请求的url，否则为本地选中的图片列表
         imageName:'', //upload返回的是url和name，以前开发保留了name用逗号连接存到数据库，这个列表是存储使用的,服务器发来的namelist
         tempFilePath:'', //待上传列表
         pub_lock:'unlock',//发布锁，避免用户多次点击 unlock lock
-        minganStatus:true
+        minganStatus:true,
+        layer:[],
+        zhiweiPath:[],
     },
 
     onLoad: function (options) {//{{{ 需要向后台请求考生基本信息 和报考信息
@@ -39,16 +43,19 @@ Page({
             header: { 'content-type':'application/x-www-form-urlencoded' },
             success(result) {
                 wx.hideToast()
-                if(result.data == "null"){
+                if(result.data.kaoshengInfo == "null"){
                     that.setData({
                         kaosheng_flg:"new",
                         kaoshengInfo:{}
                     }) 
                 }else{
-                    that.data.imageName = result.data.photoUrl.replace(cosPath,'')
+                    that.data.imageName = result.data.kaoshengInfo.photoUrl.replace(cosPath,'')
+                    that.data.tree_list = result.data.zhiwei
+                    that.init_tree_list(that.data.tree_list)
                     that.setData({
                         kaosheng_flg:"edit",
-                        kaoshengInfo:result.data
+                        kaoshengInfo:result.data.kaoshengInfo,
+                        tree_list: that.data.tree_list
                     }) 
                 }
             },
@@ -58,6 +65,98 @@ Page({
             }
         })
     },//}}}
+
+    init_tree_list:function(tree_list){
+        var layer = this.data.layer
+        this.data.tree_list.forEach(element => {
+            var idx = -1
+            for(var i=0;i<layer.length;i++){
+                if(layer[i] === element.code.length){
+                    idx = i
+                }
+            }
+            if(idx === -1){
+                element.layer = layer.length
+                layer.push(element.code.length)
+            }else{
+                element.layer = idx 
+            }
+
+            if(element.layer === 0){
+                element.show_self = true
+            }else{
+                element.show_self = false
+            }
+            element.show_sons = false
+        });
+    },
+
+    operate_tree: function (event) {
+        var tree_list = this.data.tree_list
+        var idx = event.currentTarget.dataset.idx
+        if (tree_list[idx].show_sons == true) {
+            this.close_node(tree_list[idx])
+        } else {
+            this.open_node(tree_list[idx])
+        }
+        this.setData({
+            tree_list: tree_list,
+            activeIndex: idx,
+        })
+    },
+
+    open_node: function (node) {//打开一个节点，所有同级的下级全部折叠
+        var tree_list = this.data.tree_list
+        var parentCode = node.code
+        node.show_sons = true;
+        tree_list.forEach(element => {
+            if (element.pptr === parentCode) {
+                element.show_self = true
+                if(element.cptr != 0 && element.show_sons ==true){
+                    this.open_node(element)
+                }
+            }
+        });
+    },
+
+    close_node: function (node) {
+        var tree_list = this.data.tree_list
+        node.show_sons = false //这里应该给idx 设置treelist
+        var parentCode = node.code
+        tree_list.forEach(element => {
+            if (element.code.indexOf(parentCode)!==-1 && element.layer>node.layer) {
+                element.show_self = false
+            }
+        });
+    },
+
+    getPath:function(code){ //"1240202201"
+        var layer = this.data.layer 
+        var tempCode = ""
+        this.data.zhiweiPath = []
+        for(var i=0;i<layer.length;i++){
+            tempCode = code.substr(0,layer[i])
+            this.data.tree_list.forEach(element => {
+                if (element.code === tempCode) {
+                    this.data.zhiweiPath.push(element.description)
+                }
+            });
+        }
+    },
+
+    set_idx: function (event) {
+        var idx = event.currentTarget.dataset.idx
+        this.setData({
+            activeIndex: idx
+        })
+    },
+
+    checkboxChange: function (e) {
+        var path = []
+        console.log('checkbox发生change事件，携带value值为：', e.detail.value)
+        this.getPath(e.detail.value[0])
+    },
+    baoming_confirm: function () { },
 
     input_name: function (e) {//{{{
         this.data.kaoshengInfo.name = e.detail.value

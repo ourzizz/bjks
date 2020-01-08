@@ -126,6 +126,7 @@ Page({
     node.show_sons = true;
     for (var i = 0; i < tree_list.length; i++) {
       if ((parseInt(tree_list[i].layer) === parseInt(node.layer) + 1) && (parseInt(tree_list[i].lft) > parseInt(node.lft)) && (parseInt(tree_list[i].rgt) < parseInt(node.rgt))) {
+        //当前节点i为node的下一层 & i为node的子节点
         tree_list[i].show_self = true
         if ((tree_list[i].rgt - tree_list[i].lft > 1) && (tree_list[i].show_sons == true)) {
           this.open_node(tree_list[i])
