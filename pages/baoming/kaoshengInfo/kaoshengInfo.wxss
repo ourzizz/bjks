@@ -1,2 +1,25 @@
 /* pages/baoming/kaoshengInfo/kaoshengInfo.wxss */
-@import "/common/wxss/writeMsg.wxss"
+@import "/common/wxss/writeMsg.wxss";
+@import "/pages/bookstore/bookstore.wxss";
+.left_box{
+  top: 0rpx;
+}
+.right_box{
+  top: 0rpx;
+}
+.input_box{
+    display: flex;
+    flex-direction:row;
+    justify-content:space-between
+}
+.label{
+    font-size: 30rpx;
+}
+.value{
+    font-size: 30rpx;
+    float: right;
+}
+.zhiwei{
+    font-size: 30rpx;
+    text-decoration:underline
+}
