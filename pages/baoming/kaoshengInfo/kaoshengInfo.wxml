@@ -107,6 +107,10 @@
 			</view>
 		</scroll-view>
 		<view wx:if="{{step==2}}">
+			<view wx:if="{{ baomingInfo.bmconfirm=='1'}}">
+				您已经进行过报名确认，信息处于不可修改状态
+			</view>
+			<scroll-view wx:if="{{baomingInfo.bmconfirm=='0'}}" style="height:100%;" scroll-y="true">
 			<view class="weui">
 				<view class="weui-uploader">
 					<view class="weui-uploader__files" style="position:static">
@@ -163,11 +167,66 @@
 			</view>
 			<view class="foot">
 				<view style="margin:0px auto;right:0;left:0;">
-					<button style="backgroud:#d9d9d9;margin:10rpx;display:inline-block;width:42%;float:right" bindtap="cancle"> 确认报名</button>
+					<button style="backgroud:#d9d9d9;margin:10rpx;display:inline-block;width:42%;float:right" bindtap="baoming_confirm"> 确认报名</button>
 				</view>
 			</view>
+			</scroll-view>
 		</view>
 		<view wx:if="{{step==3}}">
+			<view class="weui">
+				<view class="weui-uploader">
+					<view class="weui-uploader__files" style="position:static">
+						<view class="weui-uploader__file">
+							<image mode="aspectFit" class="weui-uploader__img" src="{{kaoshengInfo.photoUrl!=='null' ? kaoshengInfo.photoUrl : '/pages/user/user-unlogin.png'}}" data-id="{{idx}}" data-src="{{image}}" bindtap="previewImage"></image>
+						</view>
+					</view>
+				</view>
+			</view>
+			<view class="weui-cells weui-cells_after-title">
+
+				<view class="" style="margin:0 0 0 10px;">
+					<view class="input_box">
+						<view class="lable"> 姓名: </view>
+						<view class="value">{{kaoshengInfo.name}} </view>
+					</view>
+
+					<view class="input_box">
+						<view class="lable"> 身份证号: </view>
+						<view class="value">{{kaoshengInfo.sfzid}} </view>
+					</view>
+
+					<view class="input_box">
+						<view class="lable"> 电话: </view>
+						<view class="value">{{kaoshengInfo.telphone}} </view>
+					</view>
+
+					<view class="input_box">
+						<view class="lable"> 毕业学校: </view>
+						<view class="value">{{kaoshengInfo.school}} </view>
+					</view>
+
+					<view class="input_box">
+						<view class="lable"> 学历: </view>
+						<view class="value">{{kaoshengInfo.education}} </view>
+					</view>
+
+					<view class="input_box">
+						<view class="lable"> 学位: </view>
+						<view class="value">{{kaoshengInfo.degree}} </view>
+					</view>
+
+					<view class="input_box">
+						<view class="lable"> 专业: </view>
+						<view class="value">{{kaoshengInfo.major}} </view>
+					</view>
+				</view>
+			</view>
+			<view wx:if="{{zhiweiPath.length > 0}}">
+				您选择的职位是:
+				<view wx:for="{{zhiweiPath}}" wx:key="{{this}}" class="zhiwei">
+					{{item}}
+				</view>
+			</view>
 		</view>
 	</view>
 </view>

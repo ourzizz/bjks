@@ -198,7 +198,14 @@ Page({
         }
     },
 
-    baoming_confirm: function () { },
+    baoming_confirm: function () { 
+        if(this.check_message()){
+            this.data.baomingInfo.bmconfirm = '1'
+            this.setData({
+                baomingInfo: this.data.baomingInfo
+            })
+        }
+    },
 
     input_name: function (e) {//{{{
         this.data.kaoshengInfo.name = e.detail.value
@@ -305,6 +312,9 @@ Page({
     update_kaosheng:function (){//{{{
         var that = this
         var Modify = this.get_modify()
+        if(util.isEmptyObject(Modify)){
+            return
+        }
         util.showBusy("正在更新数据")
         qcloud.request({
             url: `${config.service.host}/baoming/kaoshengInfo/update_kaosheng`,
@@ -317,12 +327,6 @@ Page({
             header: { 'content-type': 'application/x-www-form-urlencoded' },
             success(result) {//更新后 更新所有副本
                 that.init_page(that.data.userInfo.openId,that.data.ksid)
-                // that.data.baomingInfoCopy = JSON.parse(JSON.stringify(that.data.baomingInfo));
-                // that.data.kaoshengInfoCopy = JSON.parse(JSON.stringify(that.data.kaoshengInfo));
-                // that.setData({//bug修改了信息set step后又回到未修改的数据
-                //     baomingInfo:that.data.baomingInfo,
-                //     kaoshengInfo:that.data.baokaoshengInfo
-                // })
                 wx.hideToast()
             },
             fail(error) {

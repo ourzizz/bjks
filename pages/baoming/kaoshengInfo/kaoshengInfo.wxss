@@ -10,14 +10,16 @@
 .input_box{
     display: flex;
     flex-direction:row;
-    justify-content:space-between
+    justify-content:space-between;
 }
 .label{
     font-size: 30rpx;
+    width: 40%;
 }
 .value{
     font-size: 30rpx;
     float: right;
+    width: 60%;
 }
 .zhiwei{
     font-size: 30rpx;
