@@ -97,9 +97,10 @@ Page({
 
     goFillInfo: function (event){
         var ksid = event.currentTarget.dataset.ks_id
+        var configid = event.currentTarget.dataset.configid
         var openId = this.data.userInfo.openId
         wx.navigateTo({
-            url: '/pages/baoming/kaoshengInfo/kaoshengInfo?openId='+openId+'&ksid='+ksid
+            url: '/pages/baoming/kaoshengInfo/kaoshengInfo?openId='+openId+'&ksid='+ksid+'&configId='+configid
         })
     }
 })

@@ -10,7 +10,8 @@ var app = getApp()
 Page({
     data: {
         ksid: '',
-        step:1,
+        config:{}, //填报页面的配置属性
+        step:0,
         activeIndex: -1,
         kaosheng_flg:"new",
         kaoshengInfo: {
@@ -29,49 +30,64 @@ Page({
         baomingInfoCopy:{},//副本 涉及到改的都需要副本对比
         zhiweiPath:[],//view考生只管查看已经勾选的报考地区-单位-职位信息
         operas:[
-            {step:1,name:"信息填写"},
-            {step:2,name:"报名确认"},
-            {step:3,name:"查看信息"},
+            {step:0,name:"信息填写",onoff:true},//step1一直开放
+            {step:1,name:"上传照片",onoff:false},//默认关闭 已经填过信息或者保存成功的考生开启上传
+            {step:2,name:"选择职位",onoff:false},
+            {step:3,name:"信息确认",onoff:false},
+            {step:4,name:"查看信息",onoff:false},
         ]
     },
-    init_page:function(openId,ksid){
+    init_page:function(openId,ksid,configId){
         let that = this
         util.showBusy("下载数据中")
         qcloud.request({
             url: `${config.service.host}/baoming/kaoshengInfo/get_kaosheng_kaoshi`,
             data: {
                 open_id:openId,
-                ksfileid:ksid
+                ksfileid:ksid,
+                configId:configId,
             },
             method: 'POST',
             header: { 'content-type':'application/x-www-form-urlencoded' },
             success(result) {
                 wx.hideToast()
-                if(result.data.kaoshengInfo == "null"){
+                if(result.data.kaoshengInfo == null){//考生没有填写过任何信息
                     that.setData({
                         kaosheng_flg:"new",
-                        kaoshengInfo:{},
+                        kaoshengInfo:{photoUrl:'null',sfzid:'522401198508292031'},
                         baomingInfo:{open_id:openId,ksid:ksid,bmconfirm:0}
                     }) 
-                }else{
+                }else{//有考生信息
                     that.data.imageName = result.data.kaoshengInfo.photoUrl.replace(cosPath,'')
-                    that.data.tree_list = result.data.zhiwei
-                    that.init_tree_list(that.data.tree_list)
-                    if (result.data.baomingInfo === null) {//有考生信息 无报名信息=>考生以往报过其他考试 本考试未报名,报名未确认
-                        result.data.baomingInfo = {open_id:openId,ksid:ksid,code:"",bmconfirm:0}
-                    }else{
-                        that.getPath(result.data.baomingInfo.code)
+                    that.data.operas[1].onoff = true
+                    if(result.data.kaoshengInfo.photoUrl != 'null'){//考生已经上传图片 开放选择职位步骤
+                        that.data.operas[2].onoff = true
                     }
-                    that.data.baomingInfoCopy = JSON.parse(JSON.stringify(result.data.baomingInfo));
-                    that.data.kaoshengInfoCopy = JSON.parse(JSON.stringify(result.data.kaoshengInfo));
                     that.setData({
                         kaosheng_flg:"edit",
                         kaoshengInfo:result.data.kaoshengInfo,
-                        tree_list: that.data.tree_list,
-                        baomingInfo:result.data.baomingInfo,
-                        zhiweiPath:that.data.zhiweiPath
                     }) 
                 }
+                that.data.tree_list = result.data.zhiwei
+                that.init_tree_list(that.data.tree_list)
+                if (result.data.baomingInfo === null) {//有考生信息 无报名信息=>考生以往报过其他考试 本考试未报名,报名未确认
+                    result.data.baomingInfo = {open_id:openId,ksid:ksid,code:"",bmconfirm:0}
+                }else{
+                    that.getPath(result.data.baomingInfo.code)
+                    that.data.operas[1].onoff = true //有报名信息证明 填写 照片 职位都完成了 需要打开全部环节
+                    that.data.operas[2].onoff = true 
+                    that.data.operas[3].onoff = true
+                    that.data.operas[4].onoff = true
+                }
+                that.data.baomingInfoCopy = JSON.parse(JSON.stringify(result.data.baomingInfo));
+                that.data.kaoshengInfoCopy = JSON.parse(JSON.stringify(result.data.kaoshengInfo));
+                that.setData({
+                    tree_list: that.data.tree_list,
+                    baomingInfo:result.data.baomingInfo,
+                    zhiweiPath:that.data.zhiweiPath,
+                    config:result.data.config,
+                    operas:that.data.operas
+                }) 
             },
             fail(error) {
                 util.showModel('请求失败', error);
@@ -79,6 +95,7 @@ Page({
             }
         })
     },
+
     onLoad: function (options) {//{{{ 需要向后台请求考生基本信息 和报考信息
         let that = this
         this.data.ksid = options.ksid
@@ -89,12 +106,13 @@ Page({
                 logged: true
             })
         }
-        this.init_page(options.openId,options.ksid)
+        this.init_page(options.openId,options.ksid,options.configId)
     },//}}}
 
     init_tree_list:function(tree_list){
         var layer = this.data.layer
         this.data.tree_list.forEach(element => {
+            //遍历一遍tree 计算每个节点layer 生成layer数组确定数组索引为层级 元素为长度 
             var idx = -1
             for(var i=0;i<layer.length;i++){
                 if(layer[i] === element.code.length){
@@ -243,13 +261,15 @@ Page({
         } else if (!sfzRegx.exec(kaoshengInfo.sfzid)) {
             util.showModel("信息不全", "身份证填写错误");
             return false
-        } else if(kaoshengInfo.photoUrl == "null"){
-            util.showModel("信息不全", "请上传一寸照");
-            return false
-        } else if(this.data.zhiweiPath.length === 0){
-            util.showModel("信息不全", "考生未选职位或科目");
-            return false
-        }
+        } 
+        //else if(kaoshengInfo.photoUrl == "null"){
+            //util.showModel("信息不全", "请上传一寸照");
+            //return false
+        //} 
+        //else if(this.data.zhiweiPath.length === 0){
+            //util.showModel("信息不全", "考生未选职位或科目");
+            //return false
+        //}
         return true 
     },//}}}
 
@@ -274,32 +294,51 @@ Page({
         }
     },//}}}
 
+    submit_zhiwei:function(){
+        let that = this
+        if(this.data.baomingInfo.code !== this.data.baomingInfoCopy.code){//报考职位有变化
+            let bmtemp = {}
+            bmtemp.open_id = that.data.baomingInfo.open_id
+            bmtemp.ksid = that.data.baomingInfo.ksid
+            bmtemp.code = that.data.baomingInfo.code
+            qcloud.request({
+                url: `${config.service.host}/baoming/kaoshengInfo/baoming`,
+                data: {
+                    baomingInfo: JSON.stringify(bmtemp)
+                },
+                method: 'POST',
+                header: { 'content-type': 'application/x-www-form-urlencoded' },
+                success(result) {//更新后 更新所有副本
+                    that.init_page(that.data.userInfo.openId,that.data.ksid)
+                    wx.hideToast()
+                },
+                fail(error) {
+                    that.jump()
+                }
+            })
+        }
+    },
+
     get_modify:function(){//得到考生修改考生信息 和职位信息
         var bmCopy = this.data.baomingInfoCopy
         var bmOrigin = this.data.baomingInfo
         var ksCopy = this.data.kaoshengInfo
         var ksOrigin = this.data.kaoshengInfoCopy
-        var Modify = {bmModify:{},ksModify:{}}
-        if(bmCopy.code !== bmOrigin.code){
-            Modify.bmModify = this.data.baomingInfo
-        }
-        if(ksCopy.photoUrl !== ksOrigin.photoUrl){
-            Modify.ksModify.photoUrl = ksCopy.photoUrl
-        }
+        var Modify = {}
         if(ksCopy.telphone !== ksOrigin.telphone){
-            Modify.ksModify.telphone = ksCopy.telphone
+            Modify.telphone = ksCopy.telphone
         }
         if(ksCopy.school !== ksOrigin.school){
-            Modify.ksModify.school = ksCopy.school
+            Modify.school = ksCopy.school
         }
         if(ksCopy.degree !== ksOrigin.degree){
-            Modify.ksModify.degree = ksCopy.degree
+            Modify.degree = ksCopy.degree
         }
         if(ksCopy.education !== ksOrigin.education){
-            Modify.ksModify.education = ksCopy.education
+            Modify.education = ksCopy.education
         }
         if(ksCopy.major !== ksOrigin.major){
-            Modify.ksModify.major = ksCopy.major
+            Modify.major = ksCopy.major
         }
         if(util.isEmptyObject(Modify)){
             return "NULL";
@@ -320,8 +359,7 @@ Page({
             url: `${config.service.host}/baoming/kaoshengInfo/update_kaosheng`,
             data: {
                 open_id: that.data.userInfo.openId,
-                kaoshengInfo: JSON.stringify(Modify.ksModify),
-                baomingInfo: JSON.stringify(Modify.bmModify)
+                kaoshengInfo: JSON.stringify(Modify),
             },
             method: 'POST',
             header: { 'content-type': 'application/x-www-form-urlencoded' },
@@ -344,7 +382,6 @@ Page({
             url: `${config.service.host}/baoming/kaoshengInfo/store_kaosheng`,
             data: {
                 kaoshengInfo: JSON.stringify(kaoshengInfo),
-                baomingInfo: JSON.stringify(this.data.baomingInfo)
             },
             method: 'POST',
             header: { 'content-type': 'application/x-www-form-urlencoded' },
@@ -408,12 +445,12 @@ Page({
                 res = JSON.parse(res.data)
                 that.delete_cos_img(that.data.imageName)//删除上一张图片
                 that.data.imageName = res.data.name
-                if(that.data.kaosheng_flg === "edit"){//如果是编辑态，需要更新db，前面已经删掉了原图片
-                    that.img_to_db(that.data.kaoshengInfo.open_id , res.data.imgUrl)
-                }
+                that.img_to_db(that.data.kaoshengInfo.open_id , res.data.imgUrl)//因为第一步必须填报信息，上传cos的同时直接进数据库避免僵尸图片产生
                 that.data.kaoshengInfo.photoUrl = res.data.imgUrl
+                that.data.operas[2].onoff = true
                 that.setData({
-                    kaoshengInfo:that.data.kaoshengInfo
+                    kaoshengInfo:that.data.kaoshengInfo,
+                    operas:that.data.operas
                 })
                 wx.hideToast()
             },

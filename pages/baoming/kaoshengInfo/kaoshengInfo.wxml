@@ -6,22 +6,13 @@
 		</view>
 	</view>
 	<view class="right_box">
-		<view wx:if="{{step==1 && baomingInfo.bmconfirm=='1'}}">
+        <view style="display:flex;justify-content:center">
+        {{config.eventtitle}}
+        </view>
+		<view wx:if="{{step==0 && baomingInfo.bmconfirm=='1'}}">
 			您已经进行过报名确认，信息处于不可修改状态
 		</view>
-		<scroll-view wx:if="{{step==1 && baomingInfo.bmconfirm=='0'}}" style="height:100%;" scroll-y="true">
-			<view class="weui">
-				<view class="weui-uploader">
-					<view class="weui-uploader__files" style="position:static">
-						<view class="weui-uploader__file">
-							<image mode="aspectFit" class="weui-uploader__img" src="{{kaoshengInfo.photoUrl!=='null' ? kaoshengInfo.photoUrl : '/pages/user/user-unlogin.png'}}" data-id="{{idx}}" data-src="{{image}}" bindtap="previewImage"></image>
-						</view>
-					</view>
-					<view class="weui-uploader__input-box">
-						<view class="weui-uploader__input" bindtap="chooseImage"></view>
-					</view>
-				</view>
-			</view>
+		<scroll-view wx:if="{{step==0 && baomingInfo.bmconfirm=='0'}}" style="height:100%;" scroll-y="true">
 			<view class="weui-cells weui-cells_after-title">
 
 				<view class="" style="margin:0 0 0 10px;">
@@ -61,52 +52,86 @@
 					</view>
 				</view>
 			</view>
-			<view wx:if="{{zhiweiPath.length > 0}}">
-				您选择的职位是:
-				<view wx:for="{{zhiweiPath}}" wx:key="{{this}}" class="zhiwei">
-					{{item}}
-				</view>
-			</view>
-			<radio-group bindchange="radioChange">
-				<scroll-view style="height:50%; color:black; background-color: lightblue;" scroll-y="true">
-					<view wx:if="{{tree_list != 'NULL'}}">
-						<view wx:for="{{tree_list}}" bindtap="set_idx" data-idx="{{idx}}" wx:key="this" wx:for-index="idx">
-							<view hidden="{{!item.show_self}}">
-								<view class="nav_2_text" style="font-size:30rpx;positon:absolute;display:inline-block">
-									<view wx:for="{{[1,2,3,4,5,6]}}" wx:for-item="i" wx:key="i" style="display:inline-block">
-										<view wx:if="{{ i < item.layer + 1}}" style="padding-left:25rpx">
-										</view>
-									</view>
-									<view style="display:inline" bindtap="operate_tree" data-idx="{{idx}}">
-										<view wx:if="{{item.cptr !== '0' && item.show_sons==false}}" style="display:inline-block">
-											+
-										</view>
-										<view wx:elif="{{item.cptr !== '0' && item.show_sons==true}}" style="display:inline-block">
-											~
-										</view>
-										<view wx:else style="display:inline-block">
-											:.
-										</view>
-										{{item.description}}
-									</view>
-									<view style="float:right;postion:absolute;right:0" wx:if="{{item.cptr == '0'}}">
-										<radio data-idx="{{idx}}" value="{{ item.code }}" checked="{{item.checked}}" />
-									</view>
-								</view>
-							</view>
-						</view>
-					</view>
-					<!--wx:if="{{nav_2 != 'NULL'---->
-				</scroll-view>
-			</radio-group>
-
 			<view class="foot">
 				<view style="margin:0px auto;right:0;left:0;">
 					<button style="backgroud:#d9d9d9;margin:10rpx;display:inline-block;width:42%" bindtap="submit"> 保存</button>
 				</view>
 			</view>
 		</scroll-view>
+
+		<view wx:if="{{step==1}}">
+            <view wx:if="{{operas[1].onoff == true}}">
+                <view class="weui">
+                    <view class="weui-uploader">
+                        <view class="weui-uploader__files" style="position:static">
+                            <view class="weui-uploader__file">
+                                <image mode="aspectFit" class="weui-uploader__img" src="{{kaoshengInfo.photoUrl!=='null' ? kaoshengInfo.photoUrl : '/pages/user/user-unlogin.png'}}" data-id="{{idx}}" data-src="{{image}}" bindtap="previewImage"></image>
+                            </view>
+                        </view>
+                        <view class="weui-uploader__input-box">
+                            <view class="weui-uploader__input" bindtap="chooseImage"></view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+            <view wx:if="{{operas[1].onoff == false}}">
+                请先填写基础信息再上传照片
+            </view>
+	    </view>
+
 		<view wx:if="{{step==2}}">
+            <view wx:if="{{operas[2].onoff == true}}">
+                <view wx:if="{{zhiweiPath.length > 0}}">
+                    您选择的职位是:
+                    <view wx:for="{{zhiweiPath}}" wx:key="{{this}}" class="zhiwei">
+                        {{item}}
+                    </view>
+                </view>
+                <radio-group bindchange="radioChange">
+                    <scroll-view style="height:800rpx; color:black; background-color: lightblue;" scroll-y="true">
+                        <view wx:if="{{tree_list != 'NULL'}}">
+                            <view wx:for="{{tree_list}}" bindtap="set_idx" data-idx="{{idx}}" wx:key="this" wx:for-index="idx">
+                                <view hidden="{{!item.show_self}}">
+                                    <view class="nav_2_text" style="font-size:30rpx;positon:absolute;display:inline-block">
+                                        <view wx:for="{{[1,2,3,4,5,6]}}" wx:for-item="i" wx:key="i" style="display:inline-block">
+                                            <view wx:if="{{ i < item.layer + 1}}" style="padding-left:25rpx">
+                                            </view>
+                                        </view>
+                                        <view style="display:inline" bindtap="operate_tree" data-idx="{{idx}}">
+                                            <view wx:if="{{item.cptr !== '0' && item.show_sons==false}}" style="display:inline-block">
+                                                +
+                                            </view>
+                                            <view wx:elif="{{item.cptr !== '0' && item.show_sons==true}}" style="display:inline-block">
+                                                ~
+                                            </view>
+                                            <view wx:else style="display:inline-block">
+                                                :.
+                                            </view>
+                                            {{item.description}}
+                                        </view>
+                                        <view style="float:right;postion:absolute;right:0" wx:if="{{item.cptr == '0'}}">
+                                            <radio data-idx="{{idx}}" value="{{ item.code }}" checked="{{item.checked}}" />
+                                        </view>
+                                    </view>
+                                </view>
+                            </view>
+                        </view>
+                        <!--wx:if="{{nav_2 != 'NULL'---->
+                    </scroll-view>
+                </radio-group>
+
+                <view class="foot">
+                    <view style="margin:0px auto;right:0;left:0;">
+                        <button style="backgroud:#d9d9d9;margin:10rpx;display:inline-block;width:42%" bindtap="submit_zhiwei"> 保存</button>
+                    </view>
+                </view>
+			</view>
+            <view wx:if="{{operas[2].onoff == false}}">
+                请先上传照片再进行此步骤
+            </view>
+	    </view>
+
+		<view wx:if="{{step==3}}">
 			<view wx:if="{{ baomingInfo.bmconfirm=='1'}}">
 				您已经进行过报名确认，信息处于不可修改状态
 			</view>
@@ -115,7 +140,7 @@
 				<view class="weui-uploader">
 					<view class="weui-uploader__files" style="position:static">
 						<view class="weui-uploader__file">
-							<image mode="aspectFit" class="weui-uploader__img" src="{{kaoshengInfo.photoUrl!=='null' ? kaoshengInfo.photoUrl : '/pages/user/user-unlogin.png'}}" data-id="{{idx}}" data-src="{{image}}" bindtap="previewImage"></image>
+							<image mode="aspectFit" class="weui-uploader__img" src="{{kaoshengInfo.photoUrl!=='null' ? kaoshengInfo.photoUrl : '/pages/user/user-unlogin.png'}}" data-id="{{idx}}" data-src="{{image}}" bindtap="previewImage" />
 						</view>
 					</view>
 				</view>
@@ -167,12 +192,12 @@
 			</view>
 			<view class="foot">
 				<view style="margin:0px auto;right:0;left:0;">
-					<button style="backgroud:#d9d9d9;margin:10rpx;display:inline-block;width:42%;float:right" bindtap="baoming_confirm"> 确认报名</button>
+					<button style="backgroud:#d9d9d9;margin:10rpx;display:inline-block;width:42%;float:right" bindtap="baoming_confirm">职位确认</button>
 				</view>
 			</view>
 			</scroll-view>
 		</view>
-		<view wx:if="{{step==3}}">
+		<view wx:if="{{step==4}}">
 			<view class="weui">
 				<view class="weui-uploader">
 					<view class="weui-uploader__files" style="position:static">
@@ -228,5 +253,6 @@
 				</view>
 			</view>
 		</view>
+        <view style="height:200rpx"> </view>
 	</view>
 </view>

@@ -38,7 +38,7 @@
                       </view>
 
                         <block wx:if="{{item.act === '信息填报'}}">
-                            <button data-ks_id="{{item.ksfileid}}" bindtap="goFillInfo"> 填报 </button>
+                            <button data-configid="{{item.id}}" data-ks_id="{{item.ksfileid}}" bindtap="goFillInfo"> 填报 </button>
                         </block>
                         <block wx:elif="{{item.act === '成绩查询'}}">
                             <button> 查询 </button>
