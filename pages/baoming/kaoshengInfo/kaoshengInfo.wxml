@@ -1,8 +1,10 @@
 <!--pages/writeMsg/writeMsg.wxml-->
 <view class="page">
 	<view class="left_box">
-		<view class="nav_2_item {{nav_selected_id[1] == item.class_id ? 'selected' : 'default'}}" data-step="{{item.step}}" wx:for="{{operas}}" bindtap="set_step">
-			{{item.name}}
+		<view  data-step="{{item.step}}" wx:for="{{operas}}" bindtap="set_step" wx:for-index="idx">
+			<view class="nav_2_item {{idx !== step ? 'selected' : 'default'}}">
+			     {{item.name}}
+			</view>		
 		</view>
 	</view>
 	<view class="right_box">
@@ -13,8 +15,10 @@
 			您已经进行过报名确认，信息处于不可修改状态
 		</view>
 		<scroll-view wx:if="{{step==0 && baomingInfo.bmconfirm=='0'}}" style="height:100%;" scroll-y="true">
+			<view style="font-size:30rpx;background:light;margin:5rpx">
+				一个微信号只能绑定一名考生，提交后姓名、身份证号不可修改,考生切勿代他人填报.
+			</view>
 			<view class="weui-cells weui-cells_after-title">
-
 				<view class="" style="margin:0 0 0 10px;">
 					<view class="input_box">
 						<view class="lable"> 姓名: </view>
@@ -93,24 +97,28 @@
                             <view wx:for="{{tree_list}}" bindtap="set_idx" data-idx="{{idx}}" wx:key="this" wx:for-index="idx">
                                 <view hidden="{{!item.show_self}}">
                                     <view class="nav_2_text" style="font-size:30rpx;positon:absolute;display:inline-block">
-                                        <view wx:for="{{[1,2,3,4,5,6]}}" wx:for-item="i" wx:key="i" style="display:inline-block">
-                                            <view wx:if="{{ i < item.layer + 1}}" style="padding-left:25rpx">
-                                            </view>
-                                        </view>
-                                        <view style="display:inline" bindtap="operate_tree" data-idx="{{idx}}">
-                                            <view wx:if="{{item.cptr !== '0' && item.show_sons==false}}" style="display:inline-block">
-                                                +
-                                            </view>
-                                            <view wx:elif="{{item.cptr !== '0' && item.show_sons==true}}" style="display:inline-block">
-                                                ~
-                                            </view>
-                                            <view wx:else style="display:inline-block">
-                                                :.
-                                            </view>
-                                            {{item.description}}
-                                        </view>
-                                        <view style="float:right;postion:absolute;right:0" wx:if="{{item.cptr == '0'}}">
-                                            <radio data-idx="{{idx}}" value="{{ item.code }}" checked="{{item.checked}}" />
+                                        <view style="display:flex;line-height:15pt" bindtap="operate_tree" data-idx="{{idx}}">
+											<view wx:for="{{[1,2,3,4,5,6]}}" wx:for-item="i" wx:key="i" style="display:inline-block">
+												<view wx:if="{{ i < item.layer + 1}}" style="padding-left:25rpx">
+												</view>
+											</view>
+											<view>
+												<view wx:if="{{item.cptr !== '0' && item.show_sons==false}}" style="display:inline-block">
+													+
+												</view>
+												<view wx:elif="{{item.cptr !== '0' && item.show_sons==true}}" style="display:inline-block">
+													~
+												</view>
+												<view wx:else style="display:inline-block">
+													:.
+												</view>
+											</view>
+											<view>
+                                            	{{item.description}}
+											</view>
+											<view style="float:right;postion:absolute;right:0" wx:if="{{item.cptr == '0'}}">
+												<radio data-idx="{{idx}}" value="{{ item.code }}" checked="{{item.checked}}" />
+											</view>
                                         </view>
                                     </view>
                                 </view>
@@ -141,6 +149,9 @@
 					<view class="weui-uploader__files" style="position:static">
 						<view class="weui-uploader__file">
 							<image mode="aspectFit" class="weui-uploader__img" src="{{kaoshengInfo.photoUrl!=='null' ? kaoshengInfo.photoUrl : '/pages/user/user-unlogin.png'}}" data-id="{{idx}}" data-src="{{image}}" bindtap="previewImage" />
+						</view>
+						<view style="font-size:25rpx;line-height:15pt;">
+							信息确认后,不可再修改。本次上传信息仅作为辅助报名,填报数据不作为报名依据，考生必须到指定现场进行报名审核。
 						</view>
 					</view>
 				</view>
@@ -192,7 +203,7 @@
 			</view>
 			<view class="foot">
 				<view style="margin:0px auto;right:0;left:0;">
-					<button style="backgroud:#d9d9d9;margin:10rpx;display:inline-block;width:42%;float:right" bindtap="baoming_confirm">职位确认</button>
+					<button style="backgroud:#d9d9d9;margin:10rpx;display:inline-block;width:42%;float:right" bindtap="baoming_confirm">信息确认</button>
 				</view>
 			</view>
 			</scroll-view>
