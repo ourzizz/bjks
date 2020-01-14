@@ -54,7 +54,8 @@ Page({
                 if(result.data.kaoshengInfo == null){//考生没有填写过任何信息
                     that.setData({
                         kaosheng_flg:"new",
-                        kaoshengInfo:{photoUrl:'null',sfzid:'522401198508292031'},
+                        kaoshengInfo:{photoUrl:'null',ksid:ksid,sfzid:'522401198508292031',name:'测试',telphone:'13308570523'},
+                        // kaoshengInfo:{photoUrl:'null',ksid:ksid},
                         baomingInfo:{open_id:openId,ksid:ksid,bmconfirm:0}
                     }) 
                 }else{//有考生信息
@@ -216,35 +217,64 @@ Page({
         }
     },
 
-    baoming_confirm: function () { 
-        if(this.check_message()){
-            this.data.baomingInfo.bmconfirm = '1'
-            this.setData({
-                baomingInfo: this.data.baomingInfo
-            })
-        }
+    baoming_confirm: function () {
+        let that = this
+        wx.showModal({
+            title: '请确认',
+            content: '确认后所有信息将被锁定不可修改',
+            success(res) {
+                if (res.confirm) {
+                    qcloud.request({
+                        url: `${config.service.host}/baoming/kaoshengInfo/bmconfirm`,
+                        data: {
+                            baomingInfo: JSON.stringify(that.data.baomingInfo)
+                        },
+                        method: 'POST',
+                        header: { 'content-type': 'application/x-www-form-urlencoded' },
+                        success(result) {//更新后 更新所有副本
+                            that.data.baomingInfo.bmconfirm = '1'
+                            that.setData({
+                                baomingInfo: that.data.baomingInfo
+                            })
+                        },
+                        fail(error) {
+                            that.jump()
+                        }
+                    })
+                } else if (res.cancel) {
+                    return
+                }
+            }
+        }) //}}}
     },
 
     input_name: function (e) {//{{{
         this.data.kaoshengInfo.name = e.detail.value
+        this.data.pub_lock = 'unlock'
     },
     input_telphone: function (e) {//textarea 触发
         this.data.kaoshengInfo.telphone = e.detail.value
+        this.data.pub_lock = 'unlock'
     },
     input_sfzid:function(e){
         this.data.kaoshengInfo.sfzid = e.detail.value
+        this.data.pub_lock = 'unlock'
     },
     input_school:function(e){
         this.data.kaoshengInfo.school = e.detail.value
+        this.data.pub_lock = 'unlock'
     },
     input_education:function(e){
         this.data.kaoshengInfo.education = e.detail.value
+        this.data.pub_lock = 'unlock'
     },
     input_degree:function(e){
         this.data.kaoshengInfo.degree = e.detail.value
+        this.data.pub_lock = 'unlock'
     },
     input_major:function (e){
         this.data.kaoshengInfo.major = e.detail.value
+        this.data.pub_lock = 'unlock'
     },
     check_message: function () {//{{{
         var nameRegx = new RegExp('^[\u4E00-\u9FA5]{2,4}$','g');
@@ -271,14 +301,6 @@ Page({
             //return false
         //}
         return true 
-    },//}}}
-
-
-    cancle: function () {//{{{
-        if(this.data.kaosheng_flg === "new"){//新建信息放弃发布，删除所有已经上传图片,修改的话不能删除
-            this.clear_cos()
-        }
-        this.jump()//返回上级页面
     },//}}}
 
     //用户点击提交
@@ -343,12 +365,12 @@ Page({
         if(util.isEmptyObject(Modify)){
             return "NULL";
         }
-        this.data.pub_lock = "unlock" //有修改就要开锁
+        this.data.pub_lock = "unlock"
         return Modify;
     },
 
     //保存修改的信息
-    update_kaosheng:function (){//{{{
+    update_kaosheng:function (Modify){//{{{
         var that = this
         var Modify = this.get_modify()
         if(util.isEmptyObject(Modify)){
@@ -378,6 +400,7 @@ Page({
         let that = this
         let kaoshengInfo = that.data.kaoshengInfo
         kaoshengInfo.open_id = this.data.userInfo.openId
+        util.showBusy('保存数据中')
         qcloud.request({
             url: `${config.service.host}/baoming/kaoshengInfo/store_kaosheng`,
             data: {
@@ -386,6 +409,14 @@ Page({
             method: 'POST',
             header: { 'content-type': 'application/x-www-form-urlencoded' },
             success(result) {
+                wx.hideToast()
+                that.data.operas[1].onoff = true
+                that.setData({
+                    kaosheng_flg:'edit',
+                    kaoshengInfo:that.data.kaoshengInfo,
+                    operas:that.data.operas,
+                    pub_lock:'unlock'
+                })
             },
             fail(error) {
             }
@@ -394,12 +425,13 @@ Page({
 
 
     //新上传的图片放到db中
-    img_to_db:function (open_id,imgUrl){//{{{
+    img_to_db:function (open_id,ksid,imgUrl){//{{{
         //请求后台update图片数据
         qcloud.request({
             url: `${config.service.host}/baoming/kaoshengInfo/update_db_img`,
             data: {
                 open_id:open_id,
+                ksid:ksid,
                 imgUrl:imgUrl
             },
             method: 'POST',
@@ -445,7 +477,7 @@ Page({
                 res = JSON.parse(res.data)
                 that.delete_cos_img(that.data.imageName)//删除上一张图片
                 that.data.imageName = res.data.name
-                that.img_to_db(that.data.kaoshengInfo.open_id , res.data.imgUrl)//因为第一步必须填报信息，上传cos的同时直接进数据库避免僵尸图片产生
+                that.img_to_db(that.data.kaoshengInfo.open_id ,that.data.kaoshengInfo.ksid,res.data.imgUrl)//因为第一步必须填报信息，上传cos的同时直接进数据库避免僵尸图片产生
                 that.data.kaoshengInfo.photoUrl = res.data.imgUrl
                 that.data.operas[2].onoff = true
                 that.setData({
