@@ -9,7 +9,26 @@ var cosPath = "http://bjks-1252192276.cos.ap-chengdu.myqcloud.com"
 var app = getApp()
 Page({
     data: {
+        filltable: [
+            { key: 'name', onoff:'on', lable: '姓名', value: '',placeholder:'不可修改字段' },
+            { key: 'sfzid', onoff:'on', lable: '身份证号', value: '', placeholder:'不可修改字段'},
+            { key: 'birthday', onoff:'on', lable: '出生日期', value: '',placeholder:'出生日期' },
+            { key: 'degree', onoff:'on', lable: '学位', value: '',placeholder:'学位'},
+            { key: 'education', onoff:'on', lable: '学历', value: '',placeholder:'学历'},
+            { key: 'school', onoff:'on', lable: '毕业学校', value: '',placeholder:'毕业学校' },
+            { key: 'graduationDate', onoff:'on', lable: '毕业日期', value: '',placeholder:'毕业时间' },
+            { key: 'sex', onoff:'on', lable: '性别', value: '',placeholder:'男或女'},
+            { key: 'telphone', onoff:'on', lable: '电话', value: '', placeholder:'联系电话'},
+            { key: 'major', onoff:'on', lable: '所学专业', value: '',placeholder:'须与毕业证一致' },
+            { key: 'danwei', onoff:'on', lable: '工作单位', value: '',placeholder:'工作单位' },
+            { key: 'jobtime', onoff:'on', lable: '工作时间', value: '',placeholder:'参加工作时间' },
+            { key: 'placeOfBirth', onoff:'on', lable: '户籍地', value: '',placeholder:'出生地' },
+            { key: 'nationality', onoff:'on', lable: '民族', value: '',placeholder:'民族' },
+            { key: 'certificate', onoff:'on', lable: '资格证书', value: '',placeholder:'资格证书' },
+            { key: 'resume', onoff:'on', lable: '简历', value: '',placeholder:'从高中开始填写' }
+        ],
         ksid: '',
+        options:{},
         config:{}, //填报页面的配置属性
         step:0,
         activeIndex: -1,
@@ -23,7 +42,6 @@ Page({
         localImagePath:'', //小程序wxml页面显示的图片列表,如果是修改那么就是从服务器请求的url，否则为本地选中的图片列表
         imageName:'', //upload返回的是url和name，以前开发保留了name用逗号连接存到数据库，这个列表是存储使用的,服务器发来的namelist
         tempFilePath:'', //待上传列表
-        pub_lock:'unlock',//发布锁，避免用户多次点击 unlock lock
         tree_list:[],//职位表树形结构列表
         layer:[], //存储层级代码长度
         baomingInfo:{},//给后台增改(一旦报名不能删除) 包括报考职位代码 确认状态 审核情况 未通过原因
@@ -44,7 +62,7 @@ Page({
             url: `${config.service.host}/baoming/kaoshengInfo/get_kaosheng_kaoshi`,
             data: {
                 open_id:openId,
-                ksfileid:ksid,
+                ksid:ksid,
                 configId:configId,
             },
             method: 'POST',
@@ -97,6 +115,122 @@ Page({
         })
     },
 
+    init_kaoshengInfo:function(openId,ksid){
+        let that = this
+        util.showBusy("下载数据中")
+        qcloud.request({
+            url: `${config.service.host}/baoming/kaoshengInfo/get_kaoshengInfo`,
+            data: {
+                open_id:openId,
+                ksid:ksid,
+            },
+            method: 'POST',
+            header: { 'content-type':'application/x-www-form-urlencoded' },
+            success(result) {
+                wx.hideToast()
+                if(result.data.kaoshengInfo == null){//考生没有填写过任何信息
+                    that.setData({
+                        kaosheng_flg:"new",
+                        kaoshengInfo:{photoUrl:'null',ksid:ksid,sfzid:'522401198508292031',name:'测试',telphone:'13308570523'},
+                        // kaoshengInfo:{photoUrl:'null',ksid:ksid},
+                    }) 
+                }else{//有考生信息
+                    that.data.imageName = result.data.kaoshengInfo.photoUrl.replace(cosPath,'')
+                    that.data.operas[1].onoff = true
+                    if(result.data.kaoshengInfo.photoUrl != 'null'){//考生已经上传图片 开放选择职位步骤
+                        that.data.operas[2].onoff = true
+                    }
+                    that.setData({
+                        kaosheng_flg:"edit",
+                        kaoshengInfo:result.data.kaoshengInfo,
+                    }) 
+                }
+                that.init_fillTable(that.data.kaoshengInfo)
+                that.data.kaoshengInfoCopy = JSON.parse(JSON.stringify(result.data.kaoshengInfo));
+                that.setData({
+                    operas:that.data.operas
+                }) 
+            },
+            fail(error) {
+                util.showModel('请求失败', error);
+                console.log('request fail', error);
+            }
+        })
+    },
+
+    init_baomingInfo:function(openId,ksid){
+        let that = this
+        util.showBusy("下载数据中")
+        qcloud.request({
+            url: `${config.service.host}/baoming/kaoshengInfo/get_baomingInfo`,
+            data: {
+                open_id:openId,
+                ksid:ksid,
+            },
+            method: 'POST',
+            header: { 'content-type':'application/x-www-form-urlencoded' },
+            success(result) {
+                wx.hideToast()
+                if (result.data.baomingInfo === null) {//无报名信息=>考生以往报过其他考试 本考试未报名,报名未确认
+                    result.data.baomingInfo = {open_id:openId,ksid:ksid,code:"",bmconfirm:0}
+                }else{
+                    that.getPath(result.data.baomingInfo.code)
+                    that.data.operas[1].onoff = true //有报名信息证明 填写 照片 职位都完成了 需要打开全部环节
+                    that.data.operas[2].onoff = true 
+                    that.data.operas[3].onoff = true
+                    that.data.operas[4].onoff = true
+                }
+                that.data.baomingInfoCopy = JSON.parse(JSON.stringify(result.data.baomingInfo));
+                that.setData({
+                    zhiweiPath:that.data.zhiweiPath,
+                    baomingInfo:result.data.baomingInfo,
+                    operas:that.data.operas
+                }) 
+            },
+            fail(error) {
+                util.showModel('请求失败', error);
+                console.log('request fail', error);
+            }
+        })
+    },
+
+    init_zhiwei:function(ksid){
+        let that = this
+        util.showBusy("下载数据中")
+        qcloud.request({
+            url: `${config.service.host}/baoming/kaoshengInfo/get_zhiwei`,
+            data: {
+                ksid:ksid,
+            },
+            method: 'POST',
+            header: { 'content-type':'application/x-www-form-urlencoded' },
+            success(result) {
+                that.data.tree_list = result.data.zhiwei
+                that.init_tree_list(that.data.tree_list)
+                that.setData({
+                    tree_list:that.data.tree_list,
+                    zhiweiPath:that.data.zhiweiPath
+                })
+            },
+            fail(error) {
+                util.showModel('请求失败', error);
+                console.log('request fail', error);
+            }
+        })
+    },
+
+    init_fillTable:function(kaoshengInfo){
+        const map = new Map(Object.entries(kaoshengInfo))
+        var ft = this.data.filltable
+        for(var i=0;i<ft.length;i++){
+            ft[i].value = map.get(ft[i].key)
+        }
+        this.setData({
+            filltable:ft
+        })
+    },
+    init_opears:function(){},
+
     onLoad: function (options) {//{{{ 需要向后台请求考生基本信息 和报考信息
         let that = this
         this.data.ksid = options.ksid
@@ -104,10 +238,14 @@ Page({
         if (session) { //session存在
             this.setData({
                 userInfo: session.userinfo,
-                logged: true
+                logged: true,
+                options:options
             })
         }
-        this.init_page(options.openId,options.ksid,options.configId)
+        this.init_kaoshengInfo(options.openId,options.ksid) //onLoad里面init考生顺带顺带表单初始化 没有办法避免耦合
+        this.init_zhiwei(options.ksid)
+        this.init_baomingInfo(options.openId,options.ksid) //异步执行很烦人
+        // this.init_page(options.openId,options.ksid,options.configId)
     },//}}}
 
     init_tree_list:function(tree_list){
@@ -248,34 +386,82 @@ Page({
         }) //}}}
     },
 
-    input_name: function (e) {//{{{
-        this.data.kaoshengInfo.name = e.detail.value
-        this.data.pub_lock = 'unlock'
+    input_change: function (e) {
+        var kaoshengInfo = this.data.kaoshengInfo
+        switch (e.currentTarget.dataset.key) {
+            case 'graduationDate':
+                kaoshengInfo.graduationDate = e.detail.value;
+                break;
+            case 'birthday':
+                kaoshengInfo.birthday = e.detail.value;
+                break;
+            case 'sfzid':
+                kaoshengInfo.sfzid = e.detail.value;
+                break;
+            case 'name':
+                kaoshengInfo.name = e.detail.value
+                break;
+            case 'degree':
+                kaoshengInfo.degree = e.detail.value
+                break;
+            case 'education':
+                kaoshengInfo.education = e.detail.value
+                break;
+            case 'school':
+                kaoshengInfo.school = e.detail.value
+                break;
+            case 'sex':
+                kaoshengInfo.sex = e.detail.value
+                break;
+            case 'telphone':
+                kaoshengInfo.telphone = e.detail.value
+                break;
+            case 'major':
+                kaoshengInfo.major = e.detail.value
+                break;
+            case 'danwei':
+                kaoshengInfo.danwei = e.detail.value
+                break;
+            case 'jobtime':
+                kaoshengInfo.jobtime = e.detail.value
+                break;
+            case 'placeOfBirth':
+                kaoshengInfo.placeOfBirth = e.detail.value
+                break;
+            case 'nationality':
+                kaoshengInfo.nationality = e.detail.value
+                break;
+            case 'certificate':
+                kaoshengInfo.certificate = e.detail.value
+                break;
+            case 'resume':
+                kaoshengInfo.resume = e.detail.value
+                break;
+        }
     },
-    input_telphone: function (e) {//textarea 触发
-        this.data.kaoshengInfo.telphone = e.detail.value
-        this.data.pub_lock = 'unlock'
-    },
-    input_sfzid:function(e){
-        this.data.kaoshengInfo.sfzid = e.detail.value
-        this.data.pub_lock = 'unlock'
-    },
-    input_school:function(e){
-        this.data.kaoshengInfo.school = e.detail.value
-        this.data.pub_lock = 'unlock'
-    },
-    input_education:function(e){
-        this.data.kaoshengInfo.education = e.detail.value
-        this.data.pub_lock = 'unlock'
-    },
-    input_degree:function(e){
-        this.data.kaoshengInfo.degree = e.detail.value
-        this.data.pub_lock = 'unlock'
-    },
-    input_major:function (e){
-        this.data.kaoshengInfo.major = e.detail.value
-        this.data.pub_lock = 'unlock'
-    },
+
+    // input_name: function (e) {//{{{
+    //     this.data.kaoshengInfo.name = e.detail.value
+    // },
+    // input_telphone: function (e) {//textarea 触发
+    //     this.data.kaoshengInfo.telphone = e.detail.value
+    // },
+    // input_sfzid:function(e){
+    //     this.data.kaoshengInfo.sfzid = e.detail.value
+    // },
+    // input_school:function(e){
+    //     this.data.kaoshengInfo.school = e.detail.value
+    // },
+    // input_education:function(e){
+    //     this.data.kaoshengInfo.education = e.detail.value
+    // },
+    // input_degree:function(e){
+    //     this.data.kaoshengInfo.degree = e.detail.value
+    // },
+    // input_major:function (e){
+    //     this.data.kaoshengInfo.major = e.detail.value
+    // },
+
     check_message: function () {//{{{
         var nameRegx = new RegExp('^[\u4E00-\u9FA5]{2,4}$','g');
         var sfzRegx = new RegExp('[1-9][0-9]{5}([1][9][0-9]{2}|[2][0][0|1][0-9])([0][1-9]|[1][0|1|2])([0][1-9]|[1|2][0-9]|[3][0|1])[0-9]{3}([0-9]|[X])$','g');
@@ -283,7 +469,7 @@ Page({
         let kaoshengInfo = this.data.kaoshengInfo
         //this.data.kaoshengInfo.photoUrl =  this.data.imageNameList.join(",")
         if (!nameRegx.exec(kaoshengInfo.name)) {
-            util.showModel("输入有误", "名字只能是中文");
+            util.showModel("输入有误", "名字只能是中文不能含有空格");
             return false
         } else if (!telphoneRegx.exec(kaoshengInfo.telphone)) {
             util.showModel("信息格式错误", "电话填写错误");
@@ -305,8 +491,7 @@ Page({
 
     //用户点击提交
     submit:function (){//{{{
-        if (this.check_message() && this.data.pub_lock === 'unlock') {
-            this.setData({pub_lock:'lock'})//避免连续多次点击发布按钮
+        if (this.check_message()) {
             if(this.data.kaosheng_flg === "new"){//新增考生信息
                 this.new_kaosheng()
             }else{//更新数据库
@@ -331,7 +516,7 @@ Page({
                 method: 'POST',
                 header: { 'content-type': 'application/x-www-form-urlencoded' },
                 success(result) {//更新后 更新所有副本
-                    that.init_page(that.data.userInfo.openId,that.data.ksid)
+                    that.init_baomingInfo(that.data.options.openId,that.data.options.ksid)
                     wx.hideToast()
                 },
                 fail(error) {
@@ -347,6 +532,10 @@ Page({
         var ksCopy = this.data.kaoshengInfo
         var ksOrigin = this.data.kaoshengInfoCopy
         var Modify = {}
+
+        if(ksCopy.graduationDate !== ksOrigin.graduationDate){
+            Modify.graduationDate = ksCopy.graduationDate
+        }
         if(ksCopy.telphone !== ksOrigin.telphone){
             Modify.telphone = ksCopy.telphone
         }
@@ -362,10 +551,33 @@ Page({
         if(ksCopy.major !== ksOrigin.major){
             Modify.major = ksCopy.major
         }
+        if (ksCopy.certificate !== ksOrigin.certificate) {
+            Modify.certificate = ksCopy.certificate
+        }
+        if (ksCopy.danwei !== ksOrigin.danwei) {
+            Modify.danwei = ksCopy.danwei
+        }
+        if (ksCopy.birthday !== ksOrigin.birthday) {
+            Modify.birthday = ksCopy.birthday
+        }
+        if (ksCopy.jobtime !== ksOrigin.jobtime) {
+            Modify.jobtime = ksCopy.jobtime
+        }
+        if (ksCopy.nationality !== ksOrigin.nationality) {
+            Modify.nationality = ksCopy.nationality
+        }
+        if (ksCopy.placeOfBirth !== ksOrigin.placeOfBirth) {
+            Modify.placeOfBirth = ksCopy.placeOfBirth
+        }
+        if (ksCopy.resume !== ksOrigin.resume) {
+            Modify.resume = ksCopy.resume
+        }
+        if (ksCopy.sex !== ksOrigin.sex) {
+            Modify.sex = ksCopy.sex
+        }
         if(util.isEmptyObject(Modify)){
             return "NULL";
         }
-        this.data.pub_lock = "unlock"
         return Modify;
     },
 
@@ -373,20 +585,21 @@ Page({
     update_kaosheng:function (Modify){//{{{
         var that = this
         var Modify = this.get_modify()
-        if(util.isEmptyObject(Modify)){
+        if(Modify === 'NULL'){
             return
         }
         util.showBusy("正在更新数据")
         qcloud.request({
             url: `${config.service.host}/baoming/kaoshengInfo/update_kaosheng`,
             data: {
-                open_id: that.data.userInfo.openId,
+                open_id: that.data.options.openId,
+                ksid:that.data.options.ksid,
                 kaoshengInfo: JSON.stringify(Modify),
             },
             method: 'POST',
             header: { 'content-type': 'application/x-www-form-urlencoded' },
             success(result) {//更新后 更新所有副本
-                that.init_page(that.data.userInfo.openId,that.data.ksid)
+                that.init_kaoshengInfo(that.data.userInfo.openId,that.data.ksid)
                 wx.hideToast()
             },
             fail(error) {
@@ -398,29 +611,35 @@ Page({
     //新建考生信息
     new_kaosheng: function () {//{{{
         let that = this
-        let kaoshengInfo = that.data.kaoshengInfo
-        kaoshengInfo.open_id = this.data.userInfo.openId
-        util.showBusy('保存数据中')
-        qcloud.request({
-            url: `${config.service.host}/baoming/kaoshengInfo/store_kaosheng`,
-            data: {
-                kaoshengInfo: JSON.stringify(kaoshengInfo),
-            },
-            method: 'POST',
-            header: { 'content-type': 'application/x-www-form-urlencoded' },
-            success(result) {
-                wx.hideToast()
-                that.data.operas[1].onoff = true
-                that.setData({
-                    kaosheng_flg:'edit',
-                    kaoshengInfo:that.data.kaoshengInfo,
-                    operas:that.data.operas,
-                    pub_lock:'unlock'
-                })
-            },
-            fail(error) {
+        wx.showModal({
+            title: '请确认' + that.data.kaoshengInfo.name + that.data.kaoshengInfo.sfzid  ,
+            content: '提交后姓名身份证信息将被锁定不可修改',
+            success(res) {
+                if (res.confirm) {
+                    let kaoshengInfo = that.data.kaoshengInfo
+                    kaoshengInfo.open_id = that.data.userInfo.openId
+                    util.showBusy('保存数据中')
+                    qcloud.request({
+                        url: `${config.service.host}/baoming/kaoshengInfo/store_kaosheng`,
+                        data: {
+                            kaoshengInfo: JSON.stringify(kaoshengInfo),
+                        },
+                        method: 'POST',
+                        header: { 'content-type': 'application/x-www-form-urlencoded' },
+                        success(result) {
+                            wx.hideToast()
+                            // that.data.operas[]
+                            that.init_kaoshengInfo(that.data.userInfo.openId, that.data.ksid)
+                        },
+                        fail(error) {
+                        }
+                    })
+                } else if (res.cancel) {
+                    return
+                }
             }
-        })
+        }) //}}}
+        
     },//}}}
 
 
@@ -458,10 +677,8 @@ Page({
                     localImagePath:that.data.localImagePath
                 });
                 //文件上传中禁止点发布，否则上传不完整
-                that.pub_lock = "lock"
                 util.showBusy('正在上传')
                 that.upload_cos(that.data.localImagePath)
-                that.pub_lock = "unlock"
             }
         })
     },//}}}

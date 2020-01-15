@@ -20,39 +20,11 @@
 			</view>
 			<view class="weui-cells weui-cells_after-title">
 				<view class="" style="margin:0 0 0 10px;">
-					<view class="input_box">
-						<view class="lable"> 姓名: </view>
-						<input class="value" value="{{kaoshengInfo.name}}" bindchange="input_name" placeholder="姓名" />
-					</view>
-
-					<view class="input_box">
-						<view class="lable"> 身份证号: </view>
-						<input class="value" value="{{kaoshengInfo.sfzid}}" bindchange="input_sfzid" placeholder="请仔细填写提交后不可修改" />
-					</view>
-
-					<view class="input_box">
-						<view class="lable"> 电话: </view>
-						<input class="value" value="{{kaoshengInfo.telphone}}" bindchange="input_telphone" placeholder="联系电话" />
-					</view>
-
-					<view class="input_box">
-						<view class="lable"> 毕业学校: </view>
-						<input class="value" value="{{kaoshengInfo.school}}" bindchange="input_school" placeholder="学校名称" />
-					</view>
-
-					<view class="input_box">
-						<view class="lable"> 学历: </view>
-						<input class="value" value="{{kaoshengInfo.education}}" bindchange="input_education" placeholder="学历" />
-					</view>
-
-					<view class="input_box">
-						<view class="lable"> 学位: </view>
-						<input class="value" value="{{kaoshengInfo.degree}}" bindchange="input_degree" placeholder="学位" />
-					</view>
-
-					<view class="input_box">
-						<view class="lable"> 专业: </view>
-						<input class="value" value="{{kaoshengInfo.major}}" bindchange="input_major" placeholder="与毕业证必须一致" />
+					<view wx:for="{{filltable}}" wx:key="{{item.key}}">
+						<view class="input_box" wx:if="{{item.onoff == 'on'}}">
+							<view class="lable"> {{item.lable}}: </view>
+							<input class="value" data-key="{{item.key}}" value="{{item.value}}" bindchange="input_change" placeholder="{{item.placeholder}}" />
+						</view>
 					</view>
 				</view>
 			</view>
@@ -151,11 +123,11 @@
 			</view>
 	    </view>
 
-		<view wx:if="{{step==3}}">
+		<scroll-view wx:if="{{step==3}}" style="height:100%;" scroll-y="true">
 			<view wx:if="{{ baomingInfo.bmconfirm=='1'}}">
 				您已经进行过报名确认，信息处于不可修改状态
 			</view>
-			<scroll-view wx:if="{{baomingInfo.bmconfirm=='0'}}" style="height:100%;" scroll-y="true">
+			<view wx:if="{{baomingInfo.bmconfirm=='0'}}" style="height:100%;" scroll-y="true">
 				<view wx:if="{{operas[3].onoff == true}}">
 					<view class="weui">
 						<view class="weui-uploader">
@@ -170,41 +142,12 @@
 						</view>
 					</view>
 					<view class="weui-cells weui-cells_after-title">
-
 						<view class="" style="margin:0 0 0 10px;">
-							<view class="input_box">
-								<view class="lable"> 姓名: </view>
-								<view class="value">{{kaoshengInfo.name}} </view>
-							</view>
-
-							<view class="input_box">
-								<view class="lable"> 身份证号: </view>
-								<view class="value">{{kaoshengInfo.sfzid}} </view>
-							</view>
-
-							<view class="input_box">
-								<view class="lable"> 电话: </view>
-								<view class="value">{{kaoshengInfo.telphone}} </view>
-							</view>
-
-							<view class="input_box">
-								<view class="lable"> 毕业学校: </view>
-								<view class="value">{{kaoshengInfo.school}} </view>
-							</view>
-
-							<view class="input_box">
-								<view class="lable"> 学历: </view>
-								<view class="value">{{kaoshengInfo.education}} </view>
-							</view>
-
-							<view class="input_box">
-								<view class="lable"> 学位: </view>
-								<view class="value">{{kaoshengInfo.degree}} </view>
-							</view>
-
-							<view class="input_box">
-								<view class="lable"> 专业: </view>
-								<view class="value">{{kaoshengInfo.major}} </view>
+							<view wx:for="{{filltable}}" wx:key="{{item.key}}">
+								<view class="input_box" wx:if="{{item.onoff == 'on'}}">
+									<view class="lable"> {{item.lable}}: </view>
+									<view class="value">{{item.value}}</view>
+								</view>
 							</view>
 						</view>
 					</view>
@@ -223,9 +166,9 @@
 				<view wx:else>
 					请先完成基础信息的填写再进行确认!
 				</view>
-			</scroll-view>
-		</view>
-		<view wx:if="{{step==4}}">
+			</view>
+		</scroll-view>
+		<scroll-view wx:if="{{step==4}}" style="height:100%;" scroll-y="true">
 			<view class="weui">
 				<view class="weui-uploader">
 					<view class="weui-uploader__files" style="position:static">
@@ -236,41 +179,12 @@
 				</view>
 			</view>
 			<view class="weui-cells weui-cells_after-title">
-
 				<view class="" style="margin:0 0 0 10px;">
-					<view class="input_box">
-						<view class="lable"> 姓名: </view>
-						<view class="value">{{kaoshengInfo.name}} </view>
-					</view>
-
-					<view class="input_box">
-						<view class="lable"> 身份证号: </view>
-						<view class="value">{{kaoshengInfo.sfzid}} </view>
-					</view>
-
-					<view class="input_box">
-						<view class="lable"> 电话: </view>
-						<view class="value">{{kaoshengInfo.telphone}} </view>
-					</view>
-
-					<view class="input_box">
-						<view class="lable"> 毕业学校: </view>
-						<view class="value">{{kaoshengInfo.school}} </view>
-					</view>
-
-					<view class="input_box">
-						<view class="lable"> 学历: </view>
-						<view class="value">{{kaoshengInfo.education}} </view>
-					</view>
-
-					<view class="input_box">
-						<view class="lable"> 学位: </view>
-						<view class="value">{{kaoshengInfo.degree}} </view>
-					</view>
-
-					<view class="input_box">
-						<view class="lable"> 专业: </view>
-						<view class="value">{{kaoshengInfo.major}} </view>
+					<view wx:for="{{filltable}}" wx:key="{{item.key}}">
+						<view class="input_box" wx:if="{{item.onoff == 'on'}}">
+							<view class="lable"> {{item.lable}}: </view>
+							<view class="value">{{item.value}}</view>
+						</view>
 					</view>
 				</view>
 			</view>
@@ -280,7 +194,7 @@
 					{{item}}
 				</view>
 			</view>
-		</view>
+		</scroll-view>
         <view style="height:200rpx"> </view>
 	</view>
 </view>
